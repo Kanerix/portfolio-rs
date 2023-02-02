@@ -1155,24 +1155,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "leptos_start"
-version = "0.1.0"
-dependencies = [
- "actix-files",
- "actix-web",
- "cfg-if",
- "console_error_panic_hook",
- "console_log",
- "leptos",
- "leptos_actix",
- "leptos_meta",
- "leptos_router",
- "log",
- "simple_logger",
- "wasm-bindgen",
-]
-
-[[package]]
 name = "libc"
 version = "0.2.139"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1479,6 +1461,24 @@ name = "pkg-config"
 version = "0.3.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ac9a59f73473f1b8d852421e59e64809f025994837ef743615c6d0c5b305160"
+
+[[package]]
+name = "portfolio"
+version = "0.1.0"
+dependencies = [
+ "actix-files",
+ "actix-web",
+ "cfg-if",
+ "console_error_panic_hook",
+ "console_log",
+ "leptos",
+ "leptos_actix",
+ "leptos_meta",
+ "leptos_router",
+ "log",
+ "simple_logger",
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "ppv-lite86"
