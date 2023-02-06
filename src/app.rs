@@ -14,7 +14,7 @@ pub fn App(cx: Scope) -> impl IntoView {
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
 		<Title text="Kasper's portfolio!"/>
 		<Router>
-			<main class="h-screen w-6/12 gap-4 m-auto grid grid-cols-2 place-content-center">
+			<main class="h-screen w-3/4 gap-4 m-auto grid grid-cols-1 place-content-center xl:w-1/2 md:grid-cols-2">
 				<Routes>
 					<Route path="" view=|cx| view! { cx, <HomePage/> }/>
 				</Routes>
@@ -35,7 +35,7 @@ fn HomePage(cx: Scope) -> impl IntoView {
 				I am always looking for new challenges to 
 				gather experience."
 			</p>
-			<Button text="About me"/>
+			<Button class="mt-4" text="About me"/>
 		</div>
 		<div>
 			<img 
