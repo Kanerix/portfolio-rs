@@ -31,6 +31,7 @@ ssr = [
   "leptos_router/ssr",
 ]
 
+
 [package.metadata.leptos]
 site-root = "target/site"
 site-pkg-dir = "pkg"
@@ -42,7 +43,8 @@ browserquery = "defaults"
 watch = false
 env = "DEV"
 bin-features = ["ssr"]
-bin-default-features = false
 lib-features = ["hydrate"]
-lib-default-features = false
 
+[profile.release]
+watch = false
+env = "PROD"
