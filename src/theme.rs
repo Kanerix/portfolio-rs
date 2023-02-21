@@ -13,8 +13,8 @@ pub enum ColorMode {
 impl ToString for ColorMode {
 	fn to_string(&self) -> String {
 		match self {
-			ColorMode::Light => "light".to_string(),
-			ColorMode::Dark => "dark".to_string(),
+			ColorMode::Light => "Light".to_string(),
+			ColorMode::Dark => "Dark".to_string(),
 		}
 	}
 }
@@ -62,20 +62,30 @@ fn initial_color_mode(_cx: Scope) -> ColorMode {
 	let doc = document().unchecked_into::<web_sys::HtmlDocument>();
 	let cookie = doc.cookie().unwrap_or_default();
 	match cookie.as_str() {
-		"colormode=dark" => ColorMode::Dark,
-		"colormode=light" => ColorMode::Light,
+		"colormode=Dark" => ColorMode::Dark,
+		"colormode=Light" => ColorMode::Light,
 		_ => {
 			console_log("No cookie found, defaulting to dark mode");
-			return ColorMode::Dark;
+			ColorMode::Dark
 		},
 	}
 }
 
 #[cfg(feature = "ssr")]
 fn initial_color_mode(cx: Scope) -> ColorMode {
-    use_context::<actix_web::HttpRequest>(cx);
-
-	ColorMode::Dark
+    use_context::<actix_web::HttpRequest>(cx)
+        .and_then(|req| {
+            let cookies = req.cookies().ok();
+			cookies.and_then(|cookies| {
+				cookies.iter().find(|cookie| cookie.name() == "colormode").and_then(|cookie| {
+					match cookie.value() {
+						"Dark" => Some(ColorMode::Dark),
+						"Light" => Some(ColorMode::Light),
+						_ => None,
+					}
+				})
+			})
+		}).unwrap_or_default()
 }
 
 #[component]
