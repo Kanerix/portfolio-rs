@@ -1,5 +1,6 @@
 pub mod app;
 pub mod components;
+pub mod theme;
 
 use cfg_if::cfg_if;
 
