@@ -1,5 +1,5 @@
 use leptos::*;
-
+use leptos_router::{A, AProps};
 
 #[component]
 pub fn Button(
@@ -8,6 +8,8 @@ pub fn Button(
 	class: &'static str,
 	#[prop(optional)]
 	text: &'static str,
+	#[prop(optional)]
+	to: &'static str,
 ) -> impl IntoView {
 	view! { cx,
 		<button
@@ -17,7 +19,9 @@ pub fn Button(
 				{class}",
 			)
 		>
-			{text.to_string()}
+			<A href=to>
+				{text.to_string()}
+			</A>
 		</button>
 	}
 }
