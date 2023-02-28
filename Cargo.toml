@@ -26,6 +26,7 @@ web-sys = { version = "0.3", features = [
   "HtmlDocument",
 ]}
 regex = "1.7.1"
+dotenv = "0.15.0"
 
 [features]
 hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]

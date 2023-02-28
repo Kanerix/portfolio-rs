@@ -2,7 +2,7 @@ FROM rust:latest AS builder
 WORKDIR /build
 
 RUN rustup default nightly
-RUN apt-get update && apt-get install -y clang molds llvm gcc musl-tools npm
+RUN apt-get update && apt-get install -y clang molds gcc musl-tools npm
 RUN rustup target add wasm32-unknown-unknown
 RUN rustup target add "$(uname -m)-unknown-linux-musl"
 
@@ -14,22 +14,23 @@ ENV CC_aarch64_unknown_linux_musl=clang
 COPY . .
 
 RUN npx tailwindcss -i style/tailwind.css -o style/portfolio.css --minify
-RUN cargo build --package=portfolio \ 
-	--lib --target-dir=target/front \ 
-	--no-default-features --features=hydrate \ 
-	--target=wasm32-unknown-unknown \ 
-	--release
-RUN cargo build --package=portfolio \ 
-	--bin=portfolio --target-dir=target/server \ 
-	--no-default-features --features=ssr \
-	--target="$(uname -m)-unknown-linux-musl" \
-	--release
-RUN mv "./target/server/$(uname -m)-unknown-linux-musl" "./target/server/release"
+RUN LEPTOS_BIN_TARGET_TRIPLE="$(uname -m)-unknown-linux-musl" cargo leptos build --release
+RUN mv "./target/server/$(uname -m)-unknown-linux-musl/release/portfolio" "./target/server/release/portfolio"
 
 
 FROM alpine:latest AS runner
 WORKDIR /app
 
-COPY --from=builder /build/target .
+RUN addgroup --system --gid 1001 server 
+RUN adduser --system --uid 1001 www-data
 
-CMD ["./target/server/release/portfolio"]
+COPY --chown=www-data:server --from=builder /build/target/server/release/portfolio ./server/portfolio
+COPY --chown=www-data:server --from=builder /build/target/front/wasm32-unknown-unknown/release/portfolio.wasm ./front/portfolio.wasm
+COPY --chown=www-data:server --from=builder /build/target/site ./site
+COPY --chown=www-data:server --from=builder /build/.env.production ./.env
+
+USER www-data
+
+EXPOSE 3000
+
+CMD ["./server/portfolio"]

@@ -1,3 +1,10 @@
+# Rust build dir
 target/
+
+# Random git stuff
 LICENSE
 README.md
+.gitignore
+
+# The docker file
+Dockerfile
