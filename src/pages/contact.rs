@@ -5,8 +5,7 @@ use crate::components::button::{Button, ButtonProps};
 pub fn ContactPage(cx: Scope) -> impl IntoView {
 	view! { cx,
 		<div class="flex flex-col items-start">
-			"test"
-			<Button text="Submit" to="/" />
+			<Button text="Back" to="/" />
 		</div>
 	}
 }

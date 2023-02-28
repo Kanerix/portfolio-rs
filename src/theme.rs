@@ -4,7 +4,7 @@ use leptos_meta::{Meta, MetaProps};
 use leptos_router::{ActionForm, ActionFormProps};
 use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub enum ColorMode {
 	Light,
 	Dark,
@@ -32,6 +32,15 @@ impl Not for ColorMode {
 		match self {
 			ColorMode::Light => ColorMode::Dark,
 			ColorMode::Dark => ColorMode::Light,
+		}
+	}
+}
+
+impl ColorMode {
+	pub fn to_fa_icon(&self) -> String {
+		match self {
+			ColorMode::Light => "fa-sun".to_owned(),
+			ColorMode::Dark => "fa-moon".to_owned(),
 		}
 	}
 }
@@ -91,25 +100,28 @@ fn initial_color_mode(cx: Scope) -> ColorMode {
 #[component]
 pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 	let initial_color_mode = initial_color_mode(cx);
+	let (fa_theme_icon, set_fa_theme_icon) = create_signal(cx, initial_color_mode.to_fa_icon());
 	
 	let toggle_color_mode_action = create_server_action::<ToggleColorMode>(cx);
     let input = toggle_color_mode_action.input();
     let value = toggle_color_mode_action.value();
 
-	let color_mode = move || -> ColorMode {
-		match(input(), value()) {
+	let color_mode = move || {
+		let color = match(input(), value()) {
             // if there's some current input, use that optimistically
 			(Some(submission), _) => submission.color_mode,
 			// otherwise, use the current value
 			(_, Some(Ok(value))) => value,
 			// if there's an error, use the initial value and log error
-			(_, Some(Err(err))) => {
-				console_log(&format!("Error: {:?}", err));
+			(_, Some(Err(_))) => {
 				initial_color_mode
 			}
 			// at last, use the initial value
 			_ => initial_color_mode,
-		}
+		};
+
+		set_fa_theme_icon(color.to_fa_icon());
+		color
 	};
 
 	view! { cx,
@@ -123,9 +135,9 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
                 name="color_mode"
 				value=move || (!color_mode()).to_string()
             />
-			<input type="submit">
-				"Toggle theme"
-			</input>
+			<button type="submit"> 
+				<i class=format!("fa-solid {}", fa_theme_icon())/>
+			</button>
 		</ActionForm>
 	}
 }
