@@ -10,6 +10,7 @@ RUN cargo install --locked cargo-leptos
 RUN npm install tailwindcss -g
 
 ENV CC_aarch64_unknown_linux_musl=clang
+ENV CC_x86_64_unknown_linux_musl=clang
 
 COPY . .
 
@@ -34,3 +35,6 @@ USER www-data
 EXPOSE 3000
 
 CMD ["./server/portfolio"]
+ENV OUTPUT_NAME "portfolio"
+ENV LEPTOS_SITE_ROOT "./site"
+ENV LEPTOS_SITE_ADDR "0.0.0.0:8080"
