@@ -28,13 +28,13 @@ RUN adduser --system --uid 1001 www-data
 COPY --chown=www-data:server --from=builder /build/target/server/release/portfolio ./server/portfolio
 COPY --chown=www-data:server --from=builder /build/target/front/wasm32-unknown-unknown/release/portfolio.wasm ./front/portfolio.wasm
 COPY --chown=www-data:server --from=builder /build/target/site ./site
-COPY --chown=www-data:server --from=builder /build/.env.production ./.env
 
 USER www-data
+
+ENV LEPTOS_OUTPUT_NAME "portfolio"
+ENV LEPTOS_SITE_ROOT "/app/site"
+ENV LEPTOS_SITE_ADDR "0.0.0.0:3000"
 
 EXPOSE 3000
 
 CMD ["./server/portfolio"]
-ENV OUTPUT_NAME "portfolio"
-ENV LEPTOS_SITE_ROOT "./site"
-ENV LEPTOS_SITE_ADDR "0.0.0.0:8080"

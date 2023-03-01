@@ -9,9 +9,6 @@ cfg_if! {
 			use leptos::*;
 			use leptos_actix::{generate_route_list, LeptosRoutes};
 			use portfolio::app::*;
-			use dotenv::dotenv;
-
-			dotenv().ok();	
 
 			let conf = get_configuration(None).await.unwrap();
 			let addr = conf.leptos_options.site_address;
