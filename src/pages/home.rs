@@ -1,5 +1,5 @@
-use leptos::*;
 use crate::components::button::{Button, ButtonProps};
+use leptos::*;
 
 #[component]
 pub fn HomePage(cx: Scope) -> impl IntoView {
@@ -16,7 +16,7 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
 			<Button class="mt-4" text="About me" to="/contact" />
 		</div>
 		<div>
-			<img 
+			<img
 				class="rounded-full w-64 h-64 m-auto"
 				src="profile.jpg"
 			/>

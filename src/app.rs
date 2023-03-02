@@ -1,15 +1,15 @@
+use crate::pages::{
+	contact::{ContactPage, ContactPageProps},
+	home::{HomePage, HomePageProps},
+};
+use crate::theme::{ToggleColorMode, ToggleThemeButton, ToggleThemeButtonProps};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-use crate::pages::{
-	home::{HomePage, HomePageProps},
-	contact::{ContactPage, ContactPageProps}
-};
-use crate::theme::{ToggleThemeButton, ToggleThemeButtonProps, ToggleColorMode};
 
 #[cfg(feature = "ssr")]
 pub fn register_server_functions() {
-    let _ = ToggleColorMode::register();
+	let _ = ToggleColorMode::register();
 }
 
 #[component]
