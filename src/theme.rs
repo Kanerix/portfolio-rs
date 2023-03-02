@@ -138,8 +138,13 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 				name="color_mode"
 				value=move || (!color_mode()).to_string()
 			/>
-			<button type="submit">
-				<i class=format!("fa-solid {}", fa_theme_icon())/>
+			<button 
+				class="m-4 w-14 h-14
+				float-right rounded-full
+				bg-gray-500/[.20] hover:bg-gray-500/[.35]" 
+				type="submit"
+			>
+				<i class=format!("fa-solid {} text-4xl", fa_theme_icon())/>
 			</button>
 		</ActionForm>
 	}
