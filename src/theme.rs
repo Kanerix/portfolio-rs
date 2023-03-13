@@ -149,3 +149,8 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 		</ActionForm>
 	}
 }
+
+#[component]
+pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
+	children(cx)
+}

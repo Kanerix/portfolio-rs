@@ -1,11 +1,11 @@
+use leptos::*;
+use leptos_meta::*;
+use leptos_router::*;
 use crate::pages::{
 	contact::{ContactPage, ContactPageProps},
 	home::{HomePage, HomePageProps},
 };
-use crate::theme::{ToggleColorMode, ToggleThemeButton, ToggleThemeButtonProps};
-use leptos::*;
-use leptos_meta::*;
-use leptos_router::*;
+use crate::theme::{ToggleColorMode, ToggleThemeButton, ToggleThemeButtonProps, ThemeProvider, ThemeProviderProps};
 
 #[cfg(feature = "ssr")]
 pub fn register_server_functions() {
@@ -27,16 +27,18 @@ pub fn App(cx: Scope) -> impl IntoView {
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
 		<Title text="Kasper's portfolio!"/>
 		<Body class="h-screen w-full flex flex-col" />
-		<Router>
-			<header>
-				<ToggleThemeButton />
-			</header>
-			<main class="grow w-3/4 gap-4 m-auto grid grid-cols-1 place-content-center xl:w-1/2 md:grid-cols-2">
-				<Routes>
-					<Route path="/" view=|cx| view! { cx, <HomePage/> }/>
-					<Route path="/contact" view=|cx| view! { cx, <ContactPage/> }/>
-				</Routes>
-			</main>
-		</Router>
+		<ThemeProvider>
+			<Router>
+				<header>
+					<ToggleThemeButton />
+				</header>
+				<main class="w-3/4 m-auto xl:w-1/2">
+					<Routes>
+						<Route path="/" view=|cx| view! { cx, <HomePage/> }/>
+						<Route path="/contact" view=|cx| view! { cx, <ContactPage/> }/>
+					</Routes>
+				</main>
+			</Router>
+		</ThemeProvider>
 	}
 }

@@ -14,11 +14,11 @@ pub fn Button(
 	#[prop(optional, into)]
 	to: Option<String>,
 ) -> impl IntoView {
-	let mut styles = format!(
-		"text-white font-bold py-2 px-4 rounded-md
+	let mut styles = String::from(
+		"text-white text-center font-bold py-2 px-4 rounded-md
 		bg-gradient-to-t from-blue-700 to-blue-500
 		hover:from-blue-800 hover:to-blue-600 
-		focus:ring focus:ring-blue-500 focus:ring-opacity-50",
+		focus:ring focus:ring-blue-500 focus:ring-opacity-50 ",
 	);
 
 	if let Some(class) = class {
