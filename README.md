@@ -6,6 +6,8 @@ is for me to learn webassembly and rust. Feel free
 to use any code you want and help me improve the 
 app.
 
+The website should be available at [artilun.com](https://artilun.com/)
+
 ## Required steps
 
 Install `cargo-leptos` if you don't already have it.
@@ -22,7 +24,7 @@ Install `tailwind` to compile css.
 ## Running the application in development 
 
 Start the application in `watch` mode for development. Use 2 windows.
-- `npx tailwindcss -i style/tailwind.css -o style/portfolio.css --watch`
+- `npx tailwindcss -i style/tailwind.css -o style/generated.css --watch`
 - `cargo leptos watch`
 
 In the future, [cargo-leptos will support tailwindcss](https://github.com/leptos-rs/cargo-leptos/issues/18).
