@@ -9,7 +9,10 @@ use crate::theme::{ToggleColorMode, ToggleThemeButton, ToggleThemeButtonProps, T
 
 #[cfg(feature = "ssr")]
 pub fn register_server_functions() {
-	let _ = ToggleColorMode::register();
+	match ToggleColorMode::register() {
+		Ok(_) => (),
+    	Err(_) => todo!("Handle potential server errors"),
+	};
 }
 
 #[component]
