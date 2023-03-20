@@ -1,12 +1,14 @@
 use leptos::*;
 use leptos_meta::{Meta, MetaProps};
 use leptos_router::{ActionForm, ActionFormProps};
+use cfg_if::cfg_if;
 use serde::{Deserialize, Serialize};
 use std::ops::Not;
 
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub enum ColorMode {
 	Light,
+	#[default]
 	Dark,
 }
 
@@ -16,12 +18,6 @@ impl ToString for ColorMode {
 			ColorMode::Light => "Light".to_string(),
 			ColorMode::Dark => "Dark".to_string(),
 		}
-	}
-}
-
-impl Default for ColorMode {
-	fn default() -> Self {
-		ColorMode::Dark
 	}
 }
 
@@ -69,37 +65,39 @@ pub async fn toggle_color_mode(
 	Ok(color_mode)
 }
 
-#[cfg(not(feature = "ssr"))]
-fn initial_color_mode(_cx: Scope) -> ColorMode {
-	let doc = document().unchecked_into::<web_sys::HtmlDocument>();
-	let cookie = doc.cookie().unwrap_or_default();
-	match cookie.as_str() {
-		"colormode=Dark" => ColorMode::Dark,
-		"colormode=Light" => ColorMode::Light,
-		_ => {
-			console_log("No cookie found, defaulting to dark mode");
-			ColorMode::Dark
+cfg_if! {
+	if #[cfg(feature = "ssr")] {
+		fn initial_color_mode(cx: Scope) -> ColorMode {
+			use_context::<actix_web::HttpRequest>(cx)
+				.and_then(|req| {
+					let cookies = req.cookies().ok();
+					cookies.and_then(|cookies| {
+						cookies
+							.iter()
+							.find(|cookie| cookie.name() == "colormode")
+							.and_then(|cookie| match cookie.value() {
+								"Dark" => Some(ColorMode::Dark),
+								"Light" => Some(ColorMode::Light),
+								_ => None,
+							})
+					})
+				})
+				.unwrap_or_default()
+		}
+	} else {
+		fn initial_color_mode(_cx: Scope) -> ColorMode {
+			let doc = document().unchecked_into::<web_sys::HtmlDocument>();
+			let cookie = doc.cookie().unwrap_or_default();
+			match cookie.as_str() {
+				"colormode=Dark" => ColorMode::Dark,
+				"colormode=Light" => ColorMode::Light,
+				_ => {
+					console_log("No cookie found, defaulting to dark mode");
+					ColorMode::Dark
+				}
+			}
 		}
 	}
-}
-
-#[cfg(feature = "ssr")]
-fn initial_color_mode(cx: Scope) -> ColorMode {
-	use_context::<actix_web::HttpRequest>(cx)
-		.and_then(|req| {
-			let cookies = req.cookies().ok();
-			cookies.and_then(|cookies| {
-				cookies
-					.iter()
-					.find(|cookie| cookie.name() == "colormode")
-					.and_then(|cookie| match cookie.value() {
-						"Dark" => Some(ColorMode::Dark),
-						"Light" => Some(ColorMode::Light),
-						_ => None,
-					})
-			})
-		})
-		.unwrap_or_default()
 }
 
 #[component]

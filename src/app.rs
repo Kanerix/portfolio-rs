@@ -1,18 +1,24 @@
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
+use cfg_if::cfg_if;
 use crate::pages::{
 	contact::{ContactPage, ContactPageProps},
 	home::{HomePage, HomePageProps},
 };
-use crate::theme::{ToggleColorMode, ToggleThemeButton, ToggleThemeButtonProps, ThemeProvider, ThemeProviderProps};
+use crate::theme::{ToggleThemeButton, ToggleThemeButtonProps, ThemeProvider, ThemeProviderProps};
 
-#[cfg(feature = "ssr")]
-pub fn register_server_functions() {
-	match ToggleColorMode::register() {
-		Ok(_) => (),
-    	Err(_) => todo!("Handle potential server errors"),
-	};
+cfg_if! {
+	if #[cfg(feature = "ssr")] {
+		use crate::theme::ToggleColorMode;
+		
+		pub fn register_server_functions() {
+			match ToggleColorMode::register() {
+				Ok(_) => (),
+				Err(_) => todo!("Handle potential server errors"),
+			};
+		}
+	}
 }
 
 #[component]
