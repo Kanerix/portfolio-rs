@@ -13,7 +13,7 @@ end2end/playwright-report/
 playwright/.cache/
 
 # Ignore generated css file
-style/portfolio.css
+style/generated.css
 
 # .env files
 .env

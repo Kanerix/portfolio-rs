@@ -33,7 +33,7 @@ ssr = ["dep:actix-files", "dep:actix-web", "dep:leptos_actix", "leptos/ssr", "le
 [package.metadata.leptos]
 site-root = "target/site"
 site-pkg-dir = "pkg"
-style-file = "style/portfolio.css"
+style-file = "style/generated.css"
 assets-dir = "assets"
 site-addr = "127.0.0.1:3000"
 reload-port = 3001
