@@ -14,7 +14,7 @@ ENV CC_x86_64_unknown_linux_musl=clang
 
 COPY . .
 
-RUN npx tailwindcss -i style/tailwind.css -o style/portfolio.css --minify
+RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
 RUN LEPTOS_BIN_TARGET_TRIPLE="$(uname -m)-unknown-linux-musl" cargo leptos build --release
 RUN mv "./target/server/$(uname -m)-unknown-linux-musl/release/portfolio" "./target/server/release/portfolio"
 
