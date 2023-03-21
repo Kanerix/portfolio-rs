@@ -1,17 +1,39 @@
-name: Portfolio CI
-on: push
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
 jobs:
   lint-code:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Add nightly toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          components: clippy
-          override: true
-      - name: Clippy check
+
+      - name: Setup toolchain
+        run: |
+          rustup update
+          rustup install nightly   
+          rustup component add clippy
+
+      - name: Toolchain info 
+        run: |
+          cargo --version --verbose
+          rustc --version
+          cargo clippy --version    
+
+      - name: Lint
         run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: test
+        run: |
+          cargo check
+          cargo test --all
+
+      - name: Build package
+        run: |
+          cargo install --locked cargo-leptos
+          cargo leptos build
 
 
