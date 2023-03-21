@@ -11,11 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup toolchain
+      - name: Setup enviroment
         run: |
           rustup update
           rustup install nightly   
           rustup component add clippy
+          cargo install --locked cargo-leptos
 
       - name: Toolchain info 
         run: |
@@ -26,14 +27,13 @@ jobs:
       - name: Lint
         run: cargo clippy --all-targets --all-features -- -D warnings
 
-      - name: test
+      - name: Test
         run: |
           cargo check
-          cargo test --all
+          cargo leptos test --all
 
       - name: Build package
         run: |
-          cargo install --locked cargo-leptos
           cargo leptos build
 
 
