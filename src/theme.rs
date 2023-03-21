@@ -54,7 +54,7 @@ pub async fn toggle_color_mode(
 	let mut headers = HeaderMap::new();
 	headers.insert(
 		SET_COOKIE,
-		HeaderValue::from_str(&format!("colormode={}; Path=/", color_mode.to_string()))
+		HeaderValue::from_str(&format!("color_mode={}; Path=/", color_mode.to_string()))
 			.expect("Could't create cookie header"),
 	);
 	response_parts.headers = headers;
@@ -74,7 +74,7 @@ cfg_if! {
 					cookies.and_then(|cookies| {
 						cookies
 							.iter()
-							.find(|cookie| cookie.name() == "colormode")
+							.find(|cookie| cookie.name() == "color_mode")
 							.and_then(|cookie| match cookie.value() {
 								"Dark" => Some(ColorMode::Dark),
 								"Light" => Some(ColorMode::Light),
@@ -86,14 +86,35 @@ cfg_if! {
 		}
 	} else {
 		fn initial_color_mode(_cx: Scope) -> ColorMode {
-			let doc = document().unchecked_into::<web_sys::HtmlDocument>();
-			let cookie = doc.cookie().unwrap_or_default();
-			match cookie.as_str() {
-				"colormode=Dark" => ColorMode::Dark,
-				"colormode=Light" => ColorMode::Light,
+			let local_storage = match window().local_storage() {
+				Ok(Some(storage)) => storage,
+				Ok(None) => {
+					return ColorMode::default();
+				}
+				Err(err) => {
+					log::info!("Error getting local storage: {:?}", &err);
+					return ColorMode::default();
+				}
+			};
+
+			let color_mode = match local_storage.get_item("colormode") {
+				Ok(Some(colormode)) => colormode,
+				Ok(None) => {
+					return ColorMode::default();
+				},
+				Err(err) => {
+					log::info!("Error getting colormode: {:?}", &err);
+					return ColorMode::default();
+				}
+			};
+
+
+			match color_mode.as_str() {
+				"Dark" => ColorMode::Dark,
+				"Light" => ColorMode::Light,
 				_ => {
-					console_log("No cookie found, defaulting to dark mode");
-					ColorMode::Dark
+					log::info!("Invalid colormode found, defaulting to dark mode");
+					return ColorMode::default();
 				}
 			}
 		}

@@ -33,7 +33,7 @@ pub fn App(cx: Scope) -> impl IntoView {
 		// Fontawesome icons
 		<Stylesheet href="/fontawesome/css/all.min.css"/>
 		// Tailwind generated stylesheet
-		<Stylesheet id="leptos" href="/pkg/generated.css"/>
+		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
 		<Title text="Kasper's portfolio!"/>
 		<Body class="h-screen w-full flex flex-col" />
 		<ThemeProvider>
