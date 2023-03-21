@@ -11,7 +11,7 @@ cfg_if! {
 		#[actix_web::main]
 		async fn main() -> std::io::Result<()> {
 			let conf = get_configuration(None).await.unwrap();
-			let addr = conf.leptos_options.site_address;
+			let addr = conf.leptos_options.site_addr;
 			log::info!("Starting server at {}", addr);
 
 			register_server_functions();
@@ -33,7 +33,7 @@ cfg_if! {
 					.service(Files::new("/", site_root))
 					.wrap(middleware::Compress::default())
 			})
-			.bind(&addr)?
+			.bind(addr)?
 			.run()
 			.await
 		}

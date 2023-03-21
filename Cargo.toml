@@ -24,6 +24,7 @@ web-sys = { version = "0.3", features = [
   "AbortController",
   "AbortSignal",
   "HtmlDocument",
+  "Storage"
 ]}
 
 [features]
