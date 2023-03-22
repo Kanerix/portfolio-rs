@@ -35,6 +35,8 @@ jobs:
 
       - name: Build package
         run: |
+          npm install tailwindcss -g
+          npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
           cargo leptos build
 
 
