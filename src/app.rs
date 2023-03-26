@@ -26,6 +26,9 @@ pub fn App(cx: Scope) -> impl IntoView {
 	provide_meta_context(cx);
 
 	view! { cx,
+		<Title text="Kasper's portfolio!"/>
+		<Meta name="description" content="Kasper's portfolio website, created using Leptos!"/>
+		<Link rel="manifest" href="/manifest.json"/>
 		// Google fonts (Poppins)
 		<Link rel="preconnect" href="https://fonts.googleapis.com"/>
 		<Link rel="preconnect" href="https://fonts.gstatic.com"/>
@@ -34,7 +37,6 @@ pub fn App(cx: Scope) -> impl IntoView {
 		<Stylesheet href="/fontawesome/css/all.min.css"/>
 		// Tailwind generated stylesheet
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
-		<Title text="Kasper's portfolio!"/>
 		<Body class="h-screen w-full flex flex-col" />
 		<ThemeProvider>
 			<Router>

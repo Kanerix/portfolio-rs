@@ -20,6 +20,7 @@ pub fn HomePage(cx: Scope) -> impl IntoView {
 				<img
 					class="rounded-full w-64 h-64 m-auto"
 					src="profile.jpg"
+					alt="Profile picture"
 				/>
 			</div>
 		</div>
