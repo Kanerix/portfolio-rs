@@ -1,25 +1,11 @@
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-use cfg_if::cfg_if;
 use crate::pages::{
-	contact::{ContactPage, ContactPageProps},
-	home::{HomePage, HomePageProps},
+	contact::ContactPage,
+	home::HomePage,
 };
-use crate::theme::{ToggleThemeButton, ToggleThemeButtonProps, ThemeProvider, ThemeProviderProps};
-
-cfg_if! {
-	if #[cfg(feature = "ssr")] {
-		use crate::theme::ToggleColorMode;
-		
-		pub fn register_server_functions() {
-			match ToggleColorMode::register() {
-				Ok(_) => (),
-				Err(_) => todo!("Handle potential server errors"),
-			};
-		}
-	}
-}
+use crate::theme::{ToggleThemeButton, ThemeProvider};
 
 #[component]
 pub fn App(cx: Scope) -> impl IntoView {

@@ -1,6 +1,6 @@
 use leptos::*;
-use leptos_meta::{Meta, MetaProps};
-use leptos_router::{ActionForm, ActionFormProps};
+use leptos_meta::Meta;
+use leptos_router::ActionForm;
 use cfg_if::cfg_if;
 use serde::{Deserialize, Serialize};
 use std::ops::Not;
@@ -102,7 +102,7 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 	let value = toggle_color_mode_action.value();
 
 	let color_mode = move || {
-		let color = match (input(), value()) {
+		let color = match (input.get(), value.get()) {
 			// if there's some current input, use that optimistically
 			(Some(submission), _) => submission.color_mode,
 			// otherwise, use the current value
@@ -113,7 +113,7 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 			_ => initial_color_mode,
 		};
 
-		set_fa_theme_icon(color.to_fa_icon());
+		set_fa_theme_icon.set(color.to_fa_icon());
 		color
 	};
 
@@ -134,7 +134,7 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 				bg-gray-500/[.20] hover:bg-gray-500/[.35]" 
 				type="submit"
 			>
-				<i class=format!("fa-solid {} text-4xl", fa_theme_icon())/>
+				<i class=format!("fa-solid {} text-4xl", fa_theme_icon.get())/>
 			</button>
 		</ActionForm>
 	}

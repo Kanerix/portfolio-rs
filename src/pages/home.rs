@@ -1,5 +1,5 @@
 use leptos::*;
-use crate::components::button::{Button, ButtonProps};
+use crate::components::button::Button;
 
 #[component]
 pub fn HomePage(cx: Scope) -> impl IntoView {

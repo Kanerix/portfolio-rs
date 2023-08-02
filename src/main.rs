@@ -6,15 +6,13 @@ cfg_if! {
 		use leptos_actix::{generate_route_list, LeptosRoutes};
 		use actix_files::Files;
 		use actix_web::{App, HttpServer, middleware};
-		use portfolio::app::{App, AppProps, register_server_functions};
+		use portfolio::app::App;
 
 		#[actix_web::main]
 		async fn main() -> std::io::Result<()> {
 			let conf = get_configuration(None).await.unwrap();
 			let addr = conf.leptos_options.site_addr;
 			log::info!("Starting server at {}", addr);
-
-			register_server_functions();
 
 			HttpServer::new(move || {
 				let leptos_options = &conf.leptos_options;
@@ -38,10 +36,8 @@ cfg_if! {
 			.await
 		}
 	} else {
-		pub fn main() {
-			// no client-side main function
-			// unless we want this to work with e.g., Trunk for pure client-side testing
-			// see lib.rs for hydration function instead
+		fn main() {
+			panic!("You must enable the ssr feature to run the server")
 		}
 	}
 }

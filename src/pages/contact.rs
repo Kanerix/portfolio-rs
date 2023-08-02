@@ -1,7 +1,7 @@
 use leptos::*;
-use crate::components::button::{Button, ButtonProps};
-use crate::components::input::{Input, InputProps};
-use crate::components::text_area::{TextArea, TextAreaProps};
+use crate::components::button::Button;
+use crate::components::input::Input;
+use crate::components::text_area::TextArea;
 
 #[component]
 pub fn ContactPage(cx: Scope) -> impl IntoView {
