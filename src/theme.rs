@@ -1,7 +1,7 @@
+use cfg_if::cfg_if;
 use leptos::*;
 use leptos_meta::Meta;
 use leptos_router::ActionForm;
-use cfg_if::cfg_if;
 use serde::{Deserialize, Serialize};
 use std::ops::Not;
 
@@ -72,6 +72,7 @@ cfg_if! {
 				.and_then(|req| {
 					let cookies = req.cookies().ok();
 					cookies.and_then(|cookies| {
+						log::info!("Cookies: {:?}", cookies);
 						cookies
 							.iter()
 							.find(|cookie| cookie.name() == "color_mode")
@@ -86,7 +87,6 @@ cfg_if! {
 		}
 	} else {
 		fn initial_color_mode(_cx: Scope) -> ColorMode {
-			// Implement this
 			ColorMode::default()
 		}
 	}
@@ -95,7 +95,7 @@ cfg_if! {
 #[component]
 pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 	let initial_color_mode = initial_color_mode(cx);
-	let (fa_theme_icon, set_fa_theme_icon) = create_signal(cx, initial_color_mode.to_fa_icon());
+	let (fa_icon, set_fa_icon) = create_signal(cx, initial_color_mode.to_fa_icon());
 
 	let toggle_color_mode_action = create_server_action::<ToggleColorMode>(cx);
 	let input = toggle_color_mode_action.input();
@@ -108,33 +108,40 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 			// otherwise, use the current value
 			(_, Some(Ok(value))) => value,
 			// if there's an error, use the initial value and log error
-			(_, Some(Err(_))) => initial_color_mode,
+			(_, Some(Err(error))) => {
+				log::error!("Error toggling color mode: {:?}", error);
+				initial_color_mode
+			},
 			// at last, use the initial value
 			_ => initial_color_mode,
 		};
 
-		set_fa_theme_icon.set(color.to_fa_icon());
+		set_fa_icon.set(color.to_fa_icon());
 		color
 	};
 
 	view! { cx,
 		<Meta
 			name="color-scheme"
-			content=move || color_mode().to_string()
+			// Something about this is broken, value updates but page does not...
+			content=move || color_mode().to_string().to_lowercase()
 		/>
-		<ActionForm action=toggle_color_mode_action>
+		<ActionForm
+			action=toggle_color_mode_action
+			class="absolute bottom-0 right-0"
+		>
 			<input
 				type="hidden"
 				name="color_mode"
 				value=move || (!color_mode()).to_string()
 			/>
-			<button 
+			<button
 				class="m-4 w-14 h-14
 				float-right rounded-full
 				bg-gray-500/[.20] hover:bg-gray-500/[.35]" 
 				type="submit"
 			>
-				<i class=format!("fa-solid {} text-4xl", fa_theme_icon.get())/>
+				<i class=move || format!("fa-solid {} text-4xl", fa_icon.get())/>
 			</button>
 		</ActionForm>
 	}

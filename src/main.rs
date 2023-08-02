@@ -1,4 +1,5 @@
 use cfg_if::cfg_if;
+use tracing::Level;
 
 cfg_if! {
 	if #[cfg(feature = "ssr")] {
@@ -10,15 +11,19 @@ cfg_if! {
 
 		#[actix_web::main]
 		async fn main() -> std::io::Result<()> {
+			tracing_subscriber::fmt()
+				.with_max_level(Level::DEBUG)
+				.init();
+
 			let conf = get_configuration(None).await.unwrap();
 			let addr = conf.leptos_options.site_addr;
+
 			log::info!("Starting server at {}", addr);
 
 			HttpServer::new(move || {
 				let leptos_options = &conf.leptos_options;
 				let site_root = &leptos_options.site_root;
 
-				// Generate the list of routes in your Leptos App
 				let routes = generate_route_list(|cx| view! { cx, <App/> });
 
 				App::new()
