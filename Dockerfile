@@ -1,29 +1,28 @@
-FROM rust:latest AS builder
+FROM rust:alpine3.18 AS builder
 WORKDIR /build
 
-RUN rustup default nightly
-RUN apt-get update && apt-get install -y clang molds gcc musl-tools npm
+RUN apk update && \
+	apk upgrade --no-cache && \
+	apk add pkgconfig libressl-dev musl-dev npm
+
+RUN rustup default nightly 
 RUN rustup target add wasm32-unknown-unknown
-RUN rustup target add "$(uname -m)-unknown-linux-musl"
 
 RUN cargo install --locked cargo-leptos
 RUN npm install tailwindcss -g
 
-ENV CC_aarch64_unknown_linux_musl=clang
-ENV CC_x86_64_unknown_linux_musl=clang
-
 COPY . .
 
 RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
-RUN LEPTOS_BIN_TARGET_TRIPLE="$(uname -m)-unknown-linux-musl" cargo leptos build --release
-RUN mv "./target/server/$(uname -m)-unknown-linux-musl/release/portfolio" "./target/server/release/portfolio"
+RUN cargo leptos build --release
 
 
-FROM alpine:latest AS runner
-WORKDIR /app
+FROM alpine:3.18 AS runner
+WORKDIR /var/www/app
 
-RUN addgroup --system --gid 1001 server 
-RUN adduser --system --uid 1001 www-data
+RUN addgroup -S server && \
+	adduser -S www-data -G server && \
+	chown -R www-data:server /var/www/app
 
 COPY --chown=www-data:server --from=builder /build/target/server/release/portfolio ./server/portfolio
 COPY --chown=www-data:server --from=builder /build/target/front/wasm32-unknown-unknown/release/portfolio.wasm ./front/portfolio.wasm
@@ -32,7 +31,7 @@ COPY --chown=www-data:server --from=builder /build/target/site ./site
 USER www-data
 
 ENV LEPTOS_OUTPUT_NAME "portfolio"
-ENV LEPTOS_SITE_ROOT "/app/site"
+ENV LEPTOS_SITE_ROOT "/var/www/app/site"
 ENV LEPTOS_ENV "PROD"
 ENV LEPTOS_SITE_ADDR "0.0.0.0:3000"
 

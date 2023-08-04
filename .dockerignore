@@ -1,3 +1,7 @@
+# GitHub and VScode shit
+.github
+.vscode
+
 # Rust build dir
 target/
 
@@ -8,3 +12,6 @@ README.md
 
 # The docker file
 Dockerfile
+
+# Fly stuff
+fly.toml
