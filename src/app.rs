@@ -1,5 +1,5 @@
 use crate::pages::home::Home;
-use crate::theme::{ThemeProvider, ToggleThemeButton};
+use crate::theme::{ToggleThemeButton, ThemeProvider};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
@@ -21,16 +21,17 @@ pub fn App(cx: Scope) -> impl IntoView {
 		<Stylesheet href="/fontawesome/css/all.min.css"/>
 		// Tailwind generated stylesheet
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
-		<Body class="h-screen w-full bg-slate-100 dark:bg-slate-900" />
 		<ThemeProvider>
-			<Router>
-				<main class="h-screen mx-auto w-2/3">
-					<Routes>
-						<Route path="/" view=|cx| view! { cx, <Home/> }/>
-					</Routes>
-					<ToggleThemeButton />
-				</main>
-			</Router>
+			<div class="h-screen w-full bg-slate-100 dark:bg-slate-900">
+				<Router>
+					<main class="h-screen mx-auto w-2/3">
+						<ToggleThemeButton />
+						<Routes>
+							<Route path="/" view=|cx| view! { cx, <Home/> }/>
+						</Routes>
+					</main>
+				</Router>
+			</div>
 		</ThemeProvider>
 	}
 }

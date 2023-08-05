@@ -1,7 +1,6 @@
 use cfg_if::cfg_if;
 use leptos::*;
-use leptos_meta::Meta;
-use leptos_router::ActionForm;
+use leptos_meta::{Meta, Body};
 use serde::{Deserialize, Serialize};
 use std::ops::Not;
 
@@ -11,6 +10,9 @@ pub enum ColorMode {
 	#[default]
 	Dark,
 }
+
+#[derive(Clone, Copy, Debug)]
+pub struct Theme(pub ReadSignal<ColorMode>, pub WriteSignal<ColorMode>);
 
 impl ToString for ColorMode {
 	fn to_string(&self) -> String {
@@ -41,30 +43,6 @@ impl ColorMode {
 	}
 }
 
-#[server(ToggleColorMode, "/api")]
-pub async fn toggle_color_mode(
-	cx: Scope,
-	color_mode: ColorMode,
-) -> Result<ColorMode, ServerFnError> {
-	use actix_web::http::header::{HeaderMap, HeaderValue, SET_COOKIE};
-	use leptos_actix::{ResponseOptions, ResponseParts};
-
-	let response = use_context::<ResponseOptions>(cx).expect("No response options");
-	let mut response_parts = ResponseParts::default();
-	let mut headers = HeaderMap::new();
-	headers.insert(
-		SET_COOKIE,
-		HeaderValue::from_str(&format!("color_mode={}; Path=/", color_mode.to_string()))
-			.expect("Could't create cookie header"),
-	);
-	response_parts.headers = headers;
-
-	std::thread::sleep(std::time::Duration::from_millis(250));
-
-	response.overwrite(response_parts);
-	Ok(color_mode)
-}
-
 cfg_if! {
 	if #[cfg(feature = "ssr")] {
 		fn initial_color_mode(cx: Scope) -> ColorMode {
@@ -72,7 +50,6 @@ cfg_if! {
 				.and_then(|req| {
 					let cookies = req.cookies().ok();
 					cookies.and_then(|cookies| {
-						log::info!("Cookies: {:?}", cookies);
 						cookies
 							.iter()
 							.find(|cookie| cookie.name() == "color_mode")
@@ -87,67 +64,71 @@ cfg_if! {
 		}
 	} else {
 		fn initial_color_mode(_cx: Scope) -> ColorMode {
-			ColorMode::default()
+			use wasm_bindgen::JsCast;
+
+			let doc = document().unchecked_into::<web_sys::HtmlDocument>();
+			let cookie = doc.cookie().unwrap_or_default();
+			if cookie.contains("color_mode=Dark") {
+				ColorMode::Dark
+			} else {
+				ColorMode::Light
+			}
 		}
 	}
 }
 
 #[component]
-pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
+pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
 	let initial_color_mode = initial_color_mode(cx);
-	let (fa_icon, set_fa_icon) = create_signal(cx, initial_color_mode.to_fa_icon());
+	let (color_mode, set_color_mode) = create_signal(cx, initial_color_mode);
 
-	let toggle_color_mode_action = create_server_action::<ToggleColorMode>(cx);
-	let input = toggle_color_mode_action.input();
-	let value = toggle_color_mode_action.value();
+	provide_context(cx, Theme(color_mode, set_color_mode));
 
-	let color_mode = move || {
-		let color = match (input.get(), value.get()) {
-			// if there's some current input, use that optimistically
-			(Some(submission), _) => submission.color_mode,
-			// otherwise, use the current value
-			(_, Some(Ok(value))) => value,
-			// if there's an error, use the initial value and log error
-			(_, Some(Err(error))) => {
-				log::error!("Error toggling color mode: {:?}", error);
-				initial_color_mode
-			},
-			// at last, use the initial value
-			_ => initial_color_mode,
-		};
+	let classes = create_memo(cx, move |_| {
+		match color_mode.get() {
+			ColorMode::Light => "",
+			ColorMode::Dark => "dark",
+		}.to_string()
+	});
 
-		set_fa_icon.set(color.to_fa_icon());
-		color
-	};
 
 	view! { cx,
 		<Meta
 			name="color-scheme"
-			// Something about this is broken, value updates but page does not...
-			content=move || color_mode().to_string().to_lowercase()
+			content=move || color_mode.get().to_string().to_lowercase()
 		/>
-		<ActionForm
-			action=toggle_color_mode_action
-			class="absolute bottom-0 right-0"
-		>
-			<input
-				type="hidden"
-				name="color_mode"
-				value=move || (!color_mode()).to_string()
-			/>
-			<button
-				class="m-4 w-14 h-14
-				float-right rounded-full
-				bg-gray-500/[.20] hover:bg-gray-500/[.35]" 
-				type="submit"
-			>
-				<i class=move || format!("fa-solid {} text-4xl", fa_icon.get())/>
-			</button>
-		</ActionForm>
+		<Body class=move || classes.get() />
+		{children(cx)}
 	}
 }
 
 #[component]
-pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
-	children(cx)
+pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
+	let Theme(color_mode, set_color_mode) = use_context::<Theme>(cx).unwrap();
+	let fa_icon = create_memo(cx, move |_| {
+		color_mode.get().to_fa_icon()
+	});
+
+	let toggle_color_mode = move |_| {
+		log::info!("Toggling color mode: {:?}", color_mode.get());
+		let color_mode = color_mode.get();
+		let new_color_mode = match color_mode {
+			ColorMode::Light => ColorMode::Dark,
+			ColorMode::Dark => ColorMode::Light,
+		};
+		set_color_mode.set(new_color_mode);
+	};
+
+	view! { cx,
+		<button
+			class="m-4 w-14 h-14
+			absolute bottom-0 right-0
+			float-right rounded-full
+			bg-gray-500/[.20] hover:bg-gray-500/[.35]" 
+			type="submit"
+			on:click=toggle_color_mode
+		>
+			<i class=move || format!("fa-solid {} text-4xl", fa_icon.get())/>
+		</button>
+	}
 }
