@@ -17,17 +17,14 @@ cfg-if = "1.0.0"
 console_error_panic_hook = "0.1"
 console_log = "1.0.0"
 log = "0.4"
-wasm-bindgen = "0.2.87"
-web-sys = { version = "0.3", features = [
-  "AbortController",
-  "AbortSignal",
-  "HtmlDocument",
-  "Document",
-  "Storage"
-]}
-serde = "1.0.177"
+serde = "1.0.181"
 tracing = "0.1.37"
 tracing-subscriber = "0.3.17"
+wasm-bindgen = "0.2.87"
+web-sys = { version = "0.3", features = [
+  "Storage",
+  "Window"
+]}
 
 [features]
 hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]

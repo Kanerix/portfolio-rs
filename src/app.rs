@@ -1,5 +1,5 @@
 use crate::pages::home::Home;
-use crate::theme::{ToggleThemeButton, ThemeProvider};
+use crate::theme::{ThemeProvider, ToggleThemeButton};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
@@ -10,7 +10,7 @@ pub fn App(cx: Scope) -> impl IntoView {
 
 	view! { cx,
 		<Title text="Kasper's portfolio!"/>
-      	<Meta charset="utf-8"/>
+		  <Meta charset="utf-8"/>
 		<Meta name="description" content="Kasper's portfolio website, created using Leptos!"/>
 		<Link rel="manifest" href="/manifest.json"/>
 		// Google fonts (Poppins)

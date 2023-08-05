@@ -1,6 +1,5 @@
-use cfg_if::cfg_if;
 use leptos::*;
-use leptos_meta::{Meta, Body};
+use leptos_meta::{Body, Meta};
 use serde::{Deserialize, Serialize};
 use std::ops::Not;
 
@@ -17,8 +16,8 @@ pub struct Theme(pub ReadSignal<ColorMode>, pub WriteSignal<ColorMode>);
 impl ToString for ColorMode {
 	fn to_string(&self) -> String {
 		match self {
-			ColorMode::Light => "Light".to_string(),
-			ColorMode::Dark => "Dark".to_string(),
+			ColorMode::Light => "light".to_string(),
+			ColorMode::Dark => "dark".to_string(),
 		}
 	}
 }
@@ -43,38 +42,40 @@ impl ColorMode {
 	}
 }
 
-cfg_if! {
-	if #[cfg(feature = "ssr")] {
-		fn initial_color_mode(cx: Scope) -> ColorMode {
-			use_context::<actix_web::HttpRequest>(cx)
-				.and_then(|req| {
-					let cookies = req.cookies().ok();
-					cookies.and_then(|cookies| {
-						cookies
-							.iter()
-							.find(|cookie| cookie.name() == "color_mode")
-							.and_then(|cookie| match cookie.value() {
-								"Dark" => Some(ColorMode::Dark),
-								"Light" => Some(ColorMode::Light),
-								_ => None,
-							})
+#[cfg(feature = "ssr")]
+fn initial_color_mode(cx: Scope) -> ColorMode {
+	use_context::<actix_web::HttpRequest>(cx)
+		.and_then(|req| {
+			let cookies = req.cookies().ok();
+			cookies.and_then(|cookies| {
+				cookies
+					.iter()
+					.find(|cookie| cookie.name() == "color_mode")
+					.and_then(|cookie| match cookie.value() {
+						"dark" => Some(ColorMode::Dark),
+						"light" => Some(ColorMode::Light),
+						_ => None,
 					})
-				})
-				.unwrap_or_default()
-		}
-	} else {
-		fn initial_color_mode(_cx: Scope) -> ColorMode {
-			use wasm_bindgen::JsCast;
+			})
+		})
+		.unwrap_or_default()
+}
 
-			let doc = document().unchecked_into::<web_sys::HtmlDocument>();
-			let cookie = doc.cookie().unwrap_or_default();
-			if cookie.contains("color_mode=Dark") {
-				ColorMode::Dark
-			} else {
-				ColorMode::Light
-			}
-		}
-	}
+#[cfg(not(feature = "ssr"))]
+fn initial_color_mode(_cx: Scope) -> ColorMode {
+	window()
+		.local_storage()
+		.ok()
+		.and_then(|local_storage| {
+			local_storage
+				.and_then(|storage| storage.get_item("color_mode").ok())
+				.and_then(|color_mode| match color_mode.as_deref() {
+					Some("dark") => Some(ColorMode::Dark),
+					Some("light") => Some(ColorMode::Light),
+					_ => None,
+				})
+		})
+		.unwrap_or_default()
 }
 
 #[component]
@@ -88,14 +89,25 @@ pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
 		match color_mode.get() {
 			ColorMode::Light => "",
 			ColorMode::Dark => "dark",
-		}.to_string()
+		}
+		.to_string()
 	});
 
+	create_effect(cx, move |_| {
+		window().local_storage().ok().and_then(|local_storage| {
+			local_storage.and_then(|storage| {
+				log::info!("test");
+				storage
+					.set_item("color_mode", color_mode.get().to_string().as_str())
+					.ok()
+			})
+		});
+	});
 
 	view! { cx,
 		<Meta
 			name="color-scheme"
-			content=move || color_mode.get().to_string().to_lowercase()
+			content=move || color_mode.get().to_string()
 		/>
 		<Body class=move || classes.get() />
 		{children(cx)}
@@ -105,12 +117,9 @@ pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
 #[component]
 pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 	let Theme(color_mode, set_color_mode) = use_context::<Theme>(cx).unwrap();
-	let fa_icon = create_memo(cx, move |_| {
-		color_mode.get().to_fa_icon()
-	});
+	let fa_icon = create_memo(cx, move |_| color_mode.get().to_fa_icon());
 
 	let toggle_color_mode = move |_| {
-		log::info!("Toggling color mode: {:?}", color_mode.get());
 		let color_mode = color_mode.get();
 		let new_color_mode = match color_mode {
 			ColorMode::Light => ColorMode::Dark,

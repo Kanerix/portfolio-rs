@@ -12,8 +12,8 @@
       "sizes": "48x48"
     },
     {
-      "src": "/profile.jpg",
-      "type": "image/jpg",
+      "src": "/profile.webp",
+      "type": "image/webp",
       "sizes": "600x600"
     }
   ]
