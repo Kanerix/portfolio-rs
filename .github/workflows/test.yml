@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - "**"
 
 jobs:
   CI:
@@ -39,5 +39,3 @@ jobs:
           npm install tailwindcss -g
           npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
           cargo leptos build --release
-
-
