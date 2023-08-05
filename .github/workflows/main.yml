@@ -24,6 +24,7 @@ jobs:
           cargo --version --verbose
           rustc --version
           cargo clippy --version    
+          cargo leptos --version
 
       - name: Lint
         run: cargo clippy --all-targets --all-features -- -D warnings
@@ -37,6 +38,6 @@ jobs:
         run: |
           npm install tailwindcss -g
           npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
-          cargo leptos build
+          cargo leptos build --release
 
 
