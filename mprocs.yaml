@@ -1,0 +1,9 @@
+procs:
+  trunk: "cargo leptos watch"
+  tailwind: "npx tailwindcss -i ./style/tailwind.css -o ./style/generated.css --watch"
+  fmt: 
+    shell: "cargo fmt"
+    autostart: false
+  tests:
+    shell: "cargo test"
+    autostart: false
