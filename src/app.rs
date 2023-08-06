@@ -9,7 +9,7 @@ pub fn App(cx: Scope) -> impl IntoView {
 	provide_meta_context(cx);
 
 	view! { cx,
-		<Html lang="en" dir="rtl" />
+		<Html lang="en" dir="ltr" />
 		<Title text="Kasper's portfolio!"/>
 		  <Meta charset="utf-8"/>
 		<Meta name="description" content="Kasper's portfolio website, created using Leptos!"/>
