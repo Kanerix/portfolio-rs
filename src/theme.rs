@@ -130,7 +130,7 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 
 	view! { cx,
 		<button
-			arial-label="Toggle color mode"
+			aria-label="Toggle color mode"
 			class="m-4 w-14 h-14
 			absolute bottom-0 right-0
 			float-right rounded-full
