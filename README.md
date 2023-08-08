@@ -6,7 +6,7 @@ is for me to learn webassembly and rust. Feel free
 to use any code you want and help me improve the 
 app.
 
-The website should be available at [artilun.com](https://artilun.com/)
+The website should be available at [portfolio.artilun.com](https://portfolio.artilun.com/)
 
 ## Required steps
 
