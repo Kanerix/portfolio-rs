@@ -27,8 +27,19 @@ web-sys = { version = "0.3", features = [
 ]}
 
 [features]
-hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
-ssr = ["dep:actix-files", "dep:actix-web", "dep:leptos_actix", "leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+hydrate = [
+	"leptos/hydrate",
+	"leptos_meta/hydrate",
+	"leptos_router/hydrate"
+]
+ssr = [
+	"dep:actix-files",
+	"dep:actix-web",
+	"dep:leptos_actix",
+	"leptos/ssr",
+	"leptos_meta/ssr",
+	"leptos_router/ssr"
+]
 
 [package.metadata.leptos]
 site-root = "target/site"

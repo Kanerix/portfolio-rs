@@ -27,7 +27,7 @@ pub fn Home(cx: Scope) -> impl IntoView {
 					</a>
 				</div>
 			</div>
-			<div class="overflow-scroll h-screen col-span-2">
+			<div class="overflow-y-scroll h-screen col-span-2">
 				<img
 					class="rounded-full w-64 h-64 m-auto"
 					src="profile.webp"
