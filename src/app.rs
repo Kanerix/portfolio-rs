@@ -5,10 +5,10 @@ use leptos_meta::*;
 use leptos_router::*;
 
 #[component]
-pub fn App(cx: Scope) -> impl IntoView {
-	provide_meta_context(cx);
+pub fn App() -> impl IntoView {
+	provide_meta_context();
 
-	view! { cx,
+	view! {
 		<Html lang="en" dir="ltr" />
 		<Title text="Kasper's portfolio!"/>
 		  <Meta charset="utf-8"/>
@@ -23,12 +23,12 @@ pub fn App(cx: Scope) -> impl IntoView {
 		// Tailwind generated stylesheet
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
 		<ThemeProvider>
-			<div class="h-screen w-full bg-slate-100 dark:bg-slate-900">
+			<div class="h-screen w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
 				<Router>
 					<main class="h-screen mx-auto w-2/3">
 						<ToggleThemeButton />
 						<Routes>
-							<Route path="/" view=|cx| view! { cx, <Home/> }/>
+							<Route path="/" view=|| view! { <Home/> }/>
 						</Routes>
 					</main>
 				</Router>

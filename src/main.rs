@@ -7,7 +7,7 @@ cfg_if! {
 		use leptos_actix::{generate_route_list, LeptosRoutes};
 		use actix_files::Files;
 		use actix_web::{App, HttpServer, middleware};
-		use portfolio::app::App;
+		use portfolio::app::App as Frontend;
 
 		#[actix_web::main]
 		async fn main() -> std::io::Result<()> {
@@ -18,20 +18,20 @@ cfg_if! {
 			let conf = get_configuration(None).await.unwrap();
 			let addr = conf.leptos_options.site_addr;
 
-			log::info!("Starting server at {}", addr);
+			tracing::info!("Starting server at {}", addr);
 
 			HttpServer::new(move || {
 				let leptos_options = &conf.leptos_options;
 				let site_root = &leptos_options.site_root;
 
-				let routes = generate_route_list(|cx| view! { cx, <App/> });
+				let routes = generate_route_list(|| view! { <Frontend/> });
 
 				App::new()
 					.route("/api/{tail:.*}", leptos_actix::handle_server_fns())
 					.leptos_routes(
 						leptos_options.to_owned(),
 						routes,
-						|cx| view! { cx, <App/> },
+						|| view! { <Frontend/> },
 					)
 					.service(Files::new("/", site_root))
 					.wrap(middleware::Compress::default())

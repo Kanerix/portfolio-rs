@@ -13,11 +13,11 @@ pub enum ColorMode {
 #[derive(Clone, Copy, Debug)]
 pub struct Theme(pub ReadSignal<ColorMode>, pub WriteSignal<ColorMode>);
 
-impl ToString for ColorMode {
-	fn to_string(&self) -> String {
+impl AsRef<str> for ColorMode {
+	fn as_ref(&self) -> &str {
 		match self {
-			ColorMode::Light => "light".to_string(),
-			ColorMode::Dark => "dark".to_string(),
+			ColorMode::Light => "light",
+			ColorMode::Dark => "dark",
 		}
 	}
 }
@@ -43,8 +43,8 @@ impl ColorMode {
 }
 
 #[cfg(feature = "ssr")]
-fn initial_color_mode(cx: Scope) -> ColorMode {
-	use_context::<actix_web::HttpRequest>(cx)
+fn initial_color_mode() -> ColorMode {
+	use_context::<actix_web::HttpRequest>()
 		.and_then(|req| {
 			let cookies = req.cookies().ok();
 			cookies.and_then(|cookies| {
@@ -62,7 +62,7 @@ fn initial_color_mode(cx: Scope) -> ColorMode {
 }
 
 #[cfg(not(feature = "ssr"))]
-fn initial_color_mode(_cx: Scope) -> ColorMode {
+fn initial_color_mode() -> ColorMode {
 	window()
 		.local_storage()
 		.ok()
@@ -79,13 +79,13 @@ fn initial_color_mode(_cx: Scope) -> ColorMode {
 }
 
 #[component]
-pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
-	let initial_color_mode = initial_color_mode(cx);
-	let (color_mode, set_color_mode) = create_signal(cx, initial_color_mode);
+pub fn ThemeProvider(children: Children) -> impl IntoView {
+	let initial_color_mode = initial_color_mode();
+	let (color_mode, set_color_mode) = create_signal(initial_color_mode);
 
-	provide_context(cx, Theme(color_mode, set_color_mode));
+	provide_context(Theme(color_mode, set_color_mode));
 
-	let classes = create_memo(cx, move |_| {
+	let classes = create_memo(move |_| {
 		match color_mode.get() {
 			ColorMode::Light => "",
 			ColorMode::Dark => "dark",
@@ -93,31 +93,30 @@ pub fn ThemeProvider(cx: Scope, children: Children) -> impl IntoView {
 		.to_string()
 	});
 
-	create_effect(cx, move |_| {
+	create_effect(move |_| {
 		window().local_storage().ok().and_then(|local_storage| {
 			local_storage.and_then(|storage| {
-				log::info!("test");
-				storage
-					.set_item("color_mode", color_mode.get().to_string().as_str())
-					.ok()
+				storage.set_item(
+					"color_mode",
+					color_mode.get().as_ref()
+				).ok()
 			})
 		});
 	});
 
-	view! { cx,
-		<Meta
-			name="color-scheme"
-			content=move || color_mode.get().to_string()
-		/>
+	let set_color_scheme = move || color_mode.get().as_ref().to_owned();
+
+	view! {
+		<Meta name="color-scheme" content=set_color_scheme />
 		<Body class=move || classes.get() />
-		{children(cx)}
+		{children()}
 	}
 }
 
 #[component]
-pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
-	let Theme(color_mode, set_color_mode) = use_context::<Theme>(cx).unwrap();
-	let fa_icon = create_memo(cx, move |_| color_mode.get().to_fa_icon());
+pub fn ToggleThemeButton() -> impl IntoView {
+	let Theme(color_mode, set_color_mode) = use_context::<Theme>().unwrap();
+	let fa_icon = create_memo(move |_| color_mode.get().to_fa_icon());
 
 	let toggle_color_mode = move |_| {
 		let color_mode = color_mode.get();
@@ -128,7 +127,7 @@ pub fn ToggleThemeButton(cx: Scope) -> impl IntoView {
 		set_color_mode.set(new_color_mode);
 	};
 
-	view! { cx,
+	view! {
 		<button
 			aria-label="Toggle color mode"
 			class="m-4 w-14 h-14

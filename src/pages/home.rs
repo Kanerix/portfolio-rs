@@ -1,8 +1,8 @@
 use leptos::*;
 
 #[component]
-pub fn Home(cx: Scope) -> impl IntoView {
-	view! { cx,
+pub fn Home() -> impl IntoView {
+	view! {
 		<div class="grid gap-4 grid-cols-1 md:grid-cols-3">
 			<div class="my-32 flex flex-col items-start grow">
 				<h1 class="text-5xl font-semibold text-slate-900 dark:text-slate-100">

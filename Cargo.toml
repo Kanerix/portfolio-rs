@@ -7,10 +7,10 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leptos = { version = "0.4.6", default-features = false, features = ["serde"] }
-leptos_router = { version = "0.4.6", default-features = false }
-leptos_meta = { version = "0.4.6", default-features = false }
-leptos_actix = { version = "0.4.6", default-features = false, optional = true }
+leptos = { version = "0.5.0-beta", default-features = false, features = ["serde"] }
+leptos_router = { version = "0.5.0-beta", default-features = false }
+leptos_meta = { version = "0.5.0-beta", default-features = false }
+leptos_actix = { version = "0.5.0-beta", default-features = false, optional = true }
 actix-files = { version = "0.6", optional = true }
 actix-web = { version = "4", optional = true, features = ["macros"] }
 cfg-if = "1.0.0"
