@@ -1,7 +1,39 @@
+use gloo_net::http::Request;
 use leptos::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+struct Repo {
+	name: String,
+	html_url: String,
+	homepage: Option<String>,
+}
+
+impl IntoView for Repo {
+	fn into_view(self) -> View {
+		view! {
+			<div class="bg-slate-900">
+				{self.name}
+			</div>
+		}
+		.into_view()
+	}
+}
+
+async fn fetch_repos() -> Option<Vec<Repo>> {
+	Request::get("https://api.github.com/users/Kanerix/repo")
+		.send()
+		.await
+		.ok()?
+		.json::<Vec<Repo>>()
+		.await
+		.ok()
+}
 
 #[component]
 pub fn Home() -> impl IntoView {
+	let repos = create_local_resource(|| (), |_| async move { fetch_repos().await });
+
 	view! {
 		<div class="grid gap-4 grid-cols-1 md:grid-cols-3">
 			<div class="my-32 flex flex-col items-start grow">
@@ -28,41 +60,14 @@ pub fn Home() -> impl IntoView {
 				</div>
 			</div>
 			<div class="overflow-y-scroll h-screen col-span-2">
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
-				<img
-					class="rounded-full w-64 h-64 m-auto"
-					src="profile.webp"
-					alt="Profile picture"
-				/>
+				{move || {
+					match repos.get() {
+						None => view! {
+							<div class="text-slate-600 dark:text-slate-400">"Loading..."</div>
+						}.into_view(),
+						Some(repos) => repos.into_view(),
+					}
+				}}
 			</div>
 		</div>
 	}

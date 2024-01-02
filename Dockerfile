@@ -14,7 +14,7 @@ RUN npm install tailwindcss -g
 COPY . .
 
 RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
-RUN cargo leptos build --release
+RUN cargo leptos build --release -vv
 
 
 FROM alpine:3.18 AS runner
@@ -24,17 +24,16 @@ RUN addgroup -S server && \
 	adduser -S www-data -G server && \
 	chown -R www-data:server /var/www/app
 
-COPY --chown=www-data:server --from=builder /build/target/server/release/portfolio ./server/portfolio
-COPY --chown=www-data:server --from=builder /build/target/front/wasm32-unknown-unknown/release/portfolio.wasm ./front/portfolio.wasm
+COPY --chown=www-data:server --from=builder /build/target/release/portfolio ./portfolio-server
 COPY --chown=www-data:server --from=builder /build/target/site ./site
 
 USER www-data
 
-ENV LEPTOS_OUTPUT_NAME "portfolio"
-ENV LEPTOS_SITE_ROOT "/var/www/app/site"
-ENV LEPTOS_ENV "PROD"
+ENV RUST_LOG="info"
+ENV APP_ENVIRONMENT="production"
 ENV LEPTOS_SITE_ADDR "0.0.0.0:3000"
+ENV LEPTOS_SITE_ROOT "/var/www/app/site"
 
 EXPOSE 3000
 
-CMD ["./server/portfolio"]
+CMD ["./portfolio-server"]

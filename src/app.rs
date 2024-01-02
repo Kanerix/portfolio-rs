@@ -29,6 +29,7 @@ pub fn App() -> impl IntoView {
 						<ToggleThemeButton />
 						<Routes>
 							<Route path="/" view=|| view! { <Home/> }/>
+							<Route path="/" view=|| view! { <Home/> }/>
 						</Routes>
 					</main>
 				</Router>
