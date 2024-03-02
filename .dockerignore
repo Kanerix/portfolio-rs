@@ -3,7 +3,7 @@
 .vscode
 
 # Rust build dir
-target/
+target
 
 # Random git stuff
 LICENSE
