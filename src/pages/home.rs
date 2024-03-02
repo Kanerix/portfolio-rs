@@ -2,7 +2,7 @@ use gloo_net::http::Request;
 use leptos::*;
 use serde::{Deserialize, Serialize};
 
-static REPOS_WHITELIST: [&'static str; 2] = ["portfolio-rs", "mnist-ai-rust"];
+static REPOS_WHITELIST: [&str; 2] = ["portfolio-rs", "mnist-ai-rust"];
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 struct Repo {
@@ -71,7 +71,7 @@ impl Repo {
 				<i class=format!("fa-solid fa-code {}", default_classes) />
 		};
 
-		if language == None {
+		if language.is_none() {
 			return unkown_icon_view;
 		}
 
