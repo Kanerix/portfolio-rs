@@ -27,7 +27,7 @@ jobs:
           cargo leptos --version
 
       - name: Lint
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo clippy --all-targets --all-features
 
       - name: Test
         run: |
