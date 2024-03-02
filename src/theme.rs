@@ -96,10 +96,9 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
 	create_effect(move |_| {
 		window().local_storage().ok().and_then(|local_storage| {
 			local_storage.and_then(|storage| {
-				storage.set_item(
-					"color_mode",
-					color_mode.get().as_ref()
-				).ok()
+				storage
+					.set_item("color_mode", color_mode.get().as_ref())
+					.ok()
 			})
 		});
 	});

@@ -11,7 +11,7 @@ pub fn App() -> impl IntoView {
 	view! {
 		<Html lang="en" dir="ltr" />
 		<Title text="Kasper's portfolio!"/>
-		  <Meta charset="utf-8"/>
+		<Meta charset="utf-8"/>
 		<Meta name="description" content="Kasper's portfolio website, created using Leptos!"/>
 		<Link rel="manifest" href="/manifest.json"/>
 		// Google fonts (Poppins)
