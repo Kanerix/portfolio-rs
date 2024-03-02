@@ -14,7 +14,7 @@ RUN npm install tailwindcss -g
 COPY . .
 
 RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
-RUN cargo leptos build --release -vv
+RUN LEPTOS_WASM_OPT_VERSION=version_117 cargo leptos build --release -vv
 
 
 FROM alpine:3.18 AS runner

@@ -53,3 +53,4 @@ browserquery = "defaults"
 env = "DEV"
 bin-features = ["ssr"]
 lib-features = ["hydrate"]
+frontend-files-content-hashes = false
