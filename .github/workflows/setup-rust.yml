@@ -1,0 +1,30 @@
+name: setup-rust
+
+on:
+  workflow_call:
+    inputs: 
+      RUST_VERSION:
+        description: The version of rust to use
+        default: nightly
+        type: string
+
+jobs:
+  setup-rust:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup environment
+        run: |
+          rustup update
+          rustup install ${{ inputs.RUST_VERSION }}   
+          rustup component add clippy
+          rustup target add wasm32-unknown-unknown
+          cargo install --locked cargo-leptos
+
+      - name: Toolchain info 
+        run: |
+          cargo --version --verbose
+          rustc --version
+          cargo clippy --version    

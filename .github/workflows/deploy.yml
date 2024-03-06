@@ -1,16 +1,10 @@
-name: CD
+name: Deploy app
 
 on:
-  workflow_run:
-      workflows: 
-        - CI
-      branches: 
-        - main
-      types:
-        - completed
+  workflow_call:
 
 jobs:
-  CD:
+  deploy:
     name: Deploy app
     runs-on: ubuntu-latest
     steps:

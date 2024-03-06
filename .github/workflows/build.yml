@@ -1,0 +1,46 @@
+name: Build and push docker image
+
+on:
+  workflow_call:
+    inputs:
+      RUST_VERSION:
+        description: The Rust version to use
+        required: true
+        type: string 
+    outputs:
+      DOCKER_IMAGE:
+        description: Name of Docker image
+        value: ${{ jobs.build-and-push-image.outputs.DOCKER_IMAGE }}
+
+env:
+  DOCKER_REGISTRY: ghcr.io
+  DOCKER_IMAGE: ${{ github.repository }}/${{ github.event.inputs.RUST_VERSION }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+
+    outputs:
+      DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}
+
+    # Permissions granted to `GITHUB_TOKEN` for actions in this job.
+    permissions:
+      contents: read
+      packages: write
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }} 
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Docker meta-data
+        id: docker-meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE }}:latest

@@ -1,0 +1,25 @@
+name: Linter
+
+on:
+  workflow_call:
+    inputs:
+      DOCKER_IMAGE:
+        description: Docker image to use for the workflow
+        type: string
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Lint Dockerfile
+        run: |
+          docker run --rm -i hadolint/hadolint < Dockerfile
+
+      - name: Lint Rust project
+        uses: .github/workflows/setup-rust.yml
+        with:
+          RUST_VERSION: ${{ vars.RUST_VERSION }} 
