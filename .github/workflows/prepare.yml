@@ -1,0 +1,83 @@
+name: Prepare workflow
+
+on:
+  workflow_call:
+    outputs:
+      DEPLOY_ENV:
+        description: What kind of deployment this is
+        value: ${{ jobs.prepare.outputs.DEPLOY_ENV }}
+      
+      RUST_VERSION:
+        description: The version of Rust to use
+        value: ${{ jobs.prepare.outputs.RUST_ENV }}
+      
+      IMAGE_NAME:
+        description: The name of the image to build
+        value: ${{ jobs.prepare.outputs.IMAGE_NAME }}
+
+jobs:
+  prepare:
+      runs-on: ubuntu-latest
+
+      outputs:
+        DEPLOY_ENV: ${{ steps.deploy-env.outputs.DEPLOY_ENV }}
+        RUST_ENV: ${{ steps.rust-version.outputs.RUST_VERSION }}
+        IMAGE_NAME: ${{ steps.image-name.outputs.IMAGE_NAME }}
+
+      steps:
+        - name: Set deployment variable 
+          id: deploy-env
+          env:
+            BRANCH: ${{ github.ref_name }}
+          run: |
+            if [[ $BRANCH == "main" || $BRANCH == "master" ]]; then
+                DEPLOY_ENV=PROD
+            else
+                DEPLOY_ENV=TEST
+            fi
+
+            echo "DEPLOY_ENV="$DEPLOY_ENV
+            echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_OUTPUT
+        
+        - name: Set Rust version
+          id: rust-version
+          env:
+            RUST_VERSION: ${{ vars.RUST_VERSION }}
+          run: |
+            if [[ -f .rust-toolchain.toml ]]; then
+                RUST_VERSION=$(cat .rust-toolchain.toml)
+            elif [[ -n "$RUST_VERSION" ]]; then
+                RUST_VERSION=$RUST_VERSION
+            else
+                RUST_VERSION=stable
+            fi
+
+            echo "RUST_VERSION="$RUST_VERSION
+            echo "RUST_VERSION=$RUST_VERSIN" >> $GITHUB_OUTPUT
+
+        - name: Set image name
+          id : image-name
+          env:
+            GIT_REPOSITORY: ${{ github.repository }}
+          run: |
+            IMAGE_NAME=$GIT_REPOSITORY
+            echo "IMAGE_NAME="$IMAGE_NAME
+            echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
+        
+        - name: Write prepare summary
+          run: |
+            echo '### Prepare pipeline:\n                 
+            <table>
+                <tr>
+                    <td>🎯 Deploy env</td>
+                    <td>${{ steps.deploy-env.outputs.DEPLOY_ENV }}</td>
+                </tr>
+                <tr>
+                    <td>🦀 Rust version</td>
+                    <td>${{ steps.rust-version.outputs.RUST_VERSION }}</td>
+                </tr>
+                <tr>
+                    <td>🐳 Image name</td>
+                    <td>${{ steps.image-name.outputs.IMAGE_NAME }}</td>
+                </tr>
+            </table>' >> $GITHUB_STEP_SUMMARY

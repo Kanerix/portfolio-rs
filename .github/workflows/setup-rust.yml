@@ -7,6 +7,11 @@ on:
         description: The version of rust to use
         default: nightly
         type: string
+      
+      wasm:
+        description: Whether to add wasm
+        default: false
+        type: boolean
 
 jobs:
   setup-rust:
@@ -15,15 +20,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup environment
+      - name: Setup Rust environment
         run: |
           rustup update
           rustup install ${{ inputs.RUST_VERSION }}   
+          rustup default ${{ inputs.RUST_VERSION }}
           rustup component add clippy
+        
+      - name: Add WASM target
+        if: ${{ inputs.wasm }}
+        run: |
           rustup target add wasm32-unknown-unknown
-          cargo install --locked cargo-leptos
 
-      - name: Toolchain info 
+      - name: Write toolchain info 
         run: |
           cargo --version --verbose
           rustc --version

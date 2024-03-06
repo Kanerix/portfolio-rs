@@ -10,19 +10,29 @@ on:
       - 'CHANGELOG.md'
         
 jobs:
+    prepare:
+      uses: ./.github/workflows/prepare.yml
+      secrets: inherit
+
     linter:
-        uses: .github/workflows/linter.yml
+        uses: ./.github/workflows/linter.yml
+        needs: [prepare]
         secrets: inherit
+        with:
+          RUST_VERSION: ${{ needs.prepare.outputs.RUST_VERSION }}
 
     build:
-        uses: .github/workflows/build.yml
+        uses: ./.github/workflows/build.yml
+        needs: [prepare, linter]
         secrets: inherit
-
-    test:
-        uses: .github/workflows/test.yml
-        secrets: inherit
+        with:
+          DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
+          RUST_VERSION: ${{ needs.prepare.outputs.RUST_VERSION }}
+          IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
 
     deploy:
-        needs: [test, linter, build]
-        uses: .github/workflows/deploy.yml
+        needs: [prepare, linter, build]
+        uses: ./.github/workflows/deploy.yml
         secrets: inherit
+        with:
+          DOCKER_IMAGE: ${{ needs.build.outputs.DOCKER_IMAGE }}

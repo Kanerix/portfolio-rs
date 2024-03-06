@@ -1,4 +1,5 @@
-FROM rust:alpine3.18 AS builder
+ARG RUST_VERSION
+FROM rust:${RUST_VERSION}-alpine3.18 AS builder
 WORKDIR /build
 
 RUN apk update && \

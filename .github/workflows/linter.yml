@@ -3,6 +3,10 @@ name: Linter
 on:
   workflow_call:
     inputs:
+      RUST_VERSION:
+        description: Rust version to use for the workflow
+        type: string
+
       DOCKER_IMAGE:
         description: Docker image to use for the workflow
         type: string
@@ -19,7 +23,11 @@ jobs:
         run: |
           docker run --rm -i hadolint/hadolint < Dockerfile
 
-      - name: Lint Rust project
-        uses: .github/workflows/setup-rust.yml
+      - name: Setup rust environment 
+        uses: ./.github/workflows/setup-rust.yml
         with:
-          RUST_VERSION: ${{ vars.RUST_VERSION }} 
+          RUST_VERSION: ${{ inputs.RUST_VERSION }} 
+      
+      - name: Lint Rust code wiht Clippy
+        run: |
+          cargo clippy --all-targets --all-features -- -D warnings
