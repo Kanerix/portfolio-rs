@@ -1,4 +1,4 @@
-name: setup-rust
+name: Setup rust
 
 on:
   workflow_call:

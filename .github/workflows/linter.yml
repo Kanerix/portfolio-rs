@@ -1,4 +1,4 @@
-name: Linter
+name: Lint project 
 
 on:
   workflow_call:
@@ -12,7 +12,7 @@ on:
         type: string
 
 jobs:
-  linter:
+  lint-project:
     runs-on: ubuntu-latest
 
     steps:

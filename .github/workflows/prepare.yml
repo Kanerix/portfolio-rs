@@ -1,4 +1,4 @@
-name: Prepare workflow
+name: Prepare pipeline 
 
 on:
   workflow_call:
@@ -32,6 +32,8 @@ jobs:
           run: |
             if [[ $BRANCH == "main" || $BRANCH == "master" ]]; then
                 DEPLOY_ENV=PROD
+            elif [[ $BRANCH == "staging" ]]; then
+                DEPLOY_ENV=STAGING
             else
                 DEPLOY_ENV=TEST
             fi
