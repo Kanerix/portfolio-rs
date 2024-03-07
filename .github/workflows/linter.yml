@@ -7,10 +7,6 @@ on:
         description: Rust version to use for the workflow
         type: string
 
-      DOCKER_IMAGE:
-        description: Docker image to use for the workflow
-        type: string
-
 jobs:
   lint-project:
     runs-on: ubuntu-latest
@@ -18,10 +14,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Lint Dockerfile
-        run: |
-          docker run --rm -i hadolint/hadolint < Dockerfile
 
       - name: Setup rust environment 
         uses: ./.github/workflows/setup-rust.yml
