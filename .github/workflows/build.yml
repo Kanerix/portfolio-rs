@@ -35,11 +35,6 @@ jobs:
     outputs:
       DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}
 
-    # Permissions granted to `GITHUB_TOKEN` for actions in this job.
-    permissions:
-      contents: read
-      packages: write
-        
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

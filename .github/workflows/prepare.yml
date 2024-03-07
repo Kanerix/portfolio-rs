@@ -5,18 +5,18 @@ on:
     outputs:
       DEPLOY_ENV:
         description: What kind of deployment this is
-        value: ${{ jobs.prepare.outputs.DEPLOY_ENV }}
+        value: ${{ jobs.prepare-pipeline.outputs.DEPLOY_ENV }}
       
       RUST_VERSION:
         description: The version of Rust to use
-        value: ${{ jobs.prepare.outputs.RUST_ENV }}
+        value: ${{ jobs.prepare-pipeline.outputs.RUST_ENV }}
       
       IMAGE_NAME:
         description: The name of the image to build
-        value: ${{ jobs.prepare.outputs.IMAGE_NAME }}
+        value: ${{ jobs.prepare-pipeline.outputs.IMAGE_NAME }}
 
 jobs:
-  prepare:
+  prepare-pipeline:
       runs-on: ubuntu-latest
 
       outputs:
