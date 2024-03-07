@@ -1,18 +1,19 @@
 ARG RUST_VERSION
-FROM rust:${RUST_VERSION}-alpine3.18 AS builder
+FROM rust:alpine3.18 AS builder
 WORKDIR /build
 
 RUN apk update && \
 	apk upgrade && \
-	apk add pkgconfig libressl-dev musl-dev npm --no-cache  \
-    rm -r /var/cache/apk/*
+	apk add pkgconfig libressl-dev musl-dev npm --no-cache
 
-RUN rustup update \
-    rustup install "${RUST_VERSION}" \
-    rustup default "${RUST_VERSION}" \
-    rustup target add wasm32-unknown-unknown \
-    cargo install --locked cargo-leptos \
-    npm install tailwindcss@3.4 -g
+COPY rust-toolchain.toml .
+
+RUN rustup update && \
+    rustup install ${RUST_VERSION} && \
+    rustup default ${RUST_VERSION} && \
+    rustup target add wasm32-unknown-unknown && \
+    cargo install --locked cargo-leptos && \
+    npm install tailwindcss -g
 
 COPY . .
 

@@ -53,7 +53,7 @@ jobs:
             fi
 
             echo "RUST_VERSION="$RUST_VERSION
-            echo "RUST_VERSION=$RUST_VERSIN" >> $GITHUB_OUTPUT
+            echo "RUST_VERSION=$RUST_VERSION" >> $GITHUB_OUTPUT
 
         - name: Set image name
           id : image-name
@@ -66,7 +66,7 @@ jobs:
         
         - name: Write prepare summary
           run: |
-            echo '### Prepare pipeline:\n                 
+            echo '### Prepare pipeline:               
             <table>
                 <tr>
                     <td>🎯 Deploy env</td>
