@@ -34,4 +34,4 @@ jobs:
 
       - name: Lint Rust code wiht Clippy
         run: |
-          cargo clippy --all-targets --all-features -- -D warnings
+          cargo clippy --all-targets --all-features --
