@@ -46,9 +46,7 @@ jobs:
           env:
             RUST_VERSION: ${{ vars.RUST_VERSION }}
           run: |
-            if [[ -f .rust-toolchain.toml ]]; then
-                RUST_VERSION=$(cat .rust-toolchain.toml)
-            elif [[ -n "$RUST_VERSION" ]]; then
+            if [[ -n "$RUST_VERSION" ]]; then
                 RUST_VERSION=$RUST_VERSION
             else
                 RUST_VERSION=stable

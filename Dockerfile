@@ -3,19 +3,21 @@ FROM rust:${RUST_VERSION}-alpine3.18 AS builder
 WORKDIR /build
 
 RUN apk update && \
-	apk upgrade --no-cache && \
-	apk add pkgconfig libressl-dev musl-dev npm
+	apk upgrade && \
+	apk add pkgconfig libressl-dev musl-dev npm --no-cache  \
+    rm -r /var/cache/apk/*
 
-RUN rustup default nightly 
-RUN rustup target add wasm32-unknown-unknown
-
-RUN cargo install --locked cargo-leptos
-RUN npm install tailwindcss -g
+RUN rustup update \
+    rustup install "${RUST_VERSION}" \
+    rustup default "${RUST_VERSION}" \
+    rustup target add wasm32-unknown-unknown \
+    cargo install --locked cargo-leptos \
+    npm install tailwindcss@3.4 -g
 
 COPY . .
 
-RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify
-RUN LEPTOS_WASM_OPT_VERSION=version_117 cargo leptos build --release -vv
+RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify \
+    LEPTOS_WASM_OPT_VERSION=version_117 cargo leptos build --release -vv
 
 
 FROM alpine:3.18 AS runner
