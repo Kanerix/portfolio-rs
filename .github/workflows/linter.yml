@@ -15,11 +15,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup rust environment 
-        uses: ./.github/workflows/setup-rust.yml
-        with:
-          RUST_VERSION: ${{ inputs.RUST_VERSION }} 
-      
+      - name: Setup Rust environment
+        run: |
+          rustup update
+          rustup install ${{ inputs.RUST_VERSION }}   
+          rustup default ${{ inputs.RUST_VERSION }}
+          rustup component add clippy
+        
+      - name: Add WASM target
+        run: |
+          rustup target add wasm32-unknown-unknown
+
+      - name: Write toolchain info 
+        run: |
+          cargo --version --verbose
+          rustc --version
+          cargo clippy --version    
+
       - name: Lint Rust code wiht Clippy
         run: |
           cargo clippy --all-targets --all-features -- -D warnings
