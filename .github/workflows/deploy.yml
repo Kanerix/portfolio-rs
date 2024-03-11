@@ -1,22 +1,22 @@
-name: CD
+name: Deploy app
 
 on:
-  workflow_run:
-      workflows: 
-        - CI
-      branches: 
-        - main
-      types:
-        - completed
+  workflow_call:
+    inputs:
+      DOCKER_IMAGE:
+        description: 'Path to the image'
+        required: true
+        type: string
 
 jobs:
-  CD:
-    name: Deploy app
+  deploy-app:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-
-      - run: flyctl deploy --remote-only
+      - run: |
+          flyctl deploy --remote-only --image ${{ env.DOCKER_IMAGE }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          DOCKER_IMAGE: ${{ github.event.inputs.DOCKER_IMAGE }}
