@@ -25,11 +25,11 @@ on:
 
 env:
   DOCKER_REGISTRY: ghcr.io
-  DOCKER_IMAGE: ${{ github.repository }}/${{ github.event.inputs.RUST_VERSION }}
+  DOCKER_IMAGE: ${{ github.repository }}/${{ github.event.inputs.IMAGE_NAME }}
 
 jobs:
   build-and-push-image:
-    if: inputs.DEPLOY_ENV == 'production'
+    if: inputs.DEPLOY_ENV == 'PROD'
     runs-on: ubuntu-latest
 
     outputs:
