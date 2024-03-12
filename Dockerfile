@@ -1,4 +1,4 @@
-ARG RUST_VERSION
+ARG RUST_VERSION_USED
 FROM rust:alpine3.18 AS builder
 WORKDIR /build
 
@@ -9,10 +9,8 @@ RUN apk update && \
 COPY rust-toolchain.toml .
 
 RUN rustup update && \
-    rustup install ${RUST_VERSION} && \
-    rustup default ${RUST_VERSION} && \
     rustup target add wasm32-unknown-unknown && \
-    cargo install --locked cargo-leptos && \
+    cargo install --locked --version=0.2.16 cargo-leptos && \
     npm install tailwindcss -g
 
 COPY . .
