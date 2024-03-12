@@ -51,9 +51,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Debug image name
-        run: echo "The image name is ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE }}:latest"
-      
       - name: Docker meta-data
         id: docker-meta
         uses: docker/metadata-action@v3
