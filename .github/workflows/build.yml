@@ -32,6 +32,8 @@ jobs:
     if: inputs.DEPLOY_ENV == 'PROD'
     runs-on: ubuntu-latest
 
+    environment: ${{ inputs.DEPLOY_ENV }}
+
     outputs:
       DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}
 
@@ -39,7 +41,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
+      - name: Setup Docker BuildX
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to the container registry
@@ -48,6 +50,9 @@ jobs:
           registry: ${{ env.DOCKER_REGISTRY }} 
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Debug image name
+        run: echo "The image name is ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE }}:latest"
       
       - name: Docker meta-data
         id: docker-meta
@@ -66,3 +71,7 @@ jobs:
           labels: ${{ steps.docker-meta.outputs.labels }}
           cache-from: type=registry,ref=user/app:latest
           cache-to: type=inline
+      
+      - name: Write summary
+        run: echo "###Build
+          The Docker image is ${{ steps.docker-meta.outputs.tags }}"
