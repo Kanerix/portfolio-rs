@@ -34,6 +34,9 @@ jobs:
 
     environment: ${{ inputs.DEPLOY_ENV }}
 
+    permissions:
+      packages: read
+
     outputs:
       DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}
 
