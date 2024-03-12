@@ -17,7 +17,7 @@ RUN rustup update && \
 
 COPY . .
 
-RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify \
+RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify && \
     LEPTOS_WASM_OPT_VERSION=version_117 cargo leptos build --release -vv
 
 
