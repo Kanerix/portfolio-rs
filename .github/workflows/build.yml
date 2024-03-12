@@ -55,7 +55,7 @@ jobs:
         id: docker-meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE }}:latest
+          images: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -66,8 +66,8 @@ jobs:
             RUST_VERSION=${{ inputs.RUST_VERSION }}
           tags: ${{ steps.docker-meta.outputs.tags }}
           labels: ${{ steps.docker-meta.outputs.labels }}
-          cache-from: type=registry,ref=user/app:latest
-          cache-to: type=inline
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       
       - name: Write summary
         run: echo "###Build
