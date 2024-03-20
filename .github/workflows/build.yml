@@ -75,4 +75,4 @@ jobs:
       
       - name: Write summary
         run: echo "###Build
-          The Docker image is ${{ steps.docker-meta.outputs.tags }}"
+          The Docker image is ${{ steps.docker-meta.outputs.tags }}"  >> $GITHUB_STEP_SUMMARY

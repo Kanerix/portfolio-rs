@@ -61,12 +61,12 @@ jobs:
             GIT_REPOSITORY: ${{ github.repository }}
           run: |
             IMAGE_NAME=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')
-            echo "IMAGE_NAME="$IMAGE_NAME
+            echo "IMAGE_NAME=$IMAGE_NAME"
             echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
         
         - name: Write prepare summary
           run: |
-            echo '### Prepare pipeline:               
+            echo "### Prepare pipeline:               
             <table>
                 <tr>
                     <td>🎯 Deploy env</td>
@@ -80,4 +80,4 @@ jobs:
                     <td>🐳 Image name</td>
                     <td>${{ steps.image-name.outputs.IMAGE_NAME }}</td>
                 </tr>
-            </table>' >> $GITHUB_STEP_SUMMARY
+            </table>" >> $GITHUB_STEP_SUMMARY
