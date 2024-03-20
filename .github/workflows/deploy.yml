@@ -3,6 +3,16 @@ name: Deploy app
 on:
   workflow_call:
     inputs:
+      DEPLOY_ENV: 
+        description: 'The environment to deploy to'
+        required: true
+        type: string
+
+      IMAGE_NAME:
+        description: The name of the image to build
+        required: true
+        type: string
+
       DOCKER_IMAGE:
         description: 'Path to the image'
         required: true
@@ -15,6 +25,13 @@ env:
 jobs:
   deploy-app:
     runs-on: ubuntu-latest
+
+    environment: ${{ inputs.DEPLOY_ENV}}
+    container: ${{ inputs.DOCKER_IMAGE }}
+
+    permissions:
+        contents: read
+        packages: read
 
     steps:
       - name: Checkout code
@@ -33,7 +50,7 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --image ${{ env.DOCKER_IMAGE }}
+          flyctl deploy --image ${{ inputs.IMAGE_NAME }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           DOCKER_IMAGE: ${{ github.event.inputs.DOCKER_IMAGE }}

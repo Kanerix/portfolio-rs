@@ -67,12 +67,14 @@ jobs:
           context: .
           push: true
           build-args: |
-            RUST_VERSION=${{ inputs.RUST_VERSION }}
+            DEPLOY_ENV=${{ inputs.DEPLOY_ENV }}
+            RUST_VERSION_USED=${{ inputs.RUST_VERSION }}
           tags: ${{ steps.docker-meta.outputs.tags }}
           labels: ${{ steps.docker-meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
       - name: Write summary
-        run: echo "###Build
-          The Docker image is ${{ steps.docker-meta.outputs.tags }}"  >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo "###Build"
+          echo "The Docker image is ${{ steps.docker-meta.outputs.tags }}"  >> $GITHUB_STEP_SUMMARY

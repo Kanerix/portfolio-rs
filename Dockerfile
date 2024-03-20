@@ -1,4 +1,3 @@
-ARG RUST_VERSION_USED
 FROM rust:alpine3.18 AS builder
 WORKDIR /build
 
@@ -19,6 +18,7 @@ RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify && \
     LEPTOS_WASM_OPT_VERSION=version_117 cargo leptos build --release -vv
 
 
+ARG DEPLOY_ENV
 FROM alpine:3.18 AS runner
 WORKDIR /var/www/app
 
@@ -32,7 +32,7 @@ COPY --chown=www-data:server --from=builder /build/target/site ./site
 USER www-data
 
 ENV RUST_LOG="info"
-ENV APP_ENVIRONMENT="production"
+ENV APP_ENVIRONMENT=${DEPLOY_ENV}
 ENV LEPTOS_SITE_ADDR "0.0.0.0:3000"
 ENV LEPTOS_SITE_ROOT "/var/www/app/site"
 
