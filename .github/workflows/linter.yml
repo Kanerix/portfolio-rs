@@ -3,8 +3,8 @@ name: Lint project
 on:
   workflow_call:
     inputs:
-      RUST_VERSION:
-        description: Rust version to use for the workflow
+      RUST_TOOLCHAIN:
+        description: Rust toolchain to use for the workflow
         type: string
 
 jobs:
@@ -18,14 +18,10 @@ jobs:
       - name: Setup Rust environment
         run: |
           rustup update
-          rustup install ${{ inputs.RUST_VERSION }}   
-          rustup default ${{ inputs.RUST_VERSION }}
+          rustup install ${{ inputs.RUST_TOOLCHAIN }}   
+          rustup default ${{ inputs.RUST_TOOLCHAIN }}
           rustup component add clippy
         
-      - name: Add WASM target
-        run: |
-          rustup target add wasm32-unknown-unknown
-
       - name: Write toolchain info 
         run: |
           cargo --version --verbose

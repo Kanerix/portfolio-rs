@@ -8,8 +8,8 @@ on:
         required: true
         type: string
 
-      RUST_VERSION:
-        description: The Rust version to use
+      RUST_TOOLCHAIN:
+        description: The Rust toolchain to use
         required: true
         type: string 
 
@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Docker BuildX
         uses: docker/setup-buildx-action@v3
@@ -68,7 +68,7 @@ jobs:
           push: true
           build-args: |
             DEPLOY_ENV=${{ inputs.DEPLOY_ENV }}
-            RUST_VERSION_USED=${{ inputs.RUST_VERSION }}
+            RUST_TOOLCHAIN=${{ inputs.RUST_TOOLCHAIN }}
           tags: ${{ steps.docker-meta.outputs.tags }}
           labels: ${{ steps.docker-meta.outputs.labels }}
           cache-from: type=gha
@@ -76,5 +76,5 @@ jobs:
       
       - name: Write summary
         run: |
-          echo "###Build"
+          echo "### Build 🐳" >> $GITHUB_STEP_SUMMARY
           echo "The Docker image is ${{ steps.docker-meta.outputs.tags }}"  >> $GITHUB_STEP_SUMMARY

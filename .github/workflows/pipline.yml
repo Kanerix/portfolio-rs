@@ -19,7 +19,7 @@ jobs:
         needs: [prepare]
         secrets: inherit
         with:
-          RUST_VERSION: ${{ needs.prepare.outputs.RUST_VERSION }}
+          RUST_TOOLCHAIN: ${{ needs.prepare.outputs.RUST_TOOLCHAIN }}
 
     build:
         uses: ./.github/workflows/build.yml
@@ -27,7 +27,7 @@ jobs:
         secrets: inherit
         with:
           DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
-          RUST_VERSION: ${{ needs.prepare.outputs.RUST_VERSION }}
+          RUST_TOOLCHAIN: ${{ needs.prepare.outputs.RUST_TOOLCHAIN }}
           IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
 
     deploy:
@@ -38,5 +38,3 @@ jobs:
           DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
           IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
           DOCKER_IMAGE: ${{ needs.build.outputs.DOCKER_IMAGE }}
-
-
