@@ -20,7 +20,6 @@ on:
 
 env:
   DOCKER_REGISTRY: ghcr.io
-  DOCKER_IMAGE: ${{ github.repository }}/${{ github.event.inputs.IMAGE_NAME }}
 
 jobs:
   deploy-app:
