@@ -34,10 +34,9 @@ jobs:
         packages: read
 
     steps:
-      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --image ${{ inputs.DOCKER_IMAGE }}
+          flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           DOCKER_IMAGE: ${{ github.event.inputs.DOCKER_IMAGE }}
