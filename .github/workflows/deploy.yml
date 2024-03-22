@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       DEPLOY_ENV: 
-        description: 'The environment to deploy to'
+        description: The environment to deploy to
         required: true
         type: string
 
@@ -14,12 +14,9 @@ on:
         type: string
 
       DOCKER_IMAGE:
-        description: 'Path to the image'
+        description: Path to the image
         required: true
         type: string
-
-env:
-  DOCKER_REGISTRY: ghcr.io
 
 jobs:
   deploy-app:
