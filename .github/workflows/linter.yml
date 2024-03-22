@@ -34,18 +34,18 @@ jobs:
         
       - name: Write toolchain info summary
         run: |
-          echo "### Rust version info
+          echo "### Rust toolchain:
           <table>
             <tr>
-              <td>\`cargo\`</td>
+              <td>cargo</td>
               <td>$(cargo --version)</td>
             </tr>
             <tr>
-              <td>\`rustc\`</td>
+              <td>rustc</td>
               <td>$(rustc --version)</td>
             </tr>
             <tr>
-              <td>\`clippy\`</td>
+              <td>clippy</td>
               <td>$(cargo clippy --version)</td>
             </tr>
           </table>" >> $GITHUB_STEP_SUMMARY
