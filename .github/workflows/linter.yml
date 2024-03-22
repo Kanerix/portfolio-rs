@@ -31,15 +31,17 @@ jobs:
         
       - name: Write toolchain info summary
         run: |
-          echo "### Rust version info"
-          echo "`cargo`:"
+          echo "### Rust version info" >> $GITHUB_SUMMARY
+          echo "\`cargo\`:" >> $GITHUB_SUMMARY
           cargo --version --verbose >> $GITHUB_SUMMARY
-          echo "`rustc`:"
+          echo "\`rustc\`:" >> $GITHUB_SUMMARY
           rustc --version >> $GITHUB_SUMMARY
-          echo "`clippy`:"
+          echo "\`clippy\`:" >> $GITHUB_SUMMARY
           cargo clippy --version >> $GITHUB_SUMMARY
 
       - name: Lint Rust code wiht Clippy
+        env:
+          DEPLOY_ENV: ${{ inputs.DEPLOY_ENV }}
         run: |
           if [[ $DEPLOY_ENV == "PROD" ]]; then
             cargo clippy --all-targets --all-features -- -D warnings
