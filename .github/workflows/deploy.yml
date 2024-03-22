@@ -41,7 +41,6 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --image ${{ inputs.IMAGE_NAME }}
+          flyctl deploy --image ${{ inputs.DOCKER_IMAGE }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          DOCKER_IMAGE: ${{ github.event.inputs.DOCKER_IMAGE }}
