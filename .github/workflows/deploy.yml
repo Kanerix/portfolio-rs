@@ -19,7 +19,8 @@ on:
         type: string
 
 jobs:
-  deploy-app:
+  deploy-app-to-flyio:
+    if: ${{ vars.DEPLOY_PLATFORM }} == 'fly.io'
     runs-on: ubuntu-latest
 
     environment: ${{ inputs.DEPLOY_ENV}}
@@ -36,7 +37,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Pull Docker image from registry
-        run: docker pull ${{ github.event.inputs.DOCKER_IMAGE }}
+        run: docker pull ${{ inputs.DOCKER_IMAGE }}
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
