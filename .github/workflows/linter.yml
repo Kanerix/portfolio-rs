@@ -40,7 +40,7 @@ jobs:
           \`rustc\`:\n
           $(rustc --version)\n
           \`clippy\`:\n
-          $(cargo clippy --version)" >> $GITHUB_SUMMARY
+          $(cargo clippy --version)" >> $GITHUB_STEP_SUMMARY
 
       - name: Lint Rust code wiht Clippy
         env:
