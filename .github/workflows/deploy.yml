@@ -28,6 +28,7 @@ jobs:
     environment: ${{ inputs.DEPLOY_ENV}}
 
     steps:
+      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           flyctl deploy --remote-only
