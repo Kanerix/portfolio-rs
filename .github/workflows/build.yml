@@ -75,7 +75,7 @@ jobs:
       
       - name: Write summary
         run: |
-          echo "### Build 🐳" >> $GITHUB_STEP_SUMMARY
-          echo "Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
+          echo "### 🐳 Docker build: 
+          Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
         env:
           DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}

@@ -44,7 +44,9 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}
       
-      - name: Deploy summaray
-        run: echo "Deployed \`$DOCKER_IMAGE\` to Fly.io" >> $GITHUB_STEP_SUMMARY
+      - name: Deploy summary
+        run: |
+          echo "### 🏭 Deployment info:
+          Deployed \`$DOCKER_IMAGE\` to Fly.io" >> $GITHUB_STEP_SUMMARY
         env:
           DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}
