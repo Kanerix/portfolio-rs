@@ -54,7 +54,7 @@ jobs:
           run: |
             if  [[ -f rust-toolchain.toml ]]; then
                 RUST_TOOLCHAIN=rust-toolchain.toml
-            elif [[ -n "$RUST_TOOLCHAIN" ]]; then
+            elif [[ -n $RUST_TOOLCHAIN ]]; then
                 RUST_TOOLCHAIN=$RUST_TOOLCHAIN
             else
                 RUST_TOOLCHAIN=stable

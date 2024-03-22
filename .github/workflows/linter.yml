@@ -26,7 +26,7 @@ jobs:
           RUST_TOOLCHAIN: ${{ inputs.RUST_TOOLCHAIN }}
         run: |
           rustup update
-          if [[ $RUST_TOOLCHAIN != "rust-toolchain.toml "]]; then
+          if [[ $RUST_TOOLCHAIN != "rust-toolchain.toml" ]]; then
             rustup install ${{ inputs.RUST_TOOLCHAIN }}   
             rustup default ${{ inputs.RUST_TOOLCHAIN }}
           fi
