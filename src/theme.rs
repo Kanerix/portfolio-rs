@@ -112,6 +112,7 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
 	}
 }
 
+/// A button that toggles the theme color mode.
 #[component]
 pub fn ToggleThemeButton() -> impl IntoView {
 	let Theme(color_mode, set_color_mode) = use_context::<Theme>().unwrap();

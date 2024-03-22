@@ -111,6 +111,7 @@ async fn fetch_repos() -> Option<Vec<Repo>> {
 	Some(repos_filtered)
 }
 
+/// The home page.
 #[component]
 pub fn Home() -> impl IntoView {
 	let repos = create_local_resource(|| (), |_| async move { fetch_repos().await });

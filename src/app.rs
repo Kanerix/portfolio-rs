@@ -4,6 +4,7 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
+/// The entire application root.
 #[component]
 pub fn App() -> impl IntoView {
 	provide_meta_context();
