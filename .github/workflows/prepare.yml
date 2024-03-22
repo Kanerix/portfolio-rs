@@ -77,16 +77,16 @@ jobs:
           run: |
             echo "### Prepare pipeline:               
             <table>
-                <tr>
-                    <td>🎯 Deploy env</td>
-                    <td>${{ steps.deploy-env.outputs.DEPLOY_ENV }}</td>
-                </tr>
-                <tr>
-                    <td>🦀 Rust toolchain</td>
-                    <td>${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}</td>
-                </tr>
-                <tr>
-                    <td>🐳 Image name</td>
-                    <td>${{ steps.image-name.outputs.IMAGE_NAME }}</td>
-                </tr>
+              <tr>
+                <td>🎯 Deploy env</td>
+                <td>${{ steps.deploy-env.outputs.DEPLOY_ENV }}</td>
+              </tr>
+              <tr>
+                <td>🦀 Rust toolchain</td>
+                <td>${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}</td>
+              </tr>
+              <tr>
+                <td>🐳 Image name</td>
+                <td>${{ steps.image-name.outputs.IMAGE_NAME }}</td>
+              </tr>
             </table>" >> $GITHUB_STEP_SUMMARY

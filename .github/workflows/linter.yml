@@ -34,13 +34,21 @@ jobs:
         
       - name: Write toolchain info summary
         run: |
-          echo "### Rust version info\n
-          \`cargo\`:\n
-          $(cargo --version)\n
-          \`rustc\`:\n
-          $(rustc --version)\n
-          \`clippy\`:\n
-          $(cargo clippy --version)" >> $GITHUB_STEP_SUMMARY
+          echo "### Rust version info
+          <table>
+            <tr>
+              <td>\`cargo\`</td>
+              <td>$(cargo --version)</td>
+            </tr>
+            <tr>
+              <td>\`rustc\`</td>
+              <td>$(rustc --version)</td>
+            </tr>
+            <tr>
+              <td>\`clippy\`</td>
+              <td>$(cargo clippy --version)</td>
+            </tr>
+          </table>" >> $GITHUB_STEP_SUMMARY
 
       - name: Lint Rust code wiht Clippy
         env:
