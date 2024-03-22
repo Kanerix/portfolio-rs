@@ -22,22 +22,25 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Rust environment
-        if: inputs.RUST_TOOLCHAIN != 'rust-toolchain.toml'
+        env:
+          RUST_TOOLCHAIN: ${{ inputs.RUST_TOOLCHAIN }}
         run: |
           rustup update
-          rustup install ${{ inputs.RUST_TOOLCHAIN }}   
-          rustup default ${{ inputs.RUST_TOOLCHAIN }}
+          if [[ $RUST_TOOLCHAIN != "rust-toolchain.toml "]]; then
+            rustup install ${{ inputs.RUST_TOOLCHAIN }}   
+            rustup default ${{ inputs.RUST_TOOLCHAIN }}
+          fi
           rustup component add clippy
         
       - name: Write toolchain info summary
         run: |
-          echo "### Rust version info" >> $GITHUB_SUMMARY
-          echo "\`cargo\`:" >> $GITHUB_SUMMARY
-          cargo --version --verbose >> $GITHUB_SUMMARY
-          echo "\`rustc\`:" >> $GITHUB_SUMMARY
-          rustc --version >> $GITHUB_SUMMARY
-          echo "\`clippy\`:" >> $GITHUB_SUMMARY
-          cargo clippy --version >> $GITHUB_SUMMARY
+          echo "### Rust version info\n
+          \`cargo\`:\n
+          $(cargo --version)\n
+          \`rustc\`:\n
+          $(rustc --version)\n
+          \`clippy\`:\n
+          $(cargo clippy --version)" >> $GITHUB_SUMMARY
 
       - name: Lint Rust code wiht Clippy
         env:

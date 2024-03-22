@@ -19,7 +19,6 @@ on:
         type: string
 
 env:
-  DOCKER_REGISTRY: ghcr.io
   DOCKER_IMAGE: ${{ github.repository }}/${{ github.event.inputs.IMAGE_NAME }}
 
 jobs:
@@ -27,10 +26,6 @@ jobs:
     runs-on: ubuntu-latest
 
     environment: ${{ inputs.DEPLOY_ENV}}
-
-    permissions:
-        contents: read
-        packages: read
 
     steps:
       - uses: superfly/flyctl-actions/setup-flyctl@master
