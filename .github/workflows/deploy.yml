@@ -27,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
 
     environment: ${{ inputs.DEPLOY_ENV}}
-    container: ${{ inputs.DOCKER_IMAGE }}
 
     permissions:
         contents: read

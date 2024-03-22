@@ -25,6 +25,10 @@ jobs:
         IMAGE_NAME: ${{ steps.image-name.outputs.IMAGE_NAME }}
 
       steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        # Sets the deployment environment based on the branch name
         - name: Set deployment variable 
           id: deploy-env
           env:
@@ -41,12 +45,16 @@ jobs:
             echo "DEPLOY_ENV="$DEPLOY_ENV
             echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_OUTPUT
         
+        # Gets the Rust toolchain from the var if rust-toolchian.toml
+        # does not exist. If nothing is prresent, the default is stable.
         - name: Set Rust toolchain 
           id: rust-toolchain
           env:
             RUST_TOOLCHAIN: ${{ vars.RUST_TOOLCHAIN }}
           run: |
-            if [[ -n "$RUST_TOOLCHAIN" ]]; then
+            if  [[ -f rust-toolchain.toml ]]; then
+                RUST_TOOLCHAIN=rust-toolchain.toml
+            elif [[ -n "$RUST_TOOLCHAIN" ]]; then
                 RUST_TOOLCHAIN=$RUST_TOOLCHAIN
             else
                 RUST_TOOLCHAIN=stable
@@ -55,6 +63,7 @@ jobs:
             echo "RUST_TOOLCHAIN="$RUST_TOOLCHAIN
             echo "RUST_TOOLCHAIN=$RUST_TOOLCHAIN" >> $GITHUB_OUTPUT
 
+        # Sets the image name. This is based on the repository name
         - name: Set image name
           id : image-name
           env:
