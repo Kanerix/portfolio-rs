@@ -19,6 +19,7 @@ jobs:
         needs: [prepare]
         secrets: inherit
         with:
+          DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
           RUST_TOOLCHAIN: ${{ needs.prepare.outputs.RUST_TOOLCHAIN }}
 
     build:
