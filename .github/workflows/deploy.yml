@@ -38,6 +38,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Pull Docker image from registry
+        run: docker pull ${{ github.event.inputs.DOCKER_IMAGE }}
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
