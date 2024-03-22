@@ -8,19 +8,17 @@ on:
         required: true
         type: string
 
-      IMAGE_NAME:
-        description: The name of the image to build
-        required: true
-        type: string
-
       DOCKER_IMAGE:
         description: Path to the image
         required: true
         type: string
 
+env:
+  DOCKER_REGISTRY: ghcr.io
+
 jobs:
   deploy-app-to-flyio:
-    if: ${{ vars.DEPLOY_PLATFORM }} == 'fly.io'
+    if: vars.DEPLOY_PLATFORM == 'fly.io'
     runs-on: ubuntu-latest
 
     environment: ${{ inputs.DEPLOY_ENV}}
@@ -32,7 +30,7 @@ jobs:
       - name: Log in to the container registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.DOCKER_REGISTRY }}
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
@@ -41,6 +39,12 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --image ${{ inputs.DOCKER_IMAGE }}
+          flyctl deploy --image $DOCKER_IMAGE
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}
+      
+      - name: Deploy summaray
+        run: echo "Deployed \`$DOCKER_IMAGE\` to Fly.io" >> $GITHUB_STEP_SUMMARY
+        env:
+          DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}

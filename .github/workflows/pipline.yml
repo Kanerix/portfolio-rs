@@ -37,5 +37,4 @@ jobs:
         secrets: inherit
         with:
           DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
-          IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
           DOCKER_IMAGE: ${{ needs.build.outputs.DOCKER_IMAGE }}
