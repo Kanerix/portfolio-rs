@@ -9,7 +9,7 @@ on:
       
       RUST_TOOLCHAIN:
         description: The toolchain for Rust to use
-        value: ${{ jobs.prepare-pipeline.outputs.RUST_ENV }}
+        value: ${{ jobs.prepare-pipeline.outputs.RUST_TOOLCHAIN }}
       
       IMAGE_NAME:
         description: The name of the image to build
@@ -21,7 +21,7 @@ jobs:
 
       outputs:
         DEPLOY_ENV: ${{ steps.deploy-env.outputs.DEPLOY_ENV }}
-        RUST_ENV: ${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}
+        RUST_TOOLCHAIN: ${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}
         IMAGE_NAME: ${{ steps.image-name.outputs.IMAGE_NAME }}
 
       steps:
