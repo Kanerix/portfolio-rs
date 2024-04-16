@@ -23,6 +23,10 @@ pub fn App() -> impl IntoView {
 		<Stylesheet href="/fontawesome/css/all.min.css"/>
 		// Tailwind generated stylesheet
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
+		// Background
+		<div class="absolute">
+			<div class="h-2 w-2" />
+		</div>
 		<ThemeProvider>
 			<div class="h-screen w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
 				<Router>
