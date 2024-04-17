@@ -16,8 +16,8 @@ struct Repo {
 impl IntoView for Repo {
 	fn into_view(self) -> View {
 		view! {
-			<div class="shadow rounded-md bg-slate-950
-				md:py-4 px-4 max-w-sm w-full mx-auto mb-4">
+			<div class="shadow rounded-md bg-slate-200 dark:bg-slate-950
+				p-4 max-w-sm w-full mx-auto mb-4">
 				<a href={self.html_url} target="_blank">
 					<div>
 						<div class="flex">
@@ -45,8 +45,8 @@ impl IntoView for Repo {
 impl Repo {
 	fn loading_view() -> impl IntoView {
 		view! {
-			<div class="shadow rounded-md bg-slate-950
-				md:py-4 px-4 max-w-sm w-full mx-auto">
+			<div class="shadow rounded-md bg-slate-200 dark:bg-slate-950
+				p-4 max-w-sm w-full mx-auto">
 				<div class="animate-pulse flex space-x-4">
 					<div class="rounded-full bg-slate-800 h-10 w-10" />
 					<div class="flex-1 space-y-8 py-1">
@@ -65,7 +65,7 @@ impl Repo {
 	}
 
 	fn get_language_icon(language: Option<String>) -> impl IntoView {
-		let default_classes = "text-2xl text-slate-600 dark:text-slate-400";
+		let default_classes = "text-2xl text-slate-500 dark:text-slate-400";
 
 		let unkown_icon_view = view! {
 				<i class=format!("fa-solid fa-code {}", default_classes) />
@@ -117,19 +117,21 @@ pub fn Home() -> impl IntoView {
 	let repos = create_local_resource(|| (), |_| async move { fetch_repos().await });
 
 	view! {
-		<div class="grid gap-4 grid-cols-1 md:my-32 md:grid-cols-3">
-			<div class="flex flex-col items-start grow">
+		<div class="grid gap-4 grid-cols-1 md:my-32 xl:grid-cols-3">
+			<div class="flex flex-col">
 				<h1 class="text-5xl font-semibold text-slate-900 dark:text-slate-100">
 					"Hi, im Kasper"
 				</h1>
 				<h2 class="pt-2 text-xl text-slate-600 dark:text-slate-300">
 					"Fullstack Developer"
 				</h2>
-				<p class="pt-4 grow text-slate-500 dark:text-slate-400">
-					"Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-					Donec placerat justo neque, ut accumsan mi tristique in."
+				<p class="pt-4 text-slate-500 dark:text-slate-400">
+					"I'm a software engineer and IT enthusiast. I'm currently studying sowftware development at the "
+					<a href="https://itu.dk/" target="_blank" class="text-slate-700 dark:text-slate-200">
+						"IT University of Chopenhagen"
+					</a>
 				</p>
-				<div class="grid gap-5 grid-cols-3 mt-8">
+				<div class="grid grid-cols-3 w-2/4 mt-16">
 					<a href="https://github.com/Kanerix" aria-label="Checkout my GitHub">
 						<i class="fa-brands fa-github text-4xl
 							text-slate-600 dark:text-slate-400" />
@@ -145,7 +147,8 @@ pub fn Home() -> impl IntoView {
 				</div>
 			</div>
 			<div class="overflow-y-scroll h-screen col-span-2 md:mt-0 mt-16 p-auto">
-				<h1 class="text-slate-100 font-semibold md:py-4 px-4 max-w-sm w-full mx-auto">
+				<h1 class="text-slate-900 dark:text-slate-100
+					font-semibold py-4 px-4 max-w-sm w-full mx-auto">
 					"PROJECTS"
 				</h1>
 				{move || {
