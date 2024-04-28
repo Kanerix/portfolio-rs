@@ -4,7 +4,7 @@ My portfolio website, created using Leptos. This is a side project and its prima
 is for me to learn webassembly and rust. Feel free to use any code you want and help me improve
 the app.
 
-The website should be available at [portfolio.artilun.com](https://portfolio.artilun.com/)
+The website should be available at [portfolio.lerpz.com](https://portfolio.lerpz.com/)
 
 ## Required Dependencies
 
@@ -31,9 +31,9 @@ Start the application in `watch` mode for development. Use 2 windows.
 
 The server will be available at [`0.0.0.0:3000`](http://0.0.0.0:3000). (Is also using port 3001)
 
-## Runnin In Docker
+## Running In Docker
 
-Install [`Docker`](https://docs.docker.com/get-docker/), if not installed.
+Install [Docker](https://docs.docker.com/get-docker/), if not installed.
 
 Build the docker container and run it.
 
@@ -41,3 +41,10 @@ Build the docker container and run it.
 - `docker run -d --name portfolio -p 3000:3000 portfolio-rs`
 
 The server will then be available at [`0.0.0.0:3000`](http://0.0.0.0:3000).
+
+## Deployment to Fly.io
+
+The website runs in the cloud on a platform called [Fly.io](<https://fly.io>).
+
+The GitHub workflow will automatically build the docker image, and later use
+it to then publish the container to Fly.io.
