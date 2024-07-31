@@ -1,5 +1,6 @@
 procs:
-  trunk: "cargo leptos watch"
+  leptos:
+    shell: "cargo leptos watch"
   tailwind: 
     shell: "npx tailwindcss -i ./style/tailwind.css -o ./style/generated.css --watch"
     stop: "SIGKILL"
