@@ -140,7 +140,7 @@ pub fn Home() -> impl IntoView {
 						<i class="fa-brands fa-twitter text-4xl
 							text-slate-600 dark:text-slate-400" />
 					</a>
-					<a href="https://www.linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
+					<a href="https://linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
 						<i class="fa-brands fa-linkedin text-4xl
 							text-slate-600 dark:text-slate-400" />
 					</a>
