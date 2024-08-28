@@ -1,0 +1,24 @@
+#!/bin/sh
+
+while read local_ref local_sha remote_ref remote_sha
+do
+  if [[ "$remote_ref" =~ refs/heads/(main|master)$ ]]; then
+    echo "Running cargo clippy with -- -D warnings for $remote_ref"
+    cargo clippy --all-targets --all-features -- -D warnings
+  elif [[ "$remote_ref" =~ refs/heads/staging$ ]]; then
+    echo "Running cargo clippy without -- -D warnings for $remote_ref"
+    cargo clippy --all-targets --all-features
+  else
+    echo "No specific cargo clippy checks for branch $remote_ref"
+    continue
+  fi
+
+  CLIPPY_EXIT_CODE=$?
+
+  if [ $CLIPPY_EXIT_CODE -ne 0 ]; then
+    echo "cargo clippy reported issues on branch $remote_ref"
+    exit $CLIPPY_EXIT_CODE
+  fi
+done
+
+exit 0
