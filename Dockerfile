@@ -9,13 +9,13 @@ COPY rust-toolchain.toml .
 
 RUN rustup update && \
     rustup target add wasm32-unknown-unknown && \
-    cargo install --locked --version=0.2.16 cargo-leptos && \
+    cargo install --locked --version=0.2.20 cargo-leptos && \
     npm install tailwindcss -g
 
 COPY . .
 
 RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify && \
-    LEPTOS_WASM_OPT_VERSION=version_117 cargo leptos build --release -vv
+    cargo leptos build --release -vv
 
 
 FROM alpine:3.18 AS runner
@@ -31,8 +31,8 @@ COPY --chown=www-data:server --from=builder /build/target/site ./site
 USER www-data
 
 ENV RUST_LOG="info"
-ENV LEPTOS_SITE_ADDR "0.0.0.0:3000"
-ENV LEPTOS_SITE_ROOT "/var/www/app/site"
+ENV LEPTOS_SITE_ADDR="0.0.0.0:3000"
+ENV LEPTOS_SITE_ROOT="/var/www/app/site"
 
 EXPOSE 3000
 
