@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_meta::{Body, Meta};
+use leptos_meta::{Html, Meta};
 use serde::{Deserialize, Serialize};
 use std::{ops::Not, str::FromStr};
 
@@ -124,7 +124,7 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
 
 	view! {
 		<Meta name="color-scheme" content=set_color_scheme />
-		<Body class=move || classes.get() />
+		<Html class=move || classes.get() />
 		{children()}
 	}
 }
@@ -141,7 +141,7 @@ pub fn ToggleThemeButton() -> impl IntoView {
 		<button
 			aria-label="Toggle color mode"
 			class="m-4 w-14 h-14
-			absolute bottom-0 right-0
+			fixed bottom-0 right-0
 			float-right rounded-full
 			bg-gray-500/[.20] hover:bg-gray-500/[.35]" 
 			type="submit"

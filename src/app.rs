@@ -23,22 +23,17 @@ pub fn App() -> impl IntoView {
 		<Stylesheet href="/fontawesome/css/all.min.css"/>
 		// Tailwind generated stylesheet
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
-		// Background
-		<div class="absolute">
-			<div class="h-2 w-2" />
-		</div>
+		// The body of the document
+		<Body class="min-h-screen w-full bg-slate-100 dark:bg-slate-900" />
 		<ThemeProvider>
-			<div class="h-screen w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
-				<Router>
-					<main class="h-screen mx-auto w-2/3">
-						<ToggleThemeButton />
-						<Routes>
-							<Route path="/" view=|| view! { <Home/> }/>
-							<Route path="/" view=|| view! { <Home/> }/>
-						</Routes>
-					</main>
-				</Router>
-			</div>
+			<Router>
+				<main class="mx-auto w-2/3">
+					<ToggleThemeButton />
+					<Routes>
+						<Route path="/" view=|| view! { <Home/> }/>
+					</Routes>
+				</main>
+			</Router>
 		</ThemeProvider>
 	}
 }

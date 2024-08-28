@@ -2,122 +2,102 @@ use gloo_net::http::Request;
 use leptos::*;
 use serde::{Deserialize, Serialize};
 
-static REPOS_WHITELIST: [&str; 2] = ["portfolio-rs", "mnist-ai-rust"];
+use crate::components::{LanguageIcon, Repo, RepoLoading};
+
+static REPOS_WHITELIST: [&str; 3] = ["portfolio-rs", "mnist-ai-rust", "lerpz-backend"];
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-struct Repo {
-	name: String,
-	html_url: String,
-	stargazers_count: u32,
-	homepage: Option<String>,
-	language: Option<String>,
+pub struct RepoData {
+	pub name: String,
+	pub html_url: String,
+	pub stargazers_count: u32,
+	pub language: Option<String>,
 }
 
-impl IntoView for Repo {
-	fn into_view(self) -> View {
-		view! {
-			<div class="shadow rounded-md bg-slate-200 dark:bg-slate-950
-				p-4 max-w-sm w-full mx-auto mb-4">
-				<a href={self.html_url} target="_blank">
-					<div>
-						<div class="flex">
-							<div class="grow">
-								{self.name}
-							</div>
-							<div>
-								{Repo::get_language_icon(self.language)}
-							</div>
-						</div>
-						<div>
-							<p class="text-slate">
-								"Stars: "
-								<strong>{self.stargazers_count}</strong>
-							</p>
-						</div>
-					</div>
-				</a>
-			</div>
-		}
-		.into_view()
-	}
+#[derive(thiserror::Error, Debug, Clone)]
+pub enum Error {
+	#[error("could't fetch repos")]
+	RequestError,
+	#[error("could't decode repos")]
+	DecodeError,
 }
 
-impl Repo {
-	fn loading_view() -> impl IntoView {
-		view! {
-			<div class="shadow rounded-md bg-slate-200 dark:bg-slate-950
-				p-4 max-w-sm w-full mx-auto">
-				<div class="animate-pulse flex space-x-4">
-					<div class="rounded-full bg-slate-800 h-10 w-10" />
-					<div class="flex-1 space-y-8 py-1">
-						<div class="rounded bg-slate-800" />
-							<div class="space-y-3">
-								<div class="grid grid-cols-3 gap-4">
-									<div class="h-2 bg-slate-800 rounded col-span-2" />
-									<div class="h-2 bg-slate-800 rounded col-span-1" />
-								</div>
-							<div class="h-2 bg-slate-800 rounded" />
-						</div>
-					</div>
-				</div>
-			</div>
-		}
-	}
-
-	fn get_language_icon(language: Option<String>) -> impl IntoView {
-		let default_classes = "text-2xl text-slate-500 dark:text-slate-400";
-
-		let unkown_icon_view = view! {
-				<i class=format!("fa-solid fa-code {}", default_classes) />
-		};
-
-		if language.is_none() {
-			return unkown_icon_view;
-		}
-
-		match language.unwrap().as_str() {
-			"Rust" => view! { <i class=format!("fa-brands fa-rust {}", default_classes) /> },
-			"TypeScript" => view! { <i class=format!("fa-brands fa-js {}", default_classes) /> },
-			"JavaScript" => view! { <i class=format!("fa-brands fa-js {}", default_classes) /> },
-			"HTML" => view! { <i class=format!("fa-brands fa-html5 {}", default_classes) /> },
-			"CSS" => view! { <i class=format!("fa-brands fa-css3-alt {}", default_classes) /> },
-			"SCSS" => view! { <i class=format!("fa-brands fa-sass {}", default_classes) /> },
-			"Python" => view! { <i class=format!("fa-brands fa-python {}", default_classes) /> },
-			"C#" => view! { <i class=format!("fa-brands fa-microsoft {}", default_classes) /> },
-			"C++" => view! { <i class=format!("fa-brands fa-microsoft {}", default_classes) /> },
-			"Java" => view! { <i class=format!("fa-brands fa-java {}", default_classes) /> },
-			"Kotlin" => view! { <i class=format!("fa-brands fa-java {}", default_classes) /> },
-			"Swift" => view! { <i class=format!("fa-brands fa-swift {}", default_classes) /> },
-			_ => unkown_icon_view,
-		}
-	}
-}
-
-async fn fetch_repos() -> Option<Vec<Repo>> {
+async fn fetch_repos() -> Result<Vec<RepoData>, Error> {
 	let repos = Request::get("https://api.github.com/users/Kanerix/repos")
 		.send()
 		.await
-		.ok()?
-		.json::<Vec<Repo>>()
+		.map_err(|_| Error::RequestError)?
+		.json::<Vec<RepoData>>()
 		.await
-		.ok()?;
+		.map_err(|_| Error::DecodeError)?;
 
 	let repos_filtered = repos
 		.iter()
 		.filter(|&repo| REPOS_WHITELIST.contains(&repo.name.as_str()))
 		.cloned()
-		.collect::<Vec<Repo>>();
+		.collect::<Vec<RepoData>>();
 
-	Some(repos_filtered)
+	Ok(repos_filtered)
+}
+
+#[component]
+pub fn LanguageProgress(
+	#[prop(into)] language: String,
+	#[prop(into)] progress: u8,
+) -> impl IntoView {
+	if progress > 100 {
+		logging::error!("Progress must be between 0 and 100");
+	}
+
+	view! {
+		<div class="flex items-center">
+			<LanguageIcon language={language} class="w-12 mr-4 text-3xl text-gray-400 dark:text-gray-700" />
+			<div class="w-full h-3 rounded-full bg-gray-400 dark:bg-gray-700">
+				<div class=format!("w-[{}%] h-3 rounded-full bg-purple-500 dark:bg-purple-700", progress)></div>
+			</div>
+		</div>
+	}
+}
+
+#[component]
+pub fn RepoList() -> impl IntoView {
+	let repos = create_local_resource(|| (), |_| async move { fetch_repos().await });
+
+	view! {
+		<div class="grid gap-4 grid-cols-1">
+			{move || match repos.get() {
+				None => view! { <RepoLoading /> },
+				Some(resource) => match resource {
+					Err(err) => {
+						logging::error!("failed to fetch repos: {}", err);
+						view! { <RepoLoading /> }
+					}
+					Ok(repos) => view! {
+						<For
+							// TODO: Why clone "repos" here?
+							each=move || repos.clone()
+							key=|state| state.name.clone()
+							let:child
+						>
+							<Repo
+								name={child.name}
+								html_url={child.html_url}
+								stargazers_count={child.stargazers_count}
+								language={child.language.unwrap_or_default()}
+							/>
+						</For>
+					}
+				}
+			}}
+		</div>
+	}
 }
 
 /// The home page.
 #[component]
 pub fn Home() -> impl IntoView {
-	let repos = create_local_resource(|| (), |_| async move { fetch_repos().await });
-
 	view! {
-		<div class="grid gap-4 grid-cols-1 md:my-32 xl:grid-cols-3">
+		<div class="grid gap-4 grid-cols-1 py-16 md:py-32 xl:grid-cols-3">
 			<div class="flex flex-col">
 				<h1 class="text-5xl font-semibold text-slate-900 dark:text-slate-100">
 					"Hi, im Kasper"
@@ -131,32 +111,40 @@ pub fn Home() -> impl IntoView {
 						"IT University of Chopenhagen"
 					</a>
 				</p>
-				<div class="grid grid-cols-3 w-2/4 mt-16">
+				<p class="pt-4 text-slate-500 dark:text-slate-400">
+					"I also have a student job at "
+					<a href="https://egmont.com/" target="_blank" class="text-slate-700 dark:text-slate-200">
+						"Egmont"
+					</a>
+					" where i have been working since november 2023.
+					Here i help develop and maintain their internal tools."
+				</p>
+				<div class="grid grid-cols-3 w-32 mt-24 md:w-48">
 					<a href="https://github.com/Kanerix" aria-label="Checkout my GitHub">
-						<i class="fa-brands fa-github text-4xl
-							text-slate-600 dark:text-slate-400" />
+						<i class="fa-brands fa-github text-4xl text-slate-600 dark:text-slate-400" />
 					</a>
 					<a href="https://twitter.com/K4nerix" aria-label="Checkout my Twitter">
-						<i class="fa-brands fa-twitter text-4xl
-							text-slate-600 dark:text-slate-400" />
+						<i class="fa-brands fa-twitter text-4xl text-slate-600 dark:text-slate-400" />
 					</a>
 					<a href="https://linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
-						<i class="fa-brands fa-linkedin text-4xl
-							text-slate-600 dark:text-slate-400" />
+						<i class="fa-brands fa-linkedin text-4xl text-slate-600 dark:text-slate-400" />
 					</a>
 				</div>
 			</div>
-			<div class="overflow-y-scroll h-screen col-span-2 md:mt-0 mt-16 p-auto">
-				<h1 class="text-slate-900 dark:text-slate-100
-					font-semibold py-4 px-4 max-w-sm w-full mx-auto">
+			<div class="overflow-y-scroll col-span-2">
+				<h1 class="text-slate-900 dark:text-slate-100 font-semibold py-4 px-4 max-w-sm w-full mx-auto">
 					"PROJECTS"
 				</h1>
-				{move || {
-					match repos.get() {
-						None => { Repo::loading_view() }.into_view(),
-						Some(repos) => repos.into_view(),
-					}
-				}}
+				<RepoList />
+			</div>
+			<div class="overflow-y-scroll col-span-2 md:col-span-1 my-16">
+				<h1 class="text-slate-900 dark:text-slate-100 font-semibold py-4 px-4 max-w-sm w-full mx-auto">
+					"LUANGUAGES"
+				</h1>
+				<LanguageProgress language="Rust" progress=90 />
+				<LanguageProgress language="Go" progress=75 />
+				<LanguageProgress language="Python" progress=60 />
+				<LanguageProgress language="TypeScript" progress=5 />
 			</div>
 		</div>
 	}
