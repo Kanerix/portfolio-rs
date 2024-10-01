@@ -10,7 +10,8 @@ pub fn Repo(
 	#[prop(into, optional)] language: String,
 ) -> impl IntoView {
 	view! {
-		<div class="shadow rounded-md bg-slate-200 dark:bg-slate-950
+		<div class="shadow rounded-md bg-slate-50 dark:bg-slate-950
+            border-[1px] border-solid border-slate-100 dark:border-slate-900 
 			p-4 max-w-sm w-full mx-auto mb-4">
 			<a href={html_url} target="_blank">
 				<div>
@@ -19,7 +20,7 @@ pub fn Repo(
 							{name}
 						</div>
 						<div>
-							<LanguageIcon language={language} class="text-2xl text-slate-500 dark:text-slate-400" />
+							<LanguageIcon language={language} class="text-3xl text-slate-300 dark:text-slate-700" />
 						</div>
 					</div>
 					<div>

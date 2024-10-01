@@ -24,7 +24,8 @@ pub fn App() -> impl IntoView {
 		// Tailwind generated stylesheet
 		<Stylesheet id="leptos" href="/pkg/portfolio.css"/>
 		// The body of the document
-		<Body class="min-h-screen w-full bg-slate-100 dark:bg-slate-900" />
+		<Body class="min-h-screen w-full bg-white dark:bg-slate-900" />
+		<div class="fixed top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[#000000] dark:bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]"></div>
 		<ThemeProvider>
 			<Router>
 				<main class="mx-auto w-2/3">

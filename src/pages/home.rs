@@ -45,15 +45,11 @@ pub fn LanguageProgress(
 	#[prop(into)] language: String,
 	#[prop(into)] progress: u8,
 ) -> impl IntoView {
-	if progress > 100 {
-		logging::error!("Progress must be between 0 and 100");
-	}
-
 	view! {
 		<div class="flex items-center">
-			<LanguageIcon language={language} class="w-12 mr-4 text-3xl text-gray-400 dark:text-gray-700" />
-			<div class="w-full h-3 rounded-full bg-gray-400 dark:bg-gray-700">
-				<div class=format!("w-[{}%] h-3 rounded-full bg-purple-500 dark:bg-purple-700", progress)></div>
+			<LanguageIcon language={language} class="w-12 mr-4 text-3xl text-sky-500" />
+			<div class="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800">
+				<div class=format!("w-[75%] h-3 rounded-full bg-sky-400 dark:bg-sky-600")></div>
 			</div>
 		</div>
 	}
@@ -61,20 +57,19 @@ pub fn LanguageProgress(
 
 #[component]
 pub fn RepoList() -> impl IntoView {
-	let repos = create_local_resource(|| (), |_| async move { fetch_repos().await });
+	let repos = create_local_resource(|| (), |_| async move { Box::new(fetch_repos().await) });
 
 	view! {
 		<div class="grid gap-4 grid-cols-1">
 			{move || match repos.get() {
 				None => view! { <RepoLoading /> },
-				Some(resource) => match resource {
+				Some(resource) => match *resource {
 					Err(err) => {
 						logging::error!("failed to fetch repos: {}", err);
 						view! { <RepoLoading /> }
 					}
 					Ok(repos) => view! {
 						<For
-							// TODO: Why clone "repos" here?
 							each=move || repos.clone()
 							key=|state| state.name.clone()
 							let:child
@@ -107,13 +102,13 @@ pub fn Home() -> impl IntoView {
 				</h2>
 				<p class="pt-4 text-slate-500 dark:text-slate-400">
 					"I'm a software engineer and IT enthusiast. I'm currently studying sowftware development at the "
-					<a href="https://itu.dk/" target="_blank" class="text-slate-700 dark:text-slate-200">
+					<a href="https://itu.dk/" target="_blank" class="text-slate-800 dark:text-slate-300">
 						"IT University of Chopenhagen"
 					</a>
 				</p>
 				<p class="pt-4 text-slate-500 dark:text-slate-400">
 					"I also have a student job at "
-					<a href="https://egmont.com/" target="_blank" class="text-slate-700 dark:text-slate-200">
+					<a href="https://egmont.com/" target="_blank" class="text-slate-800 dark:text-slate-300">
 						"Egmont"
 					</a>
 					" where i have been working since november 2023.
@@ -121,13 +116,13 @@ pub fn Home() -> impl IntoView {
 				</p>
 				<div class="grid grid-cols-3 w-32 mt-24 md:w-48">
 					<a href="https://github.com/Kanerix" aria-label="Checkout my GitHub">
-						<i class="fa-brands fa-github text-4xl text-slate-600 dark:text-slate-400" />
+						<i class="fa-brands fa-github text-4xl text-sky-500" />
 					</a>
 					<a href="https://twitter.com/K4nerix" aria-label="Checkout my Twitter">
-						<i class="fa-brands fa-twitter text-4xl text-slate-600 dark:text-slate-400" />
+						<i class="fa-brands fa-twitter text-4xl text-sky-500" />
 					</a>
 					<a href="https://linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
-						<i class="fa-brands fa-linkedin text-4xl text-slate-600 dark:text-slate-400" />
+						<i class="fa-brands fa-linkedin text-4xl text-sky-500" />
 					</a>
 				</div>
 			</div>
@@ -144,7 +139,7 @@ pub fn Home() -> impl IntoView {
 				<LanguageProgress language="Rust" progress=90 />
 				<LanguageProgress language="Go" progress=75 />
 				<LanguageProgress language="Python" progress=60 />
-				<LanguageProgress language="TypeScript" progress=5 />
+				<LanguageProgress language="JavaScript" progress=45 />
 			</div>
 		</div>
 	}
