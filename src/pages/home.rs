@@ -8,7 +8,7 @@ use crate::components::{LanguageIcon, Repo, RepoLoading};
 
 static REPOS_WHITELIST: [&str; 3] = ["portfolio-rs", "mnist-ai-rust", "lerpz-backend"];
 
-#[derive(Deserialize, Serialize, Debug, Clone, PartialOrd, Eq)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq)]
 pub struct RepoData {
 	pub name: String,
 	pub html_url: String,
@@ -24,9 +24,9 @@ pub enum Error {
 	DecodeError,
 }
 
-impl Ord for RepoData {
-	fn cmp(&self, other: &Self) -> Ordering {
-		self.stargazers_count.cmp(&other.stargazers_count)
+impl PartialOrd for RepoData {
+	fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+		Some(self.cmp(other))
 	}
 }
 
@@ -35,6 +35,14 @@ impl PartialEq for RepoData {
 		self.name == other.name
 	}
 }
+
+impl Ord for RepoData {
+	fn cmp(&self, other: &Self) -> Ordering {
+		self.stargazers_count.cmp(&other.stargazers_count)
+	}
+}
+
+impl Eq for RepoData {}
 
 async fn fetch_repos() -> Result<Vec<RepoData>, Error> {
 	let repos = Request::get("https://api.github.com/users/Kanerix/repos")
