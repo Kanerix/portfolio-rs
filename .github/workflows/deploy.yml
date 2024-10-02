@@ -23,6 +23,9 @@ jobs:
 
     environment: ${{ inputs.DEPLOY_ENV}}
 
+    permissions:
+      packages: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
