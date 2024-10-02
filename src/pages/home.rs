@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use gloo_net::http::Request;
 use leptos::*;
 use serde::{Deserialize, Serialize};
@@ -6,7 +8,7 @@ use crate::components::{LanguageIcon, Repo, RepoLoading};
 
 static REPOS_WHITELIST: [&str; 3] = ["portfolio-rs", "mnist-ai-rust", "lerpz-backend"];
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialOrd, Eq)]
 pub struct RepoData {
 	pub name: String,
 	pub html_url: String,
@@ -22,6 +24,18 @@ pub enum Error {
 	DecodeError,
 }
 
+impl Ord for RepoData {
+	fn cmp(&self, other: &Self) -> Ordering {
+		self.stargazers_count.cmp(&other.stargazers_count)
+	}
+}
+
+impl PartialEq for RepoData {
+	fn eq(&self, other: &Self) -> bool {
+		self.name == other.name
+	}
+}
+
 async fn fetch_repos() -> Result<Vec<RepoData>, Error> {
 	let repos = Request::get("https://api.github.com/users/Kanerix/repos")
 		.send()
@@ -31,11 +45,14 @@ async fn fetch_repos() -> Result<Vec<RepoData>, Error> {
 		.await
 		.map_err(|_| Error::DecodeError)?;
 
-	let repos_filtered = repos
+	let mut repos_filtered = repos
 		.iter()
 		.filter(|&repo| REPOS_WHITELIST.contains(&repo.name.as_str()))
 		.cloned()
 		.collect::<Vec<RepoData>>();
+
+	repos_filtered.sort();
+	repos_filtered.reverse();
 
 	Ok(repos_filtered)
 }
@@ -49,7 +66,7 @@ pub fn LanguageProgress(
 		<div class="flex items-center">
 			<LanguageIcon language={language} class="w-12 mr-4 text-3xl text-sky-500" />
 			<div class="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800">
-				<div class=format!("w-[75%] h-3 rounded-full bg-sky-400 dark:bg-sky-600")></div>
+				<div class="h-3 rounded-full bg-sky-400 dark:bg-sky-600" style=format!("width: {progress}%")></div>
 			</div>
 		</div>
 	}
@@ -138,8 +155,8 @@ pub fn Home() -> impl IntoView {
 				</h1>
 				<LanguageProgress language="Rust" progress=90 />
 				<LanguageProgress language="Go" progress=75 />
-				<LanguageProgress language="Python" progress=60 />
-				<LanguageProgress language="JavaScript" progress=45 />
+				<LanguageProgress language="JavaScript" progress=60 />
+				<LanguageProgress language="Python" progress=45 />
 			</div>
 		</div>
 	}
