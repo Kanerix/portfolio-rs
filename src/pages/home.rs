@@ -8,7 +8,7 @@ use crate::components::{LanguageIcon, Repo, RepoLoading};
 
 static REPOS_WHITELIST: [&str; 3] = ["portfolio-rs", "mnist-ai-rust", "lerpz-backend"];
 
-#[derive(Deserialize, Serialize, Debug, Clone, Eq)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct RepoData {
 	pub name: String,
 	pub html_url: String,
