@@ -42,7 +42,7 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --image $DOCKER_IMAGE
+          flyctl deploy --image $DOCKER_IMAGE --local-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}
