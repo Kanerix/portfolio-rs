@@ -159,7 +159,7 @@ pub fn Home() -> impl IntoView {
 			</div>
 			<div class="overflow-y-scroll col-span-2 md:col-span-1 my-16">
 				<h1 class="text-slate-900 dark:text-slate-100 font-semibold py-4 px-4 max-w-sm w-full mx-auto">
-					"LUANGUAGES"
+					"LANGUAGES"
 				</h1>
 				<LanguageProgress language="Rust" progress=90 />
 				<LanguageProgress language="Go" progress=75 />
