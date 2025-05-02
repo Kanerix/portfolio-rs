@@ -1,6 +1,9 @@
-# GitHub and VScode shit
+# Git, GitHub and VScode
+.git
+.githooks
 .github
 .vscode
+.gitignore
 
 # Rust build dir
 target
@@ -10,7 +13,9 @@ LICENSE
 README.md
 .gitignore
 
-# The docker file
+# Docker
+.dockerignore
+docker-compose.yml
 Dockerfile
 
 # Fly stuff

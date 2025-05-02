@@ -1,63 +1,26 @@
-use cfg_if::cfg_if;
-use tracing::Level;
+use axum::Router;
+use leptos::prelude::*;
+use leptos_axum::{LeptosRoutes, generate_route_list};
+use portfolio::app::{App, shell};
 
-cfg_if! {
-	if #[cfg(feature = "ssr")] {
-		use leptos::*;
-		use leptos_actix::{generate_route_list, LeptosRoutes};
-		use actix_files::Files;
-		use actix_web::{web, App, HttpServer, middleware};
-		use portfolio::app::App as Frontend;
+#[tokio::main]
+async fn main() {
+    let conf = get_configuration(None).unwrap();
+    let leptos_options = conf.leptos_options;
+    let addr = leptos_options.site_addr;
+    let routes = generate_route_list(App);
 
-		#[actix_web::main]
-		async fn main() -> std::io::Result<()> {
-			tracing_subscriber::fmt()
-				.with_max_level(Level::DEBUG)
-				.init();
+    let app = Router::new()
+        .leptos_routes(&leptos_options, routes, {
+            let leptos_options = leptos_options.clone();
+            move || shell(leptos_options.clone())
+        })
+        .fallback(leptos_axum::file_and_error_handler(shell))
+        .with_state(leptos_options);
 
-			let conf = get_configuration(None).await.unwrap();
-			let addr = conf.leptos_options.site_addr;
-
-			tracing::info!("Starting server at {}", addr);
-
-			HttpServer::new(move || {
-				let leptos_options = &conf.leptos_options;
-				let site_root = &leptos_options.site_root;
-
-				let routes = generate_route_list(|| view! { <Frontend/> });
-
-				App::new()
-					.service(Files::new("/pkg", format!("{site_root}/pkg")))
-					.service(Files::new("/assets", site_root))
-					.route("/api/{tail:.*}", leptos_actix::handle_server_fns())
-					.leptos_routes(
-						leptos_options.to_owned(),
-						routes,
-						|| view! { <Frontend/> },
-					)
-					.service(Files::new("/", site_root))
-					.app_data(web::Data::new(leptos_options.to_owned()))
-					.wrap(middleware::Compress::default())
-			})
-			.bind(addr)?
-			.run()
-			.await
-		}
-	} else {
-		fn main() {
-			panic!("You must enable the ssr feature to run the server")
-		}
-	}
-}
-
-#[cfg(feature = "ssr")]
-#[actix_web::get("favicon.ico")]
-async fn favicon(
-	leptos_options: actix_web::web::Data<leptos::LeptosOptions>,
-) -> actix_web::Result<actix_files::NamedFile> {
-	let leptos_options = leptos_options.into_inner();
-	let site_root = &leptos_options.site_root;
-	Ok(actix_files::NamedFile::open(format!(
-		"{site_root}/favicon.ico"
-	))?)
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    println!("Listening on http://{}", &addr);
+    axum::serve(listener, app.into_make_service())
+        .await
+        .unwrap();
 }
