@@ -1,11 +1,15 @@
 use crate::pages::home::Home;
 use crate::theme::{ThemeProvider, ToggleThemeButton};
+
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
-use leptos_meta::{provide_meta_context, Body, Html, Link, Meta, Stylesheet, Title};
-use leptos_router::components::{Route, Router, Routes};
+use leptos_meta::provide_meta_context;
+use leptos_router::{
+    components::{Route, Router, Routes},
+    path,
+};
 
-pub fn shell(options: LeptosOptions) -> impl IntoView {
+pub fn shell(_: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
         <html lang="en">

@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_meta::Meta;
+use leptos_meta::{Body, Html, Meta};
 use serde::{Deserialize, Serialize};
 use std::{ops::Not, str::FromStr};
 
@@ -52,12 +52,6 @@ impl ColorMode {
         }
     }
 
-    /// The initial color mode, loaded from the cookie.
-    ///
-    /// This function is sever-side only. This is why we have
-    /// the `#[cfg(feature = "ssr")]` attribute to make sure it
-    /// is only used when server-side rendering.
-    #[cfg(feature = "ssr")]
     fn initial_color_mode() -> ColorMode {
         // if cfg!(feature = "ssr") {
         // 	use_context::<tower::>()
@@ -101,7 +95,7 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
 
     provide_context(Theme(color_mode, set_color_mode));
 
-    let classes = Memo::new(move |_| color_mode.get().as_ref().to_string());
+    let _classes = Memo::new(move |_| color_mode.get().as_ref().to_string());
 
     Effect::new(move |_| {
         let local_storage = window().local_storage().ok();
