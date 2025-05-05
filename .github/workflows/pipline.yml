@@ -21,33 +21,34 @@ jobs:
     needs: [prepare-pipeline]
     secrets: inherit
     with:
-      DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      RUST_TOOLCHAIN: ${{ needs.prepare-pipeline.outputs.rust_toolchain }}
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      rust_toolchain: ${{ needs.prepare-pipeline.outputs.rust_toolchain }}
 
   version-check:
     uses: ./.github/workflows/version-check.yml
     needs: [prepare-pipeline, lint-project]
     secrets: inherit
     with:
-      DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      PACKAGE_VERSION: ${{ needs.prepare-pipeline.outputs.package_version }}
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
       
   release-site:
     uses: ./.github/workflows/release-site.yml
     needs: [prepare-pipeline, version-check]
     secrets: inherit
     with:
-      DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      PACKAGE_VERSION: ${{ needs.prepare-pipeline.outputs.package_version }}
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
 
   build-image:
     uses: ./.github/workflows/build-image.yml
     needs: [prepare-pipeline, version-check]
     secrets: inherit
     with:
-      DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      RUST_TOOLCHAIN: ${{ needs.prepare-pipeline.outputs.rust_toolchain }}
-      IMAGE_NAME: ${{ needs.prepare-pipeline.outputs.image_name }}
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
+      rust_toolchain: ${{ needs.prepare-pipeline.outputs.rust_toolchain }}
+      image_name: ${{ needs.prepare-pipeline.outputs.image_name }}
 
   deploy-container:
     uses: ./.github/workflows/deploy-container.yml
@@ -55,4 +56,4 @@ jobs:
     secrets: inherit
     with:
       DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      DOCKER_IMAGE: ${{ needs.build-image.outputs.docker_image }}
+      docker_image: ${{ needs.build-image.outputs.docker_image }}
