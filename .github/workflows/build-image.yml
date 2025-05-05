@@ -1,10 +1,10 @@
-name: Build and push docker image
+name: Build and push docker image to ghcr.io
 
 on:
   workflow_call:
     inputs:
       deploy_env: 
-        description: 'The environment to deploy to'
+        description: The environment to deploy to
         required: true
         type: string
       
@@ -25,7 +25,7 @@ on:
 
     outputs:
       docker_image:
-        description: Name of Docker image
+        description: Name of the docker image
         value: ${{ jobs.build-and-push-image.outputs.docker_image }}
 
 env:
