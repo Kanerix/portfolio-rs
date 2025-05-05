@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  lint-project:
+  lint-project-with-clippy:
     runs-on: ubuntu-latest
 
     steps:

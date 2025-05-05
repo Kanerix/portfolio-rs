@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  release-fa:
+  release-site-content:
     runs-on: ubuntu-latest
 
     steps:

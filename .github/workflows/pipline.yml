@@ -32,7 +32,7 @@ jobs:
       DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
       PACKAGE_VERSION: ${{ needs.prepare-pipeline.outputs.package_version }}
       
-  release-exec:
+  release-site:
     uses: ./.github/workflows/release-site.yml
     needs: [prepare-pipeline, version-check]
     secrets: inherit
