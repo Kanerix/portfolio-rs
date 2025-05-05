@@ -88,7 +88,7 @@ pub fn Home() -> impl IntoView {
             </div>
         </Card>
         <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-8">
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-6">
                 <Text size=TextSize::Xl weight=TextWeight::Bold>
                     "About Me 🤙"
                 </Text>
