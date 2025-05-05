@@ -10,7 +10,7 @@ on:
         type: string
 
       package_version:
-        description: The version of the package.
+        description: The version of the package
         required: true
         type: string
 

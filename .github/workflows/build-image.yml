@@ -7,6 +7,11 @@ on:
         description: 'The environment to deploy to'
         required: true
         type: string
+      
+      package_version:
+        description: The version of the package
+        required: true
+        type: string
 
       rust_toolchain:
         description: The Rust toolchain to use
@@ -28,7 +33,7 @@ env:
 
 jobs:
   build-and-push-image:
-    if: inputs.deploy_env == 'prod'
+    if: inputs.deploy_env == 'prod' || inputs.deploy_env == 'stag'
     runs-on: ubuntu-latest
 
     permissions:
@@ -57,6 +62,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ inputs.deploy_env }}
+            type=raw,value=${{ inputs.package_version }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
