@@ -97,7 +97,7 @@ jobs:
             echo "### Prepare pipeline:               
             <table>
               <tr>
-                <td>🎯 Deploy Environment</td>
+                <td>🚀 Deploy Environment</td>
                 <td>${{ steps.deploy-env.outputs.DEPLOY_ENV }}</td>
               </tr>
               <tr>
