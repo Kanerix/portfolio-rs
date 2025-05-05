@@ -3,18 +3,18 @@ name: Lint project
 on:
   workflow_call:
     inputs:
-      DEPLOY_ENV:
+      deploy_env:
         description: Environment to deploy to
         required: true
         type: string
 
-      RUST_TOOLCHAIN:
+      rust_toolchain:
         description: Rust toolchain to use for the workflow
         required: true
         type: string
 
 jobs:
-  lint-project:
+  lint-project-with-clippy:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,12 +23,12 @@ jobs:
 
       - name: Setup Rust environment
         env:
-          RUST_TOOLCHAIN: ${{ inputs.RUST_TOOLCHAIN }}
+          RUST_TOOLCHAIN: ${{ inputs.rust_toolchain }}
         run: |
           rustup update
           if [[ $RUST_TOOLCHAIN != "rust-toolchain.toml" ]]; then
-            rustup install ${{ inputs.RUST_TOOLCHAIN }}   
-            rustup default ${{ inputs.RUST_TOOLCHAIN }}
+            rustup install ${{ inputs.rust_toolchain }}   
+            rustup default ${{ inputs.rust_toolchain }}
           fi
           rustup component add clippy
         
@@ -52,7 +52,7 @@ jobs:
 
       - name: Lint Rust code wiht Clippy
         env:
-          DEPLOY_ENV: ${{ inputs.DEPLOY_ENV }}
+          DEPLOY_ENV: ${{ inputs.deploy_env }}
         run: |
           if [[ $DEPLOY_ENV == "PROD" ]]; then
             cargo clippy --all-targets --all-features -- -D warnings

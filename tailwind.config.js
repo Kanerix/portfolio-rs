@@ -1,14 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-
 export default {
-	darkMode: 'class',
 	content: {
+		relative: true,
 		files: ["*.html", "./src/**/*.rs"]
 	},
-	theme: {
-		fontFamily: {
-			'sans': ['Poppins'],
-		}
-	},
-	plugins: [],
 }

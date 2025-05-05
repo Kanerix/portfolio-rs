@@ -5,36 +5,55 @@ on:
     branches:
       - '**'
     paths-ignore:
+      - '.githooks/'
+      - '.vscode/'
       - 'LICENSE'
       - 'README.md'
       - 'CHANGELOG.md'
         
 jobs:
-    prepare:
-      uses: ./.github/workflows/prepare.yml
-      secrets: inherit
+  prepare-pipeline:
+    uses: ./.github/workflows/prepare-pipeline.yml
+    secrets: inherit
 
-    linter:
-        uses: ./.github/workflows/linter.yml
-        needs: [prepare]
-        secrets: inherit
-        with:
-          DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
-          RUST_TOOLCHAIN: ${{ needs.prepare.outputs.RUST_TOOLCHAIN }}
+  lint-project:
+    uses: ./.github/workflows/lint-project.yml
+    needs: [prepare-pipeline]
+    secrets: inherit
+    with:
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      rust_toolchain: ${{ needs.prepare-pipeline.outputs.rust_toolchain }}
 
-    build:
-        uses: ./.github/workflows/build.yml
-        needs: [prepare, linter]
-        secrets: inherit
-        with:
-          DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
-          RUST_TOOLCHAIN: ${{ needs.prepare.outputs.RUST_TOOLCHAIN }}
-          IMAGE_NAME: ${{ needs.prepare.outputs.IMAGE_NAME }}
+  version-check:
+    uses: ./.github/workflows/version-check.yml
+    needs: [prepare-pipeline, lint-project]
+    secrets: inherit
+    with:
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
+      
+  release-site:
+    uses: ./.github/workflows/release-site.yml
+    needs: [prepare-pipeline, version-check]
+    secrets: inherit
+    with:
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
 
-    deploy:
-        needs: [prepare, linter, build]
-        uses: ./.github/workflows/deploy.yml
-        secrets: inherit
-        with:
-          DEPLOY_ENV: ${{ needs.prepare.outputs.DEPLOY_ENV }}
-          DOCKER_IMAGE: ${{ needs.build.outputs.DOCKER_IMAGE }}
+  build-image:
+    uses: ./.github/workflows/build-image.yml
+    needs: [prepare-pipeline, version-check]
+    secrets: inherit
+    with:
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
+      rust_toolchain: ${{ needs.prepare-pipeline.outputs.rust_toolchain }}
+      image_name: ${{ needs.prepare-pipeline.outputs.image_name }}
+
+  deploy-container:
+    uses: ./.github/workflows/deploy-container.yml
+    needs: [prepare-pipeline, build-image]
+    secrets: inherit
+    with:
+      DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      docker_image: ${{ needs.build-image.outputs.docker_image }}

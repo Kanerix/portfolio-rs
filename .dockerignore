@@ -1,16 +1,17 @@
-# GitHub and VScode shit
+# Git, GitHub and VScode
+.git
+.githooks
 .github
 .vscode
-
-# Rust build dir
-target
-
-# Random git stuff
-LICENSE
-README.md
 .gitignore
 
-# The docker file
+# Build & module dirs
+target
+node_modules
+
+# Docker
+.dockerignore
+docker-compose.yml
 Dockerfile
 
 # Fly stuff
@@ -18,3 +19,8 @@ fly.toml
 
 # mprocs
 mprocs.yaml
+
+# Random git stuff
+LICENSE
+README.md
+DS_Store

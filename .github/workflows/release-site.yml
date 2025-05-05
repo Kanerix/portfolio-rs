@@ -1,0 +1,47 @@
+name: Release Azure Function as GitHub release
+
+on:
+  workflow_call:
+    inputs:
+      deploy_env:
+        description: Deployment environment (prod, stag or dev)
+        required: true
+        type: string
+
+      package_version:
+        description: The version of the package
+        required: true
+        type: string
+
+jobs:
+  release-site-content:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Install Tailwind CSS
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Setup Rust environment
+        run: |
+          rustup update
+          cargo install --locked --version=0.2.33 cargo-leptos
+          cargo leptos build --release -vv
+
+      - name: Rename artifact
+        run: |
+          zip portfolio-rs.zip -r ./target/site
+
+      - name: Create a GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.package_version }}
+          prerelease: ${{ inputs.deploy_env != 'prod' }}
+          generate_release_notes: ${{ inputs.deploy_env == 'prod' }}
+          make_latest: true
+          files: |
+            portfolio-rs.zip

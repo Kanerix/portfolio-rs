@@ -3,51 +3,71 @@ name: Prepare pipeline
 on:
   workflow_call:
     outputs:
-      DEPLOY_ENV:
+      deploy_env:
         description: What kind of deployment this is
-        value: ${{ jobs.prepare-pipeline.outputs.DEPLOY_ENV }}
+        value: ${{ jobs.prepare-pipeline-variables.outputs.deploy_env }}
       
-      RUST_TOOLCHAIN:
+      package_version:
+        description: The version of the package
+        value: ${{ jobs.prepare-pipeline-variables.outputs.package_version }}
+      
+      rust_toolchain:
         description: The toolchain for Rust to use
-        value: ${{ jobs.prepare-pipeline.outputs.RUST_TOOLCHAIN }}
-      
-      IMAGE_NAME:
+        value: ${{ jobs.prepare-pipeline-variables.outputs.rust_toolchain }}
+
+      image_name:
         description: The name of the image to build
-        value: ${{ jobs.prepare-pipeline.outputs.IMAGE_NAME }}
+        value: ${{ jobs.prepare-pipeline-variables.outputs.image_name }}
 
 jobs:
-  prepare-pipeline:
+  prepare-pipeline-variables:
       runs-on: ubuntu-latest
 
       outputs:
-        DEPLOY_ENV: ${{ steps.deploy-env.outputs.DEPLOY_ENV }}
-        RUST_TOOLCHAIN: ${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}
-        IMAGE_NAME: ${{ steps.image-name.outputs.IMAGE_NAME }}
+        deploy_env: ${{ steps.deploy-env.outputs.DEPLOY_ENV }}
+        package_version: ${{ steps.package-version.outputs.PACKAGE_VERSION }}
+        rust_toolchain: ${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}
+        image_name: ${{ steps.image-name.outputs.IMAGE_NAME }}
 
       steps:
         - name: Checkout repository
           uses: actions/checkout@v4
 
-        # Sets the deployment environment based on the branch name
         - name: Set deployment variable 
           id: deploy-env
           env:
             BRANCH: ${{ github.ref_name }}
           run: |
             if [[ $BRANCH == "main" || $BRANCH == "master" ]]; then
-                DEPLOY_ENV=PROD
+                DEPLOY_ENV=prod
             elif [[ $BRANCH == "staging" ]]; then
-                DEPLOY_ENV=STAGING
+                DEPLOY_ENV=stag
             else
-                DEPLOY_ENV=TEST
+                DEPLOY_ENV=test
             fi
 
             echo "DEPLOY_ENV="$DEPLOY_ENV
             echo "DEPLOY_ENV=$DEPLOY_ENV" >> $GITHUB_OUTPUT
+
+        - name: Get package version
+          id: package-version
+          env:
+            DEPLOY_ENV: ${{ steps.deploy-env.outputs.DEPLOY_ENV }}
+          run: |
+            echo "Checking package version..."
+  
+            if [[ $DEPLOY_ENV != "prod" ]]; then
+              VERSION_SUFFIX="-$DEPLOY_ENV+$(git rev-parse --short HEAD)"
+            fi
+
+            PACKAGE_VERSION="$(cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version')$VERSION_SUFFIX"
         
-        # Gets the Rust toolchain from the var if rust-toolchian.toml
-        # does not exist. If nothing is prresent, the default is stable.
-        - name: Set Rust toolchain 
+            PACKAGE_VERSION=$(echo $PACKAGE_VERSION) | tr -d ''
+
+            echo "PACKAGE_VERSION=$PACKAGE_VERSION"
+            echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+        
+        - name: Get toolchain 
           id: rust-toolchain
           env:
             RUST_TOOLCHAIN: ${{ vars.RUST_TOOLCHAIN }}
@@ -63,7 +83,6 @@ jobs:
             echo "RUST_TOOLCHAIN="$RUST_TOOLCHAIN
             echo "RUST_TOOLCHAIN=$RUST_TOOLCHAIN" >> $GITHUB_OUTPUT
 
-        # Sets the image name. This is based on the repository name
         - name: Set image name
           id : image-name
           env:
@@ -72,21 +91,25 @@ jobs:
             IMAGE_NAME=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')
             echo "IMAGE_NAME=$IMAGE_NAME"
             echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
-        
+
         - name: Write prepare summary
           run: |
             echo "### Prepare pipeline:               
             <table>
               <tr>
-                <td>🎯 Deploy env</td>
+                <td>🚀 Deploy Environment</td>
                 <td>${{ steps.deploy-env.outputs.DEPLOY_ENV }}</td>
               </tr>
               <tr>
-                <td>🦀 Rust toolchain</td>
+                <td>📦 Package Version</td>
+                <td>${{ steps.package-version.outputs.PACKAGE_VERSION }}</td>
+              </tr>
+              <tr>
+                <td>🦀 Rust Toolchain</td>
                 <td>${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}</td>
               </tr>
               <tr>
-                <td>🐳 Image name</td>
+                <td>🐳 Image Name</td>
                 <td>${{ steps.image-name.outputs.IMAGE_NAME }}</td>
               </tr>
             </table>" >> $GITHUB_STEP_SUMMARY

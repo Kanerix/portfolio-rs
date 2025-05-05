@@ -1,0 +1,15 @@
+{
+	"name": "portfolio",
+	"scripts": {
+		"build": "pnpx tailwindcss -i ./input.css -o ./style/output.css",
+		"watch": "pnpx tailwindcss -i ./input.css -o ./style/output.css --watch"
+	},
+	"packageManager": "pnpm@10.9.0",
+	"dependencies": {
+		"tailwind-scrollbar": "^4.0.2",
+		"tailwindcss": "^4.1.5"
+	},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.1.5"
+	}
+}

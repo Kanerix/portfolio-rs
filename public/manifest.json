@@ -12,6 +12,11 @@
       "sizes": "48x48"
     },
     {
+      "src": "/lerpz.webp",
+      "type": "image/webp",
+      "sizes": "1024x1024"
+    },
+    {
       "src": "/profile.webp",
       "type": "image/webp",
       "sizes": "600x600"
