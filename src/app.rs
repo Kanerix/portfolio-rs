@@ -1,27 +1,39 @@
-use crate::pages::home::Home;
-use crate::theme::{ThemeProvider, ToggleThemeButton};
+use crate::{
+    components::{Nav, NavLink},
+    pages::{Contact, Home, NotFound},
+};
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
-use leptos_meta::provide_meta_context;
 use leptos_router::{
     components::{Route, Router, Routes},
+    hooks::use_url,
     path,
 };
 
-pub fn shell(_: LeptosOptions) -> impl IntoView {
+pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="en" dir="ltr" class="dark">
             <head>
-                <meta charset="utf-8"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <title>"Kasper's portfolio"</title>
+                <meta charset="utf-8"/>
+                <meta name="description" content="Kasper's portfolio website, created using Leptos!"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-                <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
                 <link rel="manifest" href="/manifest.json"/>
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com"/>
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap"/>
+                // Fontawesome icons
+                <link rel="stylesheet" href="/fontawesome/css/all.min.css"/>
+                // Tailwind generated stylesheet
+                <link rel="stylesheet" id="leptos" href="/pkg/portfolio-rs.css"/>
+                // Leptos stuff
+                <AutoReload options=options.clone()/>
+                <HydrationScripts options=options islands=true islands_router=true/>
             </head>
-            <body>
+            <body class="bg-slate-50 dark:bg-slate-950 mx-auto px-8 max-w-5xl min-h-screen">
                 <App />
             </body>
         </html>
@@ -29,19 +41,38 @@ pub fn shell(_: LeptosOptions) -> impl IntoView {
 }
 
 #[component]
-pub fn App() -> impl IntoView {
-    provide_meta_context();
+fn NavBar() -> impl IntoView {
+    let url = use_url();
 
     view! {
+        <Nav class="border-b border-slate-200 dark:border-slate-800">
+            <NavLink to="/" active=url.get().path() == "/">
+                "Home"
+            </NavLink>
+            <NavLink to="/contact" active=url.get().path() == "/contact" >
+                "Contact"
+            </NavLink>
+            <NavLink to="https://github.com/Kanerix" {..} target="_blank">
+                "Projects"
+            </NavLink>
+        </Nav>
+    }
+}
+
+#[component]
+pub fn App() -> impl IntoView {
+    view! {
         <Router>
-            <ThemeProvider>
-                <main class="mx-auto w-2/3">
-                    <ToggleThemeButton />
-                    <Routes fallback=|| "Not found.">
-                        <Route path=path!("/") view=|| view! { <Home/> }/>
-                    </Routes>
-                </main>
-            </ThemeProvider>
+            <NavBar />
+            <main class="mb-8">
+                <Routes fallback=|| NotFound() transition=true>
+                    <Route path=path!("/") view=|| view! { <Home/> }/>
+                    <Route path=path!("/contact") view=|| view! { <Contact/> }/>
+                </Routes>
+            </main>
+            <footer class="p-4 border-t border-slate-200 dark:border-slate-800">
+                "GitHub"
+            </footer>
         </Router>
     }
 }

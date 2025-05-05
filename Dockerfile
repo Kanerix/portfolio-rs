@@ -3,18 +3,25 @@ WORKDIR /build
 
 RUN apt-get update && apt-get upgrade && \
     apt-get install -y --no-install-recommends \
-    build-essential npm npx
+    build-essential npm
+
+RUN npm install -g pnpm
 
 COPY rust-toolchain.toml .
 
 RUN rustup update && \
-    cargo install --locked --version=0.2.32 cargo-leptos && \
+    cargo install --locked --version=0.2.33 cargo-leptos && \
     npm install tailwindcss -g
+
+RUN --mount=type=bind,source=style/tailwind.css,target=style/tailwind.css \
+    --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+    pnpm install && \
+    pnpx tailwindcss -i style/tailwind.css -o style/output.css --minify
 
 COPY . .
 
-RUN npx tailwindcss -i style/tailwind.css -o style/generated.css --minify && \
-    cargo leptos build --release -vv
+RUN cargo leptos build --release -vv
 
 
 FROM debian:bookworm-slim AS runner

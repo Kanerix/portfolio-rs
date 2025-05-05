@@ -5,13 +5,9 @@
 .vscode
 .gitignore
 
-# Rust build dir
+# Build & module dirs
 target
-
-# Random git stuff
-LICENSE
-README.md
-.gitignore
+node_modules
 
 # Docker
 .dockerignore
@@ -23,3 +19,8 @@ fly.toml
 
 # mprocs
 mprocs.yaml
+
+# Random git stuff
+LICENSE
+README.md
+DS_Store

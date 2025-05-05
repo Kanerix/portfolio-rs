@@ -1,34 +1,46 @@
+use std::borrow::Cow;
+
 use leptos::prelude::*;
+use tailwind_fuse::*;
+
+#[derive(TwVariant)]
+pub enum LanguageIconVariant {
+    #[tw(default, class = "fa-solid fa-code")]
+    Unkown,
+    #[tw(class = "fa-brands fa-rust")]
+    Rust,
+    #[tw(class = "fa-brands fa-golang")]
+    Go,
+    #[tw(class = "fa-brands fa-js")]
+    TypeScript,
+    #[tw(class = "fa-brands fa-js")]
+    JavaScript,
+    #[tw(class = "fa-brands fa-html5")]
+    HTML,
+    #[tw(class = "fa-brands fa-css3-alt")]
+    CSS,
+    #[tw(class = "fa-brands fa-sass")]
+    SCSS,
+    #[tw(class = "fa-brands fa-python")]
+    Python,
+    #[tw(class = "fa-brands fa-microsoft")]
+    CSharp,
+    #[tw(class = "fa-brands fa-microsoft")]
+    CPlusPlus,
+    #[tw(class = "fa-brands fa-java")]
+    Java,
+    #[tw(class = "fa-brands fa-java")]
+    Kotlin,
+    #[tw(class = "fa-brands fa-swift")]
+    Swift,
+}
 
 #[component]
 pub fn LanguageIcon(
-    #[prop(optional, into)] language: Option<String>,
-    #[prop(optional, into)] class: Option<String>,
+    #[prop(optional, into)] variant: LanguageIconVariant,
+    #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
-    let default_classes = class.unwrap_or_default();
-
-    let unkown_icon_view = view! {
-        <i class=format!("fa-solid fa-code {}", default_classes) />
-    };
-
-    if language.is_none() {
-        return unkown_icon_view;
-    }
-
-    match language.unwrap().as_str() {
-        "Rust" => view! { <i class=format!("fa-brands fa-rust {}", default_classes) /> },
-        "Go" => view! { <i class=format!("fa-brands fa-golang {}", default_classes) /> },
-        "TypeScript" => view! { <i class=format!("fa-brands fa-js {}", default_classes) /> },
-        "JavaScript" => view! { <i class=format!("fa-brands fa-js {}", default_classes) /> },
-        "HTML" => view! { <i class=format!("fa-brands fa-html5 {}", default_classes) /> },
-        "CSS" => view! { <i class=format!("fa-brands fa-css3-alt {}", default_classes) /> },
-        "SCSS" => view! { <i class=format!("fa-brands fa-sass {}", default_classes) /> },
-        "Python" => view! { <i class=format!("fa-brands fa-python {}", default_classes) /> },
-        "C#" => view! { <i class=format!("fa-brands fa-microsoft {}", default_classes) /> },
-        "C++" => view! { <i class=format!("fa-brands fa-microsoft {}", default_classes) /> },
-        "Java" => view! { <i class=format!("fa-brands fa-java {}", default_classes) /> },
-        "Kotlin" => view! { <i class=format!("fa-brands fa-java {}", default_classes) /> },
-        "Swift" => view! { <i class=format!("fa-brands fa-swift {}", default_classes) /> },
-        _ => unkown_icon_view,
+    view! {
+        <i class=tw_merge!(variant, class) />
     }
 }

@@ -1,12 +1,9 @@
 use std::cmp::Ordering;
 
-use gloo_net::http::Request;
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::components::{LanguageIcon, Repo, RepoLoading};
-
-static REPOS_WHITELIST: [&str; 3] = ["portfolio-rs", "mnist-ai-rust", "lerpz-backend"];
+use crate::components::{Card, CardVariant, Text, TextSize, text::TextWeight};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct RepoData {
@@ -44,94 +41,120 @@ impl Ord for RepoData {
 
 impl Eq for RepoData {}
 
-async fn fetch_repos() -> Result<Vec<RepoData>, Error> {
-    let repos = Request::get("https://api.github.com/users/Kanerix/repos")
-        .send()
-        .await
-        .map_err(|_| Error::RequestError)?
-        .json::<Vec<RepoData>>()
-        .await
-        .map_err(|_| Error::DecodeError)?;
-
-    let mut repos_filtered = repos
-        .iter()
-        .filter(|&repo| REPOS_WHITELIST.contains(&repo.name.as_str()))
-        .cloned()
-        .collect::<Vec<RepoData>>();
-
-    repos_filtered.sort();
-    repos_filtered.reverse();
-
-    Ok(repos_filtered)
-}
-
-#[component]
-pub fn LanguageProgress(
-    #[prop(into)] language: String,
-    #[prop(into)] progress: u8,
-) -> impl IntoView {
-    view! {
-        <div class="flex items-center">
-            <LanguageIcon language={language} class="w-12 mr-4 text-3xl text-sky-500" />
-            <div class="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800">
-                <div class="h-3 rounded-full bg-sky-400 dark:bg-sky-600" style=format!("width: {progress}%")></div>
-            </div>
-        </div>
-    }
-}
-
-/// The home page.
 #[component]
 pub fn Home() -> impl IntoView {
     view! {
-        <div class="grid gap-4 grid-cols-1 py-16 md:py-32 xl:grid-cols-3">
-            <div class="flex flex-col">
-                <h1 class="text-5xl font-semibold text-slate-900 dark:text-slate-100">
-                    "Hi, im Kasper"
-                </h1>
-                <h2 class="pt-2 text-xl text-slate-600 dark:text-slate-300">
-                    "Fullstack Developer"
-                </h2>
-                <p class="pt-4 text-slate-500 dark:text-slate-400">
-                    "I'm a software engineer and IT enthusiast. I'm currently studying sowftware development at the "
-                    <a href="https://itu.dk/" target="_blank" class="text-slate-800 dark:text-slate-300">
+        <Card
+            class="grid sm:grid-cols-[auto, auto] grid-cols-[auto]
+            sm:grid-rows-[auto, auto] grid-rows-[auto, auto, auto]"
+        >
+            <div class="sm:col-span-2 mb-8">
+                <Text class="sm:text-lg text-md">
+                    <i class="fa-solid fa-globe mr-2"/>
+                    "Introduction"
+                </Text>
+            </div>
+            <div class="grid grid-rows-[auto, auto, auto] gap-4 max-w-lg">
+                <Text class="lg:text-5xl sm:text-4xl text-2xl font-semibold">
+                    "Hi, im Kasper 👋"
+                </Text>
+                <Text
+                    size=TextSize::Lg
+                    class="text-slate-500 dark:text-slate-400"
+                >
+                    "I'm a software engineer and IT enthusiast, currently
+                    studying sowftware development at the "
+                    <a
+                        href="https://itu.dk/"
+                        target="_blank"
+                        class="text-slate-800 dark:text-slate-300"
+                    >
                         "IT University of Chopenhagen"
                     </a>
-                </p>
-                <p class="pt-4 text-slate-500 dark:text-slate-400">
-                    "I also have a student job at "
-                    <a href="https://egmont.com/" target="_blank" class="text-slate-800 dark:text-slate-300">
-                        "Egmont"
-                    </a>
-                    " where i have been working since november 2023.
-                    Here i help develop and maintain their internal tools."
-                </p>
-                <div class="grid grid-cols-3 w-32 mt-24 md:w-48">
-                    <a href="https://github.com/Kanerix" aria-label="Checkout my GitHub">
-                        <i class="fa-brands fa-github text-4xl text-sky-500" />
-                    </a>
-                    <a href="https://twitter.com/K4nerix" aria-label="Checkout my Twitter">
-                        <i class="fa-brands fa-twitter text-4xl text-sky-500" />
-                    </a>
-                    <a href="https://linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
-                        <i class="fa-brands fa-linkedin text-4xl text-sky-500" />
-                    </a>
+                    ". I have a passion for learning new technologies and
+                    improving my skills."
+                </Text>
+            </div>
+            <div
+                class="sm:ml-8 ml-0 sm:mt-0 mt-8 sm:justify-self-end
+                justify-self-center self-center"
+            >
+                <img
+                    src="/profile.webp"
+                    alt="Kasper Jonsson"
+                    class="rounded-full min-[862]:max-w-64 min-[862]:max-h-64
+                    md:max-w-56 md:max-h-56  max-w-48 max-h-48 object-cover"
+                />
+            </div>
+        </Card>
+        <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-4">
+            <div class="flex flex-col gap-4">
+                <Text size=TextSize::Xl weight=TextWeight::Bold>
+                    "About Me 🤙"
+                </Text>
+                <Text size=TextSize::Lg class="text-slate-800 dark:text-slate-300">
+                    "I have been coding since I was 13 years old, where my
+                    journey started in Denmark. Here I went to a club called
+                    Coding Pirates. This is where my passion for programming
+                    ignited. I soon started learning the basics of HTML, CSS
+                    and JavaScript, and quickly moved on to bigger frameworks
+                    like React and Svelte."
+                </Text>
+                <Text size=TextSize::Lg class="text-slate-800 dark:text-slate-300">
+                    "Today I have moved on to even more advanced stuff and have
+                    been all around the different paradigms. Lately I have found
+                    a big interest in Rust, where I have been learning all kinds
+                    of different principles. Rust has really taught me how code
+                    should be written and how to think about code in a more
+                    structured way."
+                </Text>
+            </div>
+            <Card variant=CardVariant::Outlined>
+                <div class="flex items-center justify-between">
+                    <Text weight=TextWeight::Bold class="text-2xl">
+                        "Lerpz"
+                    </Text>
+                    <img
+                        src="/lerpz.webp"
+                        alt="Lerpz Organization"
+                        class="max-w-8 max-h-8 object-cover"
+                    />
                 </div>
-            </div>
-            <div class="overflow-y-scroll col-span-2">
-                <h1 class="text-slate-900 dark:text-slate-100 font-semibold py-4 px-4 max-w-sm w-full mx-auto">
-                    "PROJECTS"
-                </h1>
-            </div>
-            <div class="overflow-y-scroll col-span-2 md:col-span-1 my-16">
-                <h1 class="text-slate-900 dark:text-slate-100 font-semibold py-4 px-4 max-w-sm w-full mx-auto">
-                    "LUANGUAGES"
-                </h1>
-                <LanguageProgress language="Rust" progress=90 />
-                <LanguageProgress language="Go" progress=75 />
-                <LanguageProgress language="JavaScript" progress=60 />
-                <LanguageProgress language="Python" progress=45 />
-            </div>
+                <Text size=TextSize::Lg class="text-slate-800 dark:text-slate-300 mt-4">
+                    "This is the domain I use for my personal projects. It is
+                    used for all kinds of enterprise-level side projects that
+                    showcase different technologies I've learned. I have a big
+                    passion for cyber security and have been exploring various
+                    aspects of it during my free time. I've been learning tools
+                    and platforms like Azure AD/Entra ID, network architecture,
+                    and security principles that help me build more robust
+                    applications. These interests complement my programming
+                    skills and have shaped my approach to creating secure
+                    software solutions."
+                </Text>
+            </Card>
         </div>
+
+        // <div class="flex flex-col">
+        //     <p class="pt-4 text-slate-500 dark:text-slate-400">
+        //         "I also have a student job at "
+        //         <a href="https://egmont.com/" target="_blank" class="text-slate-800 dark:text-slate-300">
+        //             "Egmont"
+        //         </a>
+        //         " where i have been working since november 2023.
+        //         Here i help develop and maintain their internal tools."
+        //     </p>
+        //     <div class="grid grid-cols-3">
+        //         <a href="https://github.com/Kanerix" aria-label="Checkout my GitHub">
+        //             <i class="fa-brands fa-github text-4xl text-sky-500" />
+        //         </a>
+        //         <a href="https://twitter.com/K4nerix" aria-label="Checkout my Twitter">
+        //             <i class="fa-brands fa-twitter text-4xl text-sky-500" />
+        //         </a>
+        //         <a href="https://linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
+        //             <i class="fa-brands fa-linkedin text-4xl text-sky-500" />
+        //         </a>
+        //     </div>
+        // </div>
     }
 }
