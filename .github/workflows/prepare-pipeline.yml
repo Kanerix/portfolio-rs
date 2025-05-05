@@ -9,7 +9,7 @@ on:
       
       package_version:
         description: The version of the package
-        value: ${{ jobs.prepare-pipeline.outputs.image_name }}
+        value: ${{ jobs.prepare-pipeline.outputs.package_version }}
       
       rust_toolchain:
         description: The toolchain for Rust to use
@@ -25,9 +25,9 @@ jobs:
 
       outputs:
         deploy_env: ${{ steps.deploy-env.outputs.DEPLOY_ENV }}
+        package_version: ${{ steps.package-version.outputs.PACKAGE_VERSION }}
         rust_toolchain: ${{ steps.rust-toolchain.outputs.RUST_TOOLCHAIN }}
         image_name: ${{ steps.image-name.outputs.IMAGE_NAME }}
-        package_version: ${{ steps.package-version.outputs.PACKAGE_VERSION }}
 
       steps:
         - name: Checkout repository
