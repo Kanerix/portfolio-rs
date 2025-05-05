@@ -30,7 +30,7 @@ jobs:
     secrets: inherit
     with:
       DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      PACKAGE_VERSION: ${{ github.sha }}
+      PACKAGE_VERSION: ${{ needs.prepare-pipeline.outputs.package_version }}
       
   release-exec:
     uses: ./.github/workflows/release-site.yml
