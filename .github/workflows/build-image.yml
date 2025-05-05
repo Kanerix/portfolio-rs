@@ -85,4 +85,4 @@ jobs:
           echo "### 🐳 Docker build: 
           Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
         env:
-          DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}
+          DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}:${{ inputs.package_version}}
