@@ -87,7 +87,7 @@ pub fn Home() -> impl IntoView {
                 />
             </div>
         </Card>
-        <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-4">
+        <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-8">
             <div class="flex flex-col gap-4">
                 <Text size=TextSize::Xl weight=TextWeight::Bold>
                     "About Me 🤙"
@@ -126,7 +126,7 @@ pub fn Home() -> impl IntoView {
                     showcase different technologies I've learned. I have a big
                     passion for cyber security and have been exploring various
                     aspects of it during my free time. I've been learning tools
-                    and platforms like Azure AD/Entra ID, network architecture,
+                    and platforms like Entra ID, network architecture,
                     and security principles that help me build more robust
                     applications. These interests complement my programming
                     skills and have shaped my approach to creating secure

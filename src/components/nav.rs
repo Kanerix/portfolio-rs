@@ -34,7 +34,7 @@ pub fn NavLink(
         <a
             href=to 
             class=tw_merge!(
-                "cursor-pointer rounded-lg px-4 py-2 my-6 my-4
+                "cursor-pointer rounded-lg p-4 my-6 my-4
                 hover:bg-slate-200 hover:dark:bg-slate-800",
                 active,
                 class,
