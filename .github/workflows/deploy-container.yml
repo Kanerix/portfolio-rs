@@ -3,12 +3,12 @@ name: Deploy app
 on:
   workflow_call:
     inputs:
-      DEPLOY_ENV: 
+      deploy_env: 
         description: The environment to deploy to
         required: true
         type: string
 
-      DOCKER_IMAGE:
+      docker_image:
         description: Path to the image
         required: true
         type: string
@@ -21,7 +21,10 @@ jobs:
     if: vars.DEPLOY_PLATFORM == 'fly.io'
     runs-on: ubuntu-latest
 
-    environment: ${{ inputs.DEPLOY_ENV}}
+    environment:
+      name: ${{ inputs.deploy_env }}
+      url: https://portfolio.lerpz.com
+      
 
     permissions:
       packages: read
@@ -38,18 +41,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Pull Docker image from registry
-        run: docker pull ${{ inputs.DOCKER_IMAGE }}
+        run: docker pull ${{ inputs.docker_image }}
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           flyctl deploy --image $DOCKER_IMAGE --local-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}
+          DOCKER_IMAGE: ${{ inputs.docker_image }}
       
       - name: Deploy summary
         run: |
           echo "### 🏭 Deployment info:
           Deployed \`$DOCKER_IMAGE\` to Fly.io" >> $GITHUB_STEP_SUMMARY
         env:
-          DOCKER_IMAGE: ${{ inputs.DOCKER_IMAGE }}
+          DOCKER_IMAGE: ${{ inputs.docker_image }}

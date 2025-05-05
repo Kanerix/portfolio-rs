@@ -3,25 +3,25 @@ name: Build and push docker image
 on:
   workflow_call:
     inputs:
-      DEPLOY_ENV: 
+      deploy_env: 
         description: 'The environment to deploy to'
         required: true
         type: string
 
-      RUST_TOOLCHAIN:
+      rust_toolchain:
         description: The Rust toolchain to use
         required: true
         type: string 
 
-      IMAGE_NAME:
+      image_name:
         description: The name of the image to build
         required: true
         type: string
 
     outputs:
-      DOCKER_IMAGE:
+      docker_image:
         description: Name of Docker image
-        value: ${{ jobs.build-and-push-image.outputs.DOCKER_IMAGE }}
+        value: ${{ jobs.build-and-push-image.outputs.docker_image }}
 
 env:
   DOCKER_REGISTRY: ghcr.io
@@ -30,8 +30,6 @@ jobs:
   build-and-push-image:
     if: inputs.DEPLOY_ENV == 'PROD'
     runs-on: ubuntu-latest
-
-    environment: ${{ inputs.DEPLOY_ENV }}
 
     permissions:
       contents: read
@@ -66,8 +64,8 @@ jobs:
           context: .
           push: true
           build-args: |
-            DEPLOY_ENV=${{ inputs.DEPLOY_ENV }}
-            RUST_TOOLCHAIN=${{ inputs.RUST_TOOLCHAIN }}
+            DEPLOY_ENV=${{ inputs.deploy_env }}
+            RUST_TOOLCHAIN=${{ inputs.rust_toolchain }}
           tags: ${{ steps.docker-meta.outputs.tags }}
           labels: ${{ steps.docker-meta.outputs.labels }}
           cache-from: type=gha
