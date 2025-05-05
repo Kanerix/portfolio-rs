@@ -28,7 +28,7 @@ env:
 
 jobs:
   build-and-push-image:
-    if: inputs.DEPLOY_ENV == 'PROD'
+    if: inputs.deploy_env == 'prod'
     runs-on: ubuntu-latest
 
     permissions:

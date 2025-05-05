@@ -39,11 +39,11 @@ jobs:
             BRANCH: ${{ github.ref_name }}
           run: |
             if [[ $BRANCH == "main" || $BRANCH == "master" ]]; then
-                DEPLOY_ENV=PROD
+                DEPLOY_ENV=prod
             elif [[ $BRANCH == "staging" ]]; then
-                DEPLOY_ENV=STAGING
+                DEPLOY_ENV=stag
             else
-                DEPLOY_ENV=TEST
+                DEPLOY_ENV=test
             fi
 
             echo "DEPLOY_ENV="$DEPLOY_ENV
