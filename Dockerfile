@@ -10,14 +10,11 @@ RUN npm install -g pnpm
 COPY rust-toolchain.toml .
 
 RUN rustup update && \
-    cargo install --locked --version=0.2.33 cargo-leptos && \
-    npm install tailwindcss -g
+    cargo install --locked --version=0.2.33 cargo-leptos
 
-RUN --mount=type=bind,source=style/tailwind.css,target=style/tailwind.css \
-    --mount=type=bind,source=package.json,target=package.json \
+RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    pnpm install && \
-    pnpx tailwindcss -i style/tailwind.css -o style/output.css --minify
+    pnpm install
 
 COPY . .
 
