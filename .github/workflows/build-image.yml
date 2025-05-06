@@ -79,12 +79,11 @@ jobs:
       
       - name: Write summary
         id: docker-image
+        env:
+          DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ inputs.image_name }}:${{ inputs.package_version}}
         run: |
-          DOCKER_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          DOCKER_IMAGE="${{ env.DOCKER_REGISTRY }}/${DOCKER_REPO}:${{ inputs.package_version}}"
-
-          echo "DOCKER_IMAGE=${DOCKER_IMAGE}"
-          echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
+          echo "DOCKER_IMAGE=DOCKER_IMAGE"
+          echo "DOCKER_IMAGE=DOCKER_IMAGE" >> $GITHUB_OUTPUT
         
           echo "### 🐳 Docker build: 
           Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
