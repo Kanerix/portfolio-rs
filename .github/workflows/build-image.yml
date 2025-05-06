@@ -24,9 +24,9 @@ on:
         type: string
 
     outputs:
-      docker_image:
+      image_reference:
         description: Name of the docker image
-        value: ${{ jobs.build-and-push-image.outputs.docker_image }}
+        value: ${{ jobs.build-and-push-image.outputs.image_reference }}
 
 env:
   DOCKER_REGISTRY: ghcr.io
@@ -41,7 +41,7 @@ jobs:
       packages: write
 
     outputs:
-      docker_image: ${{ steps.docker-image.outputs.DOCKER_IMAGE }}
+      image_reference: ${{ steps.docker-image.outputs.IMAGE_REFERENCE }}
 
     steps:
       - name: Checkout repository
@@ -80,10 +80,13 @@ jobs:
       - name: Write summary
         id: docker-image
         env:
-          DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ inputs.image_name }}:${{ inputs.package_version}}
+          REGISTRY_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ inputs.image_name }}
         run: |
-          echo "DOCKER_IMAGE=DOCKER_IMAGE"
-          echo "DOCKER_IMAGE=DOCKER_IMAGE" >> $GITHUB_OUTPUT
+          PACKAGE_VERSION=$(echo "${{ inputs.package_version }}" | tr '+' '-')}}
+          IMAGE_REFERENCE="$REGISTRY_IMAGE:$PACKAGE_VERSION"
+
+          echo "IMAGE_REFERENCE=$IMAGE_REFERENCE"
+          echo "IMAGE_REFERENCE=$IMAGE_REFERENCE" >> $GITHUB_OUTPUT
         
-          echo "### 🐳 Docker build: 
-          Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
+          echo "### 🐳 Image: 
+          Image reference: \`$IMAGE_REFERENCE\`" >> $GITHUB_STEP_SUMMARY

@@ -8,7 +8,7 @@ on:
         required: true
         type: string
 
-      docker_image:
+      image_reference:
         description: Path to the image
         required: true
         type: string
@@ -24,7 +24,6 @@ jobs:
     environment:
       name: ${{ inputs.deploy_env }}
       url: https://portfolio.lerpz.com
-      
 
     permissions:
       packages: read
@@ -41,18 +40,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Pull Docker image from registry
-        run: docker pull ${{ inputs.docker_image }}
+        run: docker pull ${{ inputs.image_reference }}
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --image $DOCKER_IMAGE --local-only
+          flyctl deploy --image $IMAGE_REFERENCE --local-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-          DOCKER_IMAGE: ${{ inputs.docker_image }}
+          IMAGE_REFERENCE: ${{ inputs.image_reference }}
       
       - name: Deploy summary
+        env:
+          IMAGE_REFERENCE: ${{ inputs.image_reference }}
         run: |
           echo "### 🏭 Deployment info:
-          Deployed \`$DOCKER_IMAGE\` to Fly.io" >> $GITHUB_STEP_SUMMARY
-        env:
-          DOCKER_IMAGE: ${{ inputs.docker_image }}
+          Deployed \`$IMAGE_REFERENCE\` to Fly.io" >> $GITHUB_STEP_SUMMARY

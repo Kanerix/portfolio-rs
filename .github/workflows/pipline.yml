@@ -55,5 +55,5 @@ jobs:
     needs: [prepare-pipeline, build-image]
     secrets: inherit
     with:
-      DEPLOY_ENV: ${{ needs.prepare-pipeline.outputs.deploy_env }}
-      docker_image: ${{ needs.build-image.outputs.docker_image }}
+      deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
+      image_reference: ${{ needs.build-image.outputs.image_reference }}
