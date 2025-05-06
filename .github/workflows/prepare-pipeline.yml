@@ -85,8 +85,6 @@ jobs:
 
         - name: Set image name
           id : image-name
-          env:
-            GIT_REPOSITORY: ${{ github.repository }}
           run: |
             IMAGE_NAME=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')
             echo "IMAGE_NAME=$IMAGE_NAME"
