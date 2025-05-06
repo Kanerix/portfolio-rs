@@ -41,7 +41,7 @@ jobs:
       packages: write
 
     outputs:
-      DOCKER_IMAGE: ${{ steps.docker-meta.outputs.tags }}
+      docker_image: ${{ steps.docker-image.outputs.DOCKER_IMAGE }}
 
     steps:
       - name: Checkout repository
@@ -81,8 +81,12 @@ jobs:
           cache-to: type=gha,mode=max
       
       - name: Write summary
-        run: |
-          echo "### 🐳 Docker build: 
-          Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
+        id: docker-image
         env:
           DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}:${{ inputs.package_version}}
+        run: |
+          echo "DOCKER_IMAGE=$DOCKER_IMAGE"
+          echo "DOCKER_IMAGE=$DOCKER_IMAGE" >> $GITHUB_OUTPUT
+        
+          echo "### 🐳 Docker build: 
+          Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
