@@ -72,9 +72,6 @@ jobs:
         with:
           context: .
           push: true
-          build-args: |
-            DEPLOY_ENV=${{ inputs.deploy_env }}
-            RUST_TOOLCHAIN=${{ inputs.rust_toolchain }}
           tags: ${{ steps.docker-meta.outputs.tags }}
           labels: ${{ steps.docker-meta.outputs.labels }}
           cache-from: type=gha
@@ -82,11 +79,12 @@ jobs:
       
       - name: Write summary
         id: docker-image
-        env:
-          DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}:${{ inputs.package_version}}
         run: |
-          echo "DOCKER_IMAGE=${DOCKER_IMAGE@L}"
-          echo "DOCKER_IMAGE=${DOCKER_IMAGE@L}" >> $GITHUB_OUTPUT
+          DOCKER_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          DOCKER_IMAGE="${{ env.DOCKER_REGISTRY }}/${DOCKER_REPO}:${{ inputs.package_version}}"
+
+          echo "DOCKER_IMAGE=${DOCKER_IMAGE}"
+          echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
         
           echo "### 🐳 Docker build: 
           Docker image: \`$DOCKER_IMAGE\`" >> $GITHUB_STEP_SUMMARY
