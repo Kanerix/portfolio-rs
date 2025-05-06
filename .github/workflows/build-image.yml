@@ -82,7 +82,7 @@ jobs:
         env:
           REGISTRY_IMAGE: ${{ env.DOCKER_REGISTRY }}/${{ inputs.image_name }}
         run: |
-          PACKAGE_VERSION=$(echo "${{ inputs.package_version }}" | tr '+' '-')}}
+          PACKAGE_VERSION=$(echo "${{ inputs.package_version }}" | tr '+' '-')
           IMAGE_REFERENCE="$REGISTRY_IMAGE:$PACKAGE_VERSION"
 
           echo "IMAGE_REFERENCE=$IMAGE_REFERENCE"
