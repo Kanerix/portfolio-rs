@@ -1,7 +1,4 @@
-use crate::{
-    components::{Nav, NavLink},
-    pages::{Contact, Home, NotFound},
-};
+use crate::{components::*, pages::*};
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
@@ -67,8 +64,21 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/contact") view=|| view! { <Contact/> }/>
                 </Routes>
             </main>
-            <footer class="border-t border-slate-200 dark:border-slate-800 p-4">
-                "GitHub"
+            <footer class="border-t border-slate-200 dark:border-slate-800 p-8">
+                <Text size=TextSize::Sm variant=TextVariant::Dimmed class="mb-8">
+                    "Copyright © 2025 Kasper Jønsson"
+                </Text>
+                <div class="grid grid-cols-3">
+                    <Text weight=TextWeight::Bold>
+                        "Important Links"
+                    </Text>
+                    <Text weight=TextWeight::Bold>
+                        "Socials"
+                    </Text>
+                    <Text weight=TextWeight::Bold>
+                        "Contact"
+                    </Text>
+                </div>
             </footer>
         </Router>
     }
