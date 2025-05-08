@@ -6,14 +6,14 @@ use tailwind_fuse::*;
 use crate::components::{Text, TextSize};
 
 #[component]
-pub fn Nav(
+pub fn NavBar(
     children: Children,
     #[prop(into, optional)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
     view! {
-        <span class=tw_merge!("flex gap-x-2 md:mb-6 mb-4", class)>
+        <nav class=tw_merge!("flex gap-x-2 py-4", class)>
             {children()}
-        </span>
+        </nav>
     }
 }
 
@@ -34,7 +34,7 @@ pub fn NavLink(
         <a
             href=to 
             class=tw_merge!(
-                "cursor-pointer rounded-lg p-4 my-6 my-4
+                "cursor-pointer rounded-lg py-4 px-6
                 hover:bg-slate-200 hover:dark:bg-slate-800",
                 active,
                 class,

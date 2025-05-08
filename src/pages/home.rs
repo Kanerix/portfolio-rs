@@ -49,7 +49,7 @@ pub fn Home() -> impl IntoView {
             sm:grid-rows-[auto, auto] grid-rows-[auto, auto, auto]"
         >
             <div class="sm:col-span-2 mb-8">
-                <Text class="sm:text-lg text-md">
+                <Text class="sm:text-lg">
                     <i class="fa-solid fa-globe mr-2"/>
                     "Introduction"
                 </Text>
@@ -131,27 +131,5 @@ pub fn Home() -> impl IntoView {
                 </Text>
             </Card>
         </div>
-
-        // <div class="flex flex-col">
-        //     <p class="pt-4 text-slate-500 dark:text-slate-400">
-        //         "I also have a student job at "
-        //         <a href="https://egmont.com/" target="_blank" class="text-slate-800 dark:text-slate-300">
-        //             "Egmont"
-        //         </a>
-        //         " where i have been working since november 2023.
-        //         Here i help develop and maintain their internal tools."
-        //     </p>
-        //     <div class="grid grid-cols-3">
-        //         <a href="https://github.com/Kanerix" aria-label="Checkout my GitHub">
-        //             <i class="fa-brands fa-github text-4xl text-sky-500" />
-        //         </a>
-        //         <a href="https://twitter.com/K4nerix" aria-label="Checkout my Twitter">
-        //             <i class="fa-brands fa-twitter text-4xl text-sky-500" />
-        //         </a>
-        //         <a href="https://linkedin.com/in/kasper-jonsson" aria-label="Checkout my LinkedIn">
-        //             <i class="fa-brands fa-linkedin text-4xl text-sky-500" />
-        //         </a>
-        //     </div>
-        // </div>
     }
 }

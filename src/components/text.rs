@@ -24,6 +24,12 @@ pub enum TextSize {
 }
 
 #[derive(TwVariant)]
+pub enum TextTransition {
+    #[tw(default, class = "transition-transform  transform-gpu")]
+    Slide,
+}
+
+#[derive(TwVariant)]
 pub enum TextWeight {
     #[tw(class = "font-thin")]
     Thin,
@@ -51,17 +57,11 @@ pub fn Text(
     #[prop(optional, into)] variant: TextVariant,
     #[prop(optional, into)] size: TextSize,
     #[prop(optional, into)] weight: TextWeight,
+    #[prop(optional, into)] transition: TextTransition,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
     view! {
-        <p
-            class=tw_merge!(
-                variant,
-                size,
-                weight,
-                class
-            )
-        >
+        <p class=tw_merge!(variant, size, weight, transition, class)>
             {children()}
         </p>
     }

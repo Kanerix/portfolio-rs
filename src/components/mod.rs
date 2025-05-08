@@ -7,5 +7,5 @@ pub mod text;
 pub use button::{Button, ButtonSize};
 pub use card::{Card, CardVariant};
 pub use icon::{LanguageIcon, LanguageIconVariant};
-pub use nav::{Nav, NavLink};
+pub use nav::{NavBar, NavLink};
 pub use text::{Text, TextSize, TextVariant, TextWeight};

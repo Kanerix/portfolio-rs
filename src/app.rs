@@ -27,7 +27,10 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <AutoReload options=options.clone()/>
                 <HydrationScripts options=options islands=true islands_router=true/>
             </head>
-            <body class="bg-slate-50 dark:bg-slate-950 mx-auto px-8 max-w-5xl min-h-screen">
+            <body
+                class="bg-slate-50 dark:bg-slate-950
+                mx-auto px-8 max-w-5xl min-h-screen"
+            >
                 <App />
             </body>
         </html>
@@ -35,11 +38,11 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 }
 
 #[component]
-fn NavBar() -> impl IntoView {
+pub fn Nav() -> impl IntoView {
     let url = use_url();
 
     view! {
-        <Nav class="border-b border-slate-200 dark:border-slate-800">
+        <NavBar class="border-b border-slate-200 dark:border-slate-800">
             <NavLink to="/" active=url.get().path() == "/">
                 "Home"
             </NavLink>
@@ -49,7 +52,87 @@ fn NavBar() -> impl IntoView {
             <NavLink to="https://github.com/Kanerix" {..} target="_blank">
                 "Projects"
             </NavLink>
-        </Nav>
+        </NavBar>
+    }
+}
+
+#[component]
+pub fn Footer() -> impl IntoView {
+    view! {
+        <footer
+            class="border-t border-slate-200 dark:border-slate-800
+            grid gap-8 py-8"
+        >
+            <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                "Copyright © 2025 Kasper Jønsson"
+            </Text>
+            <div class="grid grid-cols-1 md:grid-cols-3">
+                <FooterColumn>
+                    <Text weight=TextWeight::Bold>
+                        "Contact"
+                    </Text>
+                    <a
+                        href="mailto:dkkasjoe@hotmail.com"
+                        aria-label="Send me an email"
+                    >
+                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                            "dkkasjoe@hotmail.com"
+                        </Text>
+                    </a>
+                </FooterColumn>
+                <FooterColumn>
+                    <Text weight=TextWeight::Bold>
+                        "Socials"
+                    </Text>
+                    <a
+                        href="https://github.com/Kanerix"
+                        aria-label="Checkout my GitHub"
+                    >
+                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                            "GitHub"
+                        </Text>
+                    </a>
+                    <a
+                        href="https://twitter.com/K4nerix"
+                        aria-label="Checkout my Twitter"
+                    >
+                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                            "Twitter"
+                        </Text>
+                    </a>
+                    <a
+                        href="https://linkedin.com/in/kasper-jonsson"
+                        aria-label="Checkout my LinkedIn"
+                    >
+                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                            "LinkedIn"
+                        </Text>
+                    </a>
+                </FooterColumn>
+                <FooterColumn>
+                    <Text weight=TextWeight::Bold>
+                        "Important Links"
+                    </Text>
+                    <a
+                        href="https://linkedin.com/in/kasper-jonsson"
+                        aria-label="Checkout my LinkedIn"
+                    >
+                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                            "LinkedIn"
+                        </Text>
+                    </a>
+                </FooterColumn>
+            </div>
+        </footer>
+    }
+}
+
+#[component]
+pub fn FooterColumn(children: Children) -> impl IntoView {
+    view! {
+        <div class="flex flex-col gap-4 mb-8 md:mb-0">
+            {children()}
+        </div>
     }
 }
 
@@ -57,29 +140,14 @@ fn NavBar() -> impl IntoView {
 pub fn App() -> impl IntoView {
     view! {
         <Router>
-            <NavBar />
-            <main class="mb-8">
+            <Nav />
+            <main class="my-8">
                 <Routes fallback=|| NotFound() transition=true>
                     <Route path=path!("/") view=|| view! { <Home/> }/>
                     <Route path=path!("/contact") view=|| view! { <Contact/> }/>
                 </Routes>
             </main>
-            <footer class="border-t border-slate-200 dark:border-slate-800 p-8">
-                <Text size=TextSize::Sm variant=TextVariant::Dimmed class="mb-8">
-                    "Copyright © 2025 Kasper Jønsson"
-                </Text>
-                <div class="grid grid-cols-3">
-                    <Text weight=TextWeight::Bold>
-                        "Important Links"
-                    </Text>
-                    <Text weight=TextWeight::Bold>
-                        "Socials"
-                    </Text>
-                    <Text weight=TextWeight::Bold>
-                        "Contact"
-                    </Text>
-                </div>
-            </footer>
+            <Footer />
         </Router>
     }
 }
