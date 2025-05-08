@@ -22,9 +22,6 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
                 <link rel="manifest" href="/manifest.json"/>
-                <link rel="preconnect" href="https://fonts.googleapis.com"/>
-                <link rel="preconnect" href="https://fonts.gstatic.com"/>
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap"/>
                 // Fontawesome icons
                 <link rel="stylesheet" href="/fontawesome/css/all.min.css"/>
                 // Tailwind generated stylesheet
@@ -70,7 +67,7 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/contact") view=|| view! { <Contact/> }/>
                 </Routes>
             </main>
-            <footer class="p-4 border-t border-slate-200 dark:border-slate-800">
+            <footer class="border-t border-slate-200 dark:border-slate-800 p-4">
                 "GitHub"
             </footer>
         </Router>
