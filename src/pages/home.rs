@@ -3,7 +3,7 @@ use std::cmp::Ordering;
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::components::{Card, CardVariant, Text, TextSize, text::TextWeight};
+use crate::components::*;
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct RepoData {
@@ -58,10 +58,7 @@ pub fn Home() -> impl IntoView {
                 <Text class="lg:text-5xl sm:text-4xl text-2xl font-semibold">
                     "Hi, im Kasper 👋"
                 </Text>
-                <Text
-                    size=TextSize::Lg
-                    class="text-slate-500 dark:text-slate-400"
-                >
+                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
                     "I'm a software engineer and IT enthusiast, currently
                     studying sowftware development at the "
                     <a
@@ -92,7 +89,7 @@ pub fn Home() -> impl IntoView {
                 <Text size=TextSize::Xl weight=TextWeight::Bold>
                     "About Me 🤙"
                 </Text>
-                <Text size=TextSize::Lg class="text-slate-800 dark:text-slate-300">
+                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
                     "I have been coding since I was 13 years old, where my
                     journey started in Denmark. Here I went to a club called
                     Coding Pirates. This is where my passion for programming
@@ -100,7 +97,7 @@ pub fn Home() -> impl IntoView {
                     and JavaScript, and quickly moved on to bigger frameworks
                     like React and Svelte."
                 </Text>
-                <Text size=TextSize::Lg class="text-slate-800 dark:text-slate-300">
+                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
                     "Today I have moved on to even more advanced stuff and have
                     been all around the different paradigms. Lately I have found
                     a big interest in Rust, where I have been learning all kinds
@@ -120,7 +117,7 @@ pub fn Home() -> impl IntoView {
                         class="max-w-8 max-h-8 object-cover"
                     />
                 </div>
-                <Text size=TextSize::Lg class="text-slate-800 dark:text-slate-300 mt-4">
+                <Text size=TextSize::Lg variant=TextVariant::Dimmed class="mt-4">
                     "This is the domain I use for my personal projects. It is
                     used for all kinds of enterprise-level side projects that
                     showcase different technologies I've learned. I have a big

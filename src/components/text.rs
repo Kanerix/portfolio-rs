@@ -4,6 +4,14 @@ use leptos::prelude::*;
 use tailwind_fuse::*;
 
 #[derive(TwVariant)]
+pub enum TextVariant {
+    #[tw(default, class = "text-slate-900 dark:text-slate-100")]
+    Default,
+    #[tw(class = "text-slate-500 dark:text-slate-400")]
+    Dimmed,
+}
+
+#[derive(TwVariant)]
 pub enum TextSize {
     #[tw(class = "text-sm")]
     Sm,
@@ -40,6 +48,7 @@ pub enum TextWeight {
 #[component]
 pub fn Text(
     children: Children,
+    #[prop(optional, into)] variant: TextVariant,
     #[prop(optional, into)] size: TextSize,
     #[prop(optional, into)] weight: TextWeight,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
@@ -47,7 +56,7 @@ pub fn Text(
     view! {
         <p
             class=tw_merge!(
-                "text-slate-900 dark:text-slate-100",
+                variant,
                 size,
                 weight,
                 class

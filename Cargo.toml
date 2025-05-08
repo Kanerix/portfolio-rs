@@ -1,6 +1,6 @@
 [package]
 name = "portfolio"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 
 [lib]
@@ -77,4 +77,4 @@ lib-default-features = false
 lib-profile-release = "wasm-release"
 # Tailwindcss
 tailwind-input-file = "style/tailwind.css"
-tailwind-config-file = "tailwind.config.js"
+
