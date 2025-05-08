@@ -18,7 +18,7 @@ env:
 
 jobs:
   deploy-app-to-flyio:
-    if: vars.DEPLOY_PLATFORM == 'fly.io'
+    if: inputs.deploy_env == 'prod'
     runs-on: ubuntu-latest
 
     environment:
