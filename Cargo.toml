@@ -77,4 +77,4 @@ lib-default-features = false
 lib-profile-release = "wasm-release"
 # Tailwindcss
 tailwind-input-file = "style/tailwind.css"
-tailwind-config-file = "tailwind.config.js"
+
