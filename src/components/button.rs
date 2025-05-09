@@ -1,7 +1,10 @@
+use std::{borrow::Cow, str::FromStr};
+
 use leptos::prelude::*;
+use strum::EnumString;
 use tailwind_fuse::*;
 
-#[derive(TwVariant)]
+#[derive(TwVariant, EnumString)]
 pub enum ButtonSize {
     #[tw(default, class = "h-9 px-4 py-2")]
     Md,
@@ -14,9 +17,11 @@ pub enum ButtonSize {
 
 #[component]
 pub fn Button(
-    #[prop(into)] text: &'static str,
-    #[prop(into, optional)] size: ButtonSize,
+    #[prop(into)] text: Cow<'static, str>,
+    #[prop(into, optional)] size: Cow<'static, str>,
 ) -> impl IntoView {
+    let size = ButtonSize::from_str(&size).unwrap_or_default();
+
     view! {
         <button class=tw_merge!(size)>
             {text}

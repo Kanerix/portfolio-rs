@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use leptos::prelude::*;
 use tailwind_fuse::*;
 
-use crate::components::{Text, TextSize};
+use crate::components::Text;
 
 #[component]
 pub fn NavBar(
@@ -40,7 +40,7 @@ pub fn NavLink(
                 class,
             )
         >
-            <Text size=TextSize::Lg>
+            <Text size="lg">
                 {children()}
             </Text>
         </a>

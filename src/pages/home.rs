@@ -58,7 +58,7 @@ pub fn Home() -> impl IntoView {
                 <Text class="lg:text-5xl sm:text-4xl text-2xl font-semibold">
                     "Hi, im Kasper 👋"
                 </Text>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
+                <Text size="lg" variant="dimmed">
                     "I'm a software engineer and IT enthusiast, currently
                     studying sowftware development at the "
                     <a
@@ -86,10 +86,10 @@ pub fn Home() -> impl IntoView {
         </Card>
         <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-8">
             <div class="flex flex-col gap-6">
-                <Text size=TextSize::Xl weight=TextWeight::Bold>
+                <Text size="xl" weight="bold">
                     "About Me 🤙"
                 </Text>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
+                <Text size="lg" variant="dimmed">
                     "I have been coding since I was 13 years old, where my
                     journey started in Denmark. Here I went to a club called
                     Coding Pirates. This is where my passion for programming
@@ -97,7 +97,7 @@ pub fn Home() -> impl IntoView {
                     and JavaScript, and quickly moved on to bigger frameworks
                     like React and Svelte."
                 </Text>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
+                <Text size="lg" variant="dimmed">
                     "Today I have moved on to even more advanced stuff and have
                     been all around the different paradigms. Lately I have found
                     a big interest in Rust, where I have been learning all kinds
@@ -106,9 +106,9 @@ pub fn Home() -> impl IntoView {
                     structured way."
                 </Text>
             </div>
-            <Card variant=CardVariant::Outlined>
+            <Card variant="outlined">
                 <div class="flex items-center justify-between">
-                    <Text weight=TextWeight::Bold class="text-2xl">
+                    <Text weight="bold" class="text-2xl">
                         "Lerpz"
                     </Text>
                     <img
@@ -117,7 +117,7 @@ pub fn Home() -> impl IntoView {
                         class="max-w-8 max-h-8 object-cover"
                     />
                 </div>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed class="mt-4">
+                <Text size="lg" variant="dimmed" class="mt-4">
                     "This is the domain I use for my personal projects. It is
                     used for all kinds of enterprise-level side projects that
                     showcase different technologies I've learned. I have a big
