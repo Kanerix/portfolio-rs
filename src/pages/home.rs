@@ -1,45 +1,6 @@
-use std::cmp::Ordering;
-
-use leptos::prelude::*;
-use serde::{Deserialize, Serialize};
-
 use crate::components::*;
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct RepoData {
-    pub name: String,
-    pub html_url: String,
-    pub stargazers_count: u32,
-    pub language: Option<String>,
-}
-
-#[derive(thiserror::Error, Serialize, Deserialize, Debug, Clone)]
-pub enum Error {
-    #[error("could't fetch repos")]
-    RequestError,
-    #[error("could't decode repos")]
-    DecodeError,
-}
-
-impl PartialOrd for RepoData {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl PartialEq for RepoData {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
-    }
-}
-
-impl Ord for RepoData {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.stargazers_count.cmp(&other.stargazers_count)
-    }
-}
-
-impl Eq for RepoData {}
+use leptos::prelude::*;
 
 #[component]
 pub fn Home() -> impl IntoView {
