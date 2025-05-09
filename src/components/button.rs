@@ -5,7 +5,8 @@ use strum::EnumString;
 use tailwind_fuse::*;
 
 #[derive(TwVariant, EnumString)]
-pub enum ButtonSize {
+#[strum(serialize_all = "lowercase")]
+pub enum Size {
     #[tw(default, class = "h-9 px-4 py-2")]
     Md,
     #[tw(class = "h-8 px-3")]
@@ -20,7 +21,7 @@ pub fn Button(
     #[prop(into)] text: Cow<'static, str>,
     #[prop(into, optional)] size: Cow<'static, str>,
 ) -> impl IntoView {
-    let size = ButtonSize::from_str(&size).unwrap_or_default();
+    let size = Size::from_str(&size).unwrap_or_default();
 
     view! {
         <button class=tw_merge!(size)>

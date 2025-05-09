@@ -27,10 +27,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <AutoReload options=options.clone()/>
                 <HydrationScripts options=options islands=true islands_router=true/>
             </head>
-            <body
-                class="bg-slate-50 dark:bg-slate-950
-                mx-auto px-8 max-w-5xl min-h-screen"
-            >
+            <body class="bg-light dark:bg-dark mx-auto px-8 max-w-5xl min-h-screen">
                 <App />
             </body>
         </html>

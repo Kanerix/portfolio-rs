@@ -5,7 +5,7 @@ use strum::EnumString;
 use tailwind_fuse::*;
 
 #[derive(TwVariant, EnumString)]
-pub enum LanguageIconVariant {
+pub enum Variant {
     #[tw(default, class = "fa-solid fa-code")]
     Unkown,
     #[tw(class = "fa-brands fa-rust")]
@@ -41,7 +41,7 @@ pub fn LanguageIcon(
     #[prop(optional, into)] variant: Cow<'static, str>,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
-    let variant = LanguageIconVariant::from_str(variant.as_ref()).unwrap_or_default();
+    let variant = Variant::from_str(variant.as_ref()).unwrap_or_default();
 
     view! {
         <i class=tw_merge!(variant, class) />

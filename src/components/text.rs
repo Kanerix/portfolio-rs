@@ -6,7 +6,7 @@ use tailwind_fuse::*;
 
 #[derive(TwVariant, EnumString)]
 #[strum(serialize_all = "lowercase")]
-pub enum TextVariant {
+pub enum Variant {
     #[tw(default, class = "text-slate-900 dark:text-slate-100")]
     Default,
     #[tw(class = "text-slate-500 dark:text-slate-400")]
@@ -15,7 +15,7 @@ pub enum TextVariant {
 
 #[derive(TwVariant, EnumString)]
 #[strum(serialize_all = "lowercase")]
-pub enum TextSize {
+pub enum Size {
     #[tw(class = "text-sm")]
     Sm,
     #[tw(default, class = "text-md")]
@@ -24,13 +24,6 @@ pub enum TextSize {
     Lg,
     #[tw(class = "text-xl")]
     Xl,
-}
-
-#[derive(TwVariant, EnumString)]
-#[strum(serialize_all = "lowercase")]
-pub enum TextTransition {
-    #[tw(default, class = "transition-transform  transform-gpu")]
-    Slide,
 }
 
 #[derive(TwVariant, EnumString)]
@@ -62,16 +55,14 @@ pub fn Text(
     #[prop(optional, into)] variant: Cow<'static, str>,
     #[prop(optional, into)] size: Cow<'static, str>,
     #[prop(optional, into)] weight: Cow<'static, str>,
-    #[prop(optional, into)] transition: Cow<'static, str>,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
-    let variant = TextVariant::from_str(&variant).unwrap_or_default();
-    let size = TextSize::from_str(&size).unwrap_or_default();
+    let variant = Variant::from_str(&variant).unwrap_or_default();
+    let size = Size::from_str(&size).unwrap_or_default();
     let weight = TextWeight::from_str(&weight).unwrap_or_default();
-    let transition = TextTransition::from_str(&transition).unwrap_or_default();
 
     view! {
-        <p class=tw_merge!(variant, size, weight, transition, class)>
+        <p class=tw_merge!(variant, size, weight, class)>
             {children()}
         </p>
     }

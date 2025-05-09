@@ -25,7 +25,7 @@ pub fn NavLink(
     #[prop(into, optional)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
     let active = if active {
-        Some("bg-slate-100 dark:bg-slate-900")
+        Some("bg-paper-light dark:bg-paper-dark")
     } else {
         None
     };
