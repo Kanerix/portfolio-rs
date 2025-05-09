@@ -11,17 +11,14 @@ pub enum ButtonSize {
     Lg,
 }
 
+
 #[component]
 pub fn Button(
     #[prop(into)] text: &'static str,
-    #[prop(into)] size: ButtonSize,
-    #[prop(into)] onclick: impl Fn() + 'static,
+    #[prop(into, optional)] size: ButtonSize,
 ) -> impl IntoView {
     view! {
-        <button
-            class=tw_merge!(size)
-            on:click=move |_| onclick()
-        >
+        <button class=tw_merge!(size)>
             {text}
         </button>
     }
