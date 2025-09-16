@@ -11,7 +11,13 @@ use leptos_router::{
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
-        <html lang="en" dir="ltr" class="dark">
+        <html
+            lang="en"
+            dir="ltr"
+            class="dark scrollbar-thin scrollbar-track-transparent 
+            scrollbar-thumb-slate-500 dark:scrollbar-thumb-slate-600
+            hover:scrollbar-thumb-slate-400"
+        >
             <head>
                 <title>"Kasper's portfolio"</title>
                 <meta charset="utf-8"/>
