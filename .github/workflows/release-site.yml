@@ -29,7 +29,7 @@ jobs:
       - name: Setup Rust environment
         run: |
           rustup update
-          cargo install --locked --version=0.2.33 cargo-leptos
+          cargo install --locked --version=0.2.43 cargo-leptos
           cargo leptos build --release -vv
 
       - name: Rename artifact

@@ -1,10 +1,11 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, str::FromStr};
 
 use leptos::prelude::*;
+use strum::EnumString;
 use tailwind_fuse::*;
 
-#[derive(TwVariant)]
-pub enum LanguageIconVariant {
+#[derive(TwVariant, EnumString)]
+pub enum Variant {
     #[tw(default, class = "fa-solid fa-code")]
     Unkown,
     #[tw(class = "fa-brands fa-rust")]
@@ -37,9 +38,11 @@ pub enum LanguageIconVariant {
 
 #[component]
 pub fn LanguageIcon(
-    #[prop(optional, into)] variant: LanguageIconVariant,
+    #[prop(optional, into)] variant: Cow<'static, str>,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
+    let variant = Variant::from_str(variant.as_ref()).unwrap_or_default();
+
     view! {
         <i class=tw_merge!(variant, class) />
     }

@@ -11,7 +11,13 @@ use leptos_router::{
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
-        <html lang="en" dir="ltr" class="dark">
+        <html
+            lang="en"
+            dir="ltr"
+            class="dark scrollbar-thin scrollbar-track-transparent 
+            scrollbar-thumb-slate-500 dark:scrollbar-thumb-slate-600
+            hover:scrollbar-thumb-slate-400"
+        >
             <head>
                 <title>"Kasper's portfolio"</title>
                 <meta charset="utf-8"/>
@@ -27,10 +33,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <AutoReload options=options.clone()/>
                 <HydrationScripts options=options islands=true islands_router=true/>
             </head>
-            <body
-                class="bg-slate-50 dark:bg-slate-950
-                mx-auto px-8 max-w-5xl min-h-screen"
-            >
+            <body class="bg-light dark:bg-dark mx-auto px-8 max-w-5xl min-h-screen">
                 <App />
             </body>
         </html>
@@ -63,32 +66,32 @@ pub fn Footer() -> impl IntoView {
             class="border-t border-slate-200 dark:border-slate-800
             grid gap-8 py-8"
         >
-            <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+            <Text size="sm" variant="dimmed">
                 "Copyright © 2025 Kasper Jønsson"
             </Text>
             <div class="grid grid-cols-1 md:grid-cols-3">
                 <FooterColumn>
-                    <Text weight=TextWeight::Bold>
+                    <Text weight="bold">
                         "Contact"
                     </Text>
                     <a
                         href="mailto:dkkasjoe@hotmail.com"
                         aria-label="Send me an email"
                     >
-                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                        <Text size="sm" variant="dimmed">
                             "dkkasjoe@hotmail.com"
                         </Text>
                     </a>
                 </FooterColumn>
                 <FooterColumn>
-                    <Text weight=TextWeight::Bold>
+                    <Text weight="bold">
                         "Socials"
                     </Text>
                     <a
                         href="https://github.com/Kanerix"
                         aria-label="Checkout my GitHub"
                     >
-                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                        <Text size="sm" variant="dimmed">
                             "GitHub"
                         </Text>
                     </a>
@@ -96,7 +99,7 @@ pub fn Footer() -> impl IntoView {
                         href="https://twitter.com/K4nerix"
                         aria-label="Checkout my Twitter"
                     >
-                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                        <Text size="sm" variant="dimmed">
                             "Twitter"
                         </Text>
                     </a>
@@ -104,20 +107,20 @@ pub fn Footer() -> impl IntoView {
                         href="https://linkedin.com/in/kasper-jonsson"
                         aria-label="Checkout my LinkedIn"
                     >
-                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                        <Text size="sm" variant="dimmed">
                             "LinkedIn"
                         </Text>
                     </a>
                 </FooterColumn>
                 <FooterColumn>
-                    <Text weight=TextWeight::Bold>
+                    <Text weight="bold">
                         "Important Links"
                     </Text>
                     <a
                         href="https://linkedin.com/in/kasper-jonsson"
                         aria-label="Checkout my LinkedIn"
                     >
-                        <Text size=TextSize::Sm variant=TextVariant::Dimmed>
+                        <Text size="sm" variant="dimmed">
                             "LinkedIn"
                         </Text>
                     </a>

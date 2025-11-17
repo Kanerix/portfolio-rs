@@ -25,13 +25,14 @@ tower-http = { version = "0.6", optional = true }
 # -- WASM
 console_error_panic_hook = "0.1"
 console_log = "1.0"
-wasm-bindgen = "0.2"
+wasm-bindgen = "0.2.100"
 web-sys = { version = "0.3", features = ["Storage", "Window"] }
 # -- Other
 log = "0.4"
 serde = "1.0"
 thiserror = "2.0"
 tailwind_fuse = { version = "0.3.2", features = ["variant"] }
+strum = { version = "0.27.1", features = ["derive"] }
 
 [features]
 hydrate = ["leptos/hydrate"]
@@ -77,4 +78,3 @@ lib-default-features = false
 lib-profile-release = "wasm-release"
 # Tailwindcss
 tailwind-input-file = "style/tailwind.css"
-

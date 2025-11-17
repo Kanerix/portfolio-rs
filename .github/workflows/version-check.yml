@@ -1,5 +1,4 @@
 name: Validate the package version
-run-name: Validate package version ${{ inputs.package_version }}
 
 on:
   workflow_call:
@@ -42,7 +41,6 @@ jobs:
           fi
 
       - name: Check if release exsists
-        if: inputs.deploy_env == 'prod'
         env:
           PACKAGE_VERSION: ${{ inputs.package_version }}
         run: |

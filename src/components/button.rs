@@ -1,8 +1,12 @@
+use std::{borrow::Cow, str::FromStr};
+
 use leptos::prelude::*;
+use strum::EnumString;
 use tailwind_fuse::*;
 
-#[derive(TwVariant)]
-pub enum ButtonSize {
+#[derive(TwVariant, EnumString)]
+#[strum(serialize_all = "lowercase")]
+pub enum Size {
     #[tw(default, class = "h-9 px-4 py-2")]
     Md,
     #[tw(class = "h-8 px-3")]
@@ -11,17 +15,16 @@ pub enum ButtonSize {
     Lg,
 }
 
+
 #[component]
 pub fn Button(
-    #[prop(into)] text: &'static str,
-    #[prop(into)] size: ButtonSize,
-    #[prop(into)] onclick: impl Fn() + 'static,
+    #[prop(into)] text: Cow<'static, str>,
+    #[prop(into, optional)] size: Cow<'static, str>,
 ) -> impl IntoView {
+    let size = Size::from_str(&size).unwrap_or_default();
+
     view! {
-        <button
-            class=tw_merge!(size)
-            on:click=move |_| onclick()
-        >
+        <button class=tw_merge!(size)>
             {text}
         </button>
     }

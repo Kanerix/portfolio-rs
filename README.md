@@ -8,9 +8,9 @@ The website should be available at [portfolio.lerpz.com](https://portfolio.lerpz
 
 ## Required Dependencies
 
-Install `cargo-leptos` if you don't already have it.
+Install `cargo-leptos`.
 
-- `cargo install cargo-leptos`
+- `cargo install --locked cargo-leptos`
 
 Start using the `nightly` toolchain if not already.
 
@@ -18,15 +18,15 @@ Start using the `nightly` toolchain if not already.
 - `rustup default nightly`
 - `rustup target add wasm32-unknown-unknown`
 
-Install `tailwind` to compile css.
+Install `tailwindcss` to compile styling.
 
-- `npm -i tailwindcss -g`
+- `npm i -g pnpm`
+- `pnpm i`
 
 ## Running In Development
 
-Start the application in `watch` mode for development. Use 2 windows.
+Start the application in `watch` mode for development.
 
-- `npx tailwindcss -i style/tailwind.css -o style/generated.css --watch`
 - `cargo leptos watch`
 
 The server will be available at [`0.0.0.0:3000`](http://0.0.0.0:3000). (Is also using port 3001)
@@ -44,7 +44,7 @@ The server will then be available at [`0.0.0.0:3000`](http://0.0.0.0:3000).
 
 ## Deployment to Fly.io
 
-The website runs in the cloud on a platform called [Fly.io](<https://fly.io>).
+The website runs on a cloud platform called [Fly.io](<https://fly.io>).
 
 The GitHub workflow will automatically build the docker image, and later use
 it to then publish the container to Fly.io.

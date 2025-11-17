@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use leptos::prelude::*;
 use tailwind_fuse::*;
 
-use crate::components::{Text, TextSize};
+use crate::components::Text;
 
 #[component]
 pub fn NavBar(
@@ -25,7 +25,7 @@ pub fn NavLink(
     #[prop(into, optional)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
     let active = if active {
-        Some("bg-slate-100 dark:bg-slate-900")
+        Some("bg-paper-light dark:bg-paper-dark")
     } else {
         None
     };
@@ -40,7 +40,7 @@ pub fn NavLink(
                 class,
             )
         >
-            <Text size=TextSize::Lg>
+            <Text size="lg">
                 {children()}
             </Text>
         </a>

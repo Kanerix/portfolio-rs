@@ -1,45 +1,6 @@
-use std::cmp::Ordering;
-
-use leptos::prelude::*;
-use serde::{Deserialize, Serialize};
-
 use crate::components::*;
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct RepoData {
-    pub name: String,
-    pub html_url: String,
-    pub stargazers_count: u32,
-    pub language: Option<String>,
-}
-
-#[derive(thiserror::Error, Serialize, Deserialize, Debug, Clone)]
-pub enum Error {
-    #[error("could't fetch repos")]
-    RequestError,
-    #[error("could't decode repos")]
-    DecodeError,
-}
-
-impl PartialOrd for RepoData {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl PartialEq for RepoData {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
-    }
-}
-
-impl Ord for RepoData {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.stargazers_count.cmp(&other.stargazers_count)
-    }
-}
-
-impl Eq for RepoData {}
+use leptos::prelude::*;
 
 #[component]
 pub fn Home() -> impl IntoView {
@@ -58,7 +19,7 @@ pub fn Home() -> impl IntoView {
                 <Text class="lg:text-5xl sm:text-4xl text-2xl font-semibold">
                     "Hi, im Kasper 👋"
                 </Text>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
+                <Text size="lg" variant="dimmed">
                     "I'm a software engineer and IT enthusiast, currently
                     studying sowftware development at the "
                     <a
@@ -86,10 +47,10 @@ pub fn Home() -> impl IntoView {
         </Card>
         <div class="grid md:grid-cols-2 grid-cols-1 pt-8 gap-8">
             <div class="flex flex-col gap-6">
-                <Text size=TextSize::Xl weight=TextWeight::Bold>
+                <Text size="xl" weight="bold">
                     "About Me 🤙"
                 </Text>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
+                <Text size="lg" variant="dimmed">
                     "I have been coding since I was 13 years old, where my
                     journey started in Denmark. Here I went to a club called
                     Coding Pirates. This is where my passion for programming
@@ -97,7 +58,7 @@ pub fn Home() -> impl IntoView {
                     and JavaScript, and quickly moved on to bigger frameworks
                     like React and Svelte."
                 </Text>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed>
+                <Text size="lg" variant="dimmed">
                     "Today I have moved on to even more advanced stuff and have
                     been all around the different paradigms. Lately I have found
                     a big interest in Rust, where I have been learning all kinds
@@ -106,9 +67,9 @@ pub fn Home() -> impl IntoView {
                     structured way."
                 </Text>
             </div>
-            <Card variant=CardVariant::Outlined>
+            <Card variant="outlined">
                 <div class="flex items-center justify-between">
-                    <Text weight=TextWeight::Bold class="text-2xl">
+                    <Text weight="bold" class="text-2xl">
                         "Lerpz"
                     </Text>
                     <img
@@ -117,7 +78,7 @@ pub fn Home() -> impl IntoView {
                         class="max-w-8 max-h-8 object-cover"
                     />
                 </div>
-                <Text size=TextSize::Lg variant=TextVariant::Dimmed class="mt-4">
+                <Text size="lg" variant="dimmed" class="mt-4">
                     "This is the domain I use for my personal projects. It is
                     used for all kinds of enterprise-level side projects that
                     showcase different technologies I've learned. I have a big

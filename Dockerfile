@@ -10,7 +10,7 @@ RUN npm install -g pnpm
 COPY rust-toolchain.toml .
 
 RUN rustup update && \
-    cargo install --locked --version=0.2.33 cargo-leptos
+    cargo install --locked --version=0.2.43 cargo-leptos
 
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \

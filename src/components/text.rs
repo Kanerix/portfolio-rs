@@ -1,18 +1,21 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, str::FromStr};
 
 use leptos::prelude::*;
+use strum::EnumString;
 use tailwind_fuse::*;
 
-#[derive(TwVariant)]
-pub enum TextVariant {
+#[derive(TwVariant, EnumString)]
+#[strum(serialize_all = "lowercase")]
+pub enum Variant {
     #[tw(default, class = "text-slate-900 dark:text-slate-100")]
     Default,
     #[tw(class = "text-slate-500 dark:text-slate-400")]
     Dimmed,
 }
 
-#[derive(TwVariant)]
-pub enum TextSize {
+#[derive(TwVariant, EnumString)]
+#[strum(serialize_all = "lowercase")]
+pub enum Size {
     #[tw(class = "text-sm")]
     Sm,
     #[tw(default, class = "text-md")]
@@ -23,18 +26,13 @@ pub enum TextSize {
     Xl,
 }
 
-#[derive(TwVariant)]
-pub enum TextTransition {
-    #[tw(default, class = "transition-transform  transform-gpu")]
-    Slide,
-}
-
-#[derive(TwVariant)]
+#[derive(TwVariant, EnumString)]
+#[strum(serialize_all = "lowercase")]
 pub enum TextWeight {
     #[tw(class = "font-thin")]
     Thin,
     #[tw(class = "font-extralight")]
-    ExtraLight,
+    Extralight,
     #[tw(class = "font-light")]
     Light,
     #[tw(default, class = "font-normal")]
@@ -42,11 +40,11 @@ pub enum TextWeight {
     #[tw(class = "font-medium")]
     Medium,
     #[tw(class = "font-semibold")]
-    SemiBold,
+    Semibold,
     #[tw(class = "font-bold")]
     Bold,
     #[tw(class = "font-extrabold")]
-    ExtraBold,
+    Extrabold,
     #[tw(class = "font-black")]
     Black,
 }
@@ -54,14 +52,17 @@ pub enum TextWeight {
 #[component]
 pub fn Text(
     children: Children,
-    #[prop(optional, into)] variant: TextVariant,
-    #[prop(optional, into)] size: TextSize,
-    #[prop(optional, into)] weight: TextWeight,
-    #[prop(optional, into)] transition: TextTransition,
+    #[prop(optional, into)] variant: Cow<'static, str>,
+    #[prop(optional, into)] size: Cow<'static, str>,
+    #[prop(optional, into)] weight: Cow<'static, str>,
     #[prop(optional, into)] class: Option<Cow<'static, str>>,
 ) -> impl IntoView {
+    let variant = Variant::from_str(&variant).unwrap_or_default();
+    let size = Size::from_str(&size).unwrap_or_default();
+    let weight = TextWeight::from_str(&weight).unwrap_or_default();
+
     view! {
-        <p class=tw_merge!(variant, size, weight, transition, class)>
+        <p class=tw_merge!(variant, size, weight, class)>
             {children()}
         </p>
     }
