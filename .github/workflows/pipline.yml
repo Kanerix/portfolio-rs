@@ -3,14 +3,14 @@ name: Project pipeline
 on:
   push:
     branches:
-      - '**'
+      - "**"
     paths-ignore:
-      - '.githooks/'
-      - '.vscode/'
-      - 'LICENSE'
-      - 'README.md'
-      - 'CHANGELOG.md'
-        
+      - ".githooks/"
+      - ".vscode/"
+      - "LICENSE"
+      - "README.md"
+      - "CHANGELOG.md"
+
 jobs:
   prepare-pipeline:
     uses: ./.github/workflows/prepare-pipeline.yml
@@ -31,10 +31,10 @@ jobs:
     with:
       deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}
       package_version: ${{ needs.prepare-pipeline.outputs.package_version }}
-      
+
   release-site:
     uses: ./.github/workflows/release-site.yml
-    needs: [prepare-pipeline, version-check]
+    needs: [prepare-pipeline, version-check, build-image]
     secrets: inherit
     with:
       deploy_env: ${{ needs.prepare-pipeline.outputs.deploy_env }}

@@ -1,9 +1,11 @@
 FROM rust:slim-bookworm AS builder
 WORKDIR /build
 
-RUN apt-get update && apt-get upgrade && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    build-essential npm
+    build-essential npm && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g pnpm
 
