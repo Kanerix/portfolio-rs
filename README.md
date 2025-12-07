@@ -1,5 +1,7 @@
 # Portfolio Rust
 
+**This is my old portfolio website**
+
 My portfolio website, created using Leptos. This is a side project and its primary function,
 is for me to learn webassembly and rust. Feel free to use any code you want and help me improve
 the app.
